@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FC comparison</title>
+<style>
+  :root { --bg:#1d2024; --fg:#e6e8eb; --muted:#9aa3ad; --panel:rgba(20,22,26,0.82); --line:#3a3f46; --ok:#5fbf7a; --as:#d08a3a; --red:#e0685a; }
+  :root[data-theme="light"] { --bg:#f7f8f9; --fg:#15181c; --muted:#4e5661; --panel:rgba(255,255,255,0.86); --line:#c3c8cf; --ok:#23803f; --as:#a8621a; --red:#b8382b; }
+  html,body { margin:0; height:100%; background:var(--bg); color:var(--fg); font:14px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; overflow:hidden; }
+  canvas { display:block; }
+  #legend { position:fixed; left:16px; top:16px; max-width:min(372px, calc(100vw - 32px)); max-height:calc(100vh - 90px); overflow:auto; background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:10px 12px; backdrop-filter: blur(4px); }
+  #legend h1 { font-size:15px; margin:0 0 4px 0; font-weight:600; }
+  #legend .sub { color:var(--muted); font-size:12px; margin-bottom:6px; }
+  #legend ol { margin:0 0 6px 18px; padding:0; }
+  #legend li { margin:2px 0; font-size:11.5px; line-height:1.35; }
+  #legend li b { font-weight:600; }
+  #legend .sw { display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:5px; vertical-align:-1px; border:1px solid rgba(128,128,128,0.5); }
+  #legend .note { font-size:11.5px; color:var(--muted); border-top:1px solid var(--line); padding-top:5px; margin-top:5px; }
+  #legend .ok { color:var(--ok); font-weight:600; }
+  #legend .as { color:var(--as); font-weight:600; }
+  #legend .rd { color:var(--red); font-weight:600; }
+  #ctrls { position:fixed; right:16px; top:16px; display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end; }
+  button { background:var(--panel); color:var(--fg); border:1px solid var(--line); border-radius:6px; padding:6px 10px; font:inherit; font-size:13px; cursor:pointer; }
+  button:hover { border-color:var(--muted); }
+</style>
+<script src="lib/legend_panel.js"></script>
+<style id="homeCss">/* ui_chrome.py: Home button (link back to the gallery) */ #bHome { display:inline-block; background:var(--panel, var(--card, rgba(255,255,255,0.88))); color:var(--fg, var(--ink, inherit)); border:1px solid var(--line, #c3c8cf); border-radius:6px; padding:6px 10px; font:inherit; font-size:13px; line-height:normal; text-decoration:none; cursor:pointer; box-sizing:border-box; } #bHome:hover { border-color:var(--muted, #888); } #bHome.fixed { position:fixed; right:16px; top:16px; z-index:22; }</style>
+</head>
+<body>
+<div id="legend">
+  <h1>Flight controllers, to scale</h1>
+  <div class="sub">The six flight controllers in designer's FlightControllers.docx, two Lumenier NDAA options and two Raspberry Pi boards for scale, flat on a 10 / 50 mm grid, 1 scene unit = 1 mm. Front row: FPV-size boards; back row: Wing and carriers; Pis at the right. NDAA: <span class="ok">GREEN</span> / <span class="rd">RED</span> per variants/README.md.</div>
+  <ol>
+    <li><span class="sw" style="background:#1f4f9a"></span><b>Matek F405-WMO</b> (4-inch reference quad board). 32 x 22 x 12.7 mm, 39 x 2.54 mm through-holes <span class="ok">VERIFIED</span>; 18 x 12 mm M2 mount <span class="as">MEASURED</span>; separate USB-C / buzzer board not shown. <span class="rd">RED</span> (PRC).</li>
+    <li><span class="sw" style="background:#1f7a3a"></span><b>Lumenier LUX Mini F7 V2</b>. 28 x 28 x 6 mm, 20 x 20 mm on M3 grommets <span class="ok">VERIFIED</span>; pads and wire holes only, no headers; pad positions <span class="as">MEASURED</span> from photos. <span class="rd">RED</span> (China; not on the ArduPilot table, GetFPV "NDAA No").</li>
+    <li><span class="sw" style="background:#1f7a3a"></span><b>Triumph Lucid H7 (V2): 12 x 2.54 mm through-holes</b> (Triumph NDAA build of the TBS Lucid H7 V2, RMRC 86342). 30.5 x 30.5 mm M3; one 1 x 10 edge column (SCL1, SDA1, G, 4V5, R2, T2, G, 4V5, R6, T6) + G / VBat pair, rest pads <span class="ok">VERIFIED</span> (TBS manual rev 1.15 p.38-40; the former 10 front + 9 rear model was V1); 36 x 36 outline <span class="as">PARTLY ASSUMED</span> (RMRC vs manual 32 x 32); underside parts <span class="as">ASSUMED</span>. <span class="ok">GREEN</span> (US-built Triumph SKU; TBS build is RED).</li>
+    <li><span class="sw" style="background:#1f7a3a"></span><b>Triumph Lucid H7 Wing NDAA</b> (TBS Lucid H7 Wing design). 54 x 36 x 13 mm, 84 through-holes <span class="ok">VERIFIED</span> (TBS manual p.48 / p.51). <span class="ok">GREEN</span> (US-built Triumph SKU; TBS build is RED).</li>
+    <li><span class="sw" style="background:#f26b1d"></span><b>CubePilot Cube Orange+</b> on the standard carrier. 94.5 x 44.3 mm, 31.4 mm tall, 85 x 34.4 mm M2.5 holes, connector zones <span class="ok">VERIFIED</span> (CubePilot drawing); 3 x 15 servo rail out the end face. <span class="ok">GREEN</span> (Blue UAS).</li>
+    <li><span class="sw" style="background:#1f7a3a"></span><b>ARK ARKV6X</b> on the <b>ARK PAB</b> carrier. Module 36 x 29 x 5, carrier 74 x 43.5 x 12 mm <span class="ok">VERIFIED</span>; connector positions and ~68 x 39 mm holes <span class="as">ASSUMED</span> (photo). JST-GH only. <span class="ok">GREEN</span> (Blue UAS).</li>
+    <li><span class="sw" style="background:#1f7a3a"></span><b>Lumenier LUX F765 NDAA</b> (added NDAA option). 38 x 38 x 4 mm, 9 g, 30.5 mm M3 grommets <span class="ok">VERIFIED</span> (GetFPV); JST-SH ports + GH CAN, pads, no 2.54 mm (ArduPilot wiki); positions <span class="as">MEASURED</span> by eye. <span class="ok">GREEN</span> (vendor declaration, made in Thailand). ArduPilot supported.</li>
+    <li><span class="sw" style="background:#1f7a3a"></span><b>Lumenier LUX H743 NDAA</b> (added NDAA option). 37.5 x 37.5 mm, 30.5 mm M3 <span class="ok">VERIFIED</span> (PR #34831 README); JST-GH only, pads, no 2.54 mm; thickness and weight not published, 5 mm stack <span class="as">ASSUMED</span>. <span class="ok">GREEN</span> (vendor claim, made in USA; not on Blue list). ArduPilot: PR #34831 open, vendor 4.7.2 build.</li>
+    <li><span class="sw" style="background:#1d6e3c"></span><b>Raspberry Pi 5</b> (right, back; <span class="as">ASSUMED</span> model for "a Raspberry Pi", Pi 4B has the same 85 x 56 mm board and 58 x 49 mm M2.5 holes), about 46 g, 2 x 20 header fitted. Companion-computer size reference, not an FC.</li>
+    <li><span class="sw" style="background:#1d6e3c"></span><b>Raspberry Pi Zero W</b> (right, front). 65 x 30 mm, 58 x 23 mm M2.5, about 9 g; 40-pin footprint shown unpopulated. Size reference.</li>
+  </ol>
+  <div class="note">The document pairs the Lucid H7 with a JHEMCU 45A 4-in-1 ESC; omitted because 5-inch quad uses discrete ESCs.</div>
+  <div class="note">2.54 mm headers (black base 2.5 mm, 0.64 mm pins 6 mm proud) only where the board has 2.54 mm through-holes: WMO, Lucid H7 V2 (12), H7 Wing, Cube servo rail, Pi 5 (Pi Zero W holes left empty). FC boards drawn green for consistency (Matek blue, Cube orange); tell the boards apart by the labels. Scale bar 6 in, 1 in ticks. Drag to orbit, wheel to zoom, right-drag to pan; #top / #dark in the URL.</div>
+</div>
+<div id="ctrls">
+  <a id="bHome" href="index.html">Home</a>
+    <button id="bIso">3/4 view</button>
+  <button id="bTop">Top view</button>
+  <button id="bTheme">Light / dark</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
+<script src="lib/penny.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  // 0.1 in Dupont header: plastic base 2.5 mm per position, 0.64 mm square pin, 6 mm above base, 3 mm into the board
+  var HD = { pitch: 2.54, base: 2.5, pin: 0.64, above: 6, below: 3 };
+  var STANDOFF = 5;      // all boards sit on 5 mm standoffs so the undersides read
+  var PCB_T = 1.0;
+
+  // ---------------------------------------------------------------------
+  // Renderer / scene
+  // ---------------------------------------------------------------------
+  var renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.05;
+  document.body.appendChild(renderer.domElement);
+
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 2, 3000);
+
+  var themes = {
+    dark:  { bg: 0x1d2024, grid1: 0x3a3f46, grid2: 0x5a616b, hemiSky: 0xd7dde5, hemiGnd: 0x2b2e33 },
+    light: { bg: 0xf7f8f9, grid1: 0xd9dde2, grid2: 0xb4bbc4, hemiSky: 0xffffff, hemiGnd: 0x9aa2ab }
+  };
+
+  var M = {
+    pcbBlue:  new THREE.MeshStandardMaterial({ color: 0x1f4f9a, roughness: 0.65, metalness: 0.1 }),
+    pcbBlack: new THREE.MeshStandardMaterial({ color: 0x15171a, roughness: 0.6, metalness: 0.15 }),
+    pcbGreen: new THREE.MeshStandardMaterial({ color: 0x1f7a3a, roughness: 0.6, metalness: 0.1 }),   // all FC boards green for consistency except Matek (blue) and Cube (orange) (designer 2026-11-09)
+    chip:     new THREE.MeshStandardMaterial({ color: 0x111214, roughness: 0.45, metalness: 0.2 }),
+    chipSm:   new THREE.MeshStandardMaterial({ color: 0x2a2d32, roughness: 0.5, metalness: 0.2 }),
+    chipTxt:  new THREE.MeshStandardMaterial({ color: 0x3a3d42, roughness: 0.4, metalness: 0.3 }),
+    usb:      new THREE.MeshStandardMaterial({ color: 0xb8bcc2, roughness: 0.3, metalness: 0.9 }),
+    jst:      new THREE.MeshStandardMaterial({ color: 0xf2f2ee, roughness: 0.7, metalness: 0.0 }),
+    jstGrey:  new THREE.MeshStandardMaterial({ color: 0xc9c9c4, roughness: 0.7, metalness: 0.0 }),
+    pad:      new THREE.MeshStandardMaterial({ color: 0xd4af37, roughness: 0.35, metalness: 0.9 }),
+    pin:      new THREE.MeshStandardMaterial({ color: 0xd4af37, roughness: 0.35, metalness: 0.9 }),
+    nylon:    new THREE.MeshStandardMaterial({ color: 0x2c2f34, roughness: 0.8, metalness: 0.0 }),
+    brass:    new THREE.MeshStandardMaterial({ color: 0xb5a642, roughness: 0.4, metalness: 0.8 }),
+    hdrBase:  new THREE.MeshStandardMaterial({ color: 0x0e0f11, roughness: 0.92, metalness: 0.0 }),
+    hdrPin:   new THREE.MeshStandardMaterial({ color: 0xd9dcdf, roughness: 0.28, metalness: 0.9 }),
+    cap:      new THREE.MeshStandardMaterial({ color: 0x8a6d3b, roughness: 0.5, metalness: 0.3 }),
+    ind:      new THREE.MeshStandardMaterial({ color: 0x4a4d52, roughness: 0.5, metalness: 0.5 }),
+    barDark:  new THREE.MeshStandardMaterial({ color: 0x15171a, roughness: 0.9, metalness: 0.0 }),
+    barLight: new THREE.MeshStandardMaterial({ color: 0xf2f3f4, roughness: 0.9, metalness: 0.0 }),
+    barTick:  new THREE.MeshStandardMaterial({ color: 0xd08a3a, roughness: 0.8, metalness: 0.0 }),
+    ledB:     new THREE.MeshStandardMaterial({ color: 0x2255ff, emissive: 0x1133cc, emissiveIntensity: 0.6 }),
+    ledG:     new THREE.MeshStandardMaterial({ color: 0x33dd55, emissive: 0x11aa33, emissiveIntensity: 0.6 }),
+    ledR:     new THREE.MeshStandardMaterial({ color: 0xff3333, emissive: 0xcc1111, emissiveIntensity: 0.6 })
+  };
+
+  function shadowed(mesh) { mesh.castShadow = true; mesh.receiveShadow = true; return mesh; }
+  function box(g, w, h, d, mat, x, y, z) { var m = shadowed(new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat)); m.position.set(x, y, z); g.add(m); return m; }
+  function cyl(g, r, h, mat, x, y, z, seg) { var m = shadowed(new THREE.Mesh(new THREE.CylinderGeometry(r, r, h, seg || 24), mat)); m.position.set(x, y, z); g.add(m); return m; }
+
+  function roundedRectShape(L, W, r) {   // L along local y (-> world Z), W along local x (-> world X)
+    var s = new THREE.Shape();
+    var hw = W / 2, hl = L / 2;
+    s.moveTo(-hw + r, -hl);
+    s.lineTo(hw - r, -hl); s.absarc(hw - r, -hl + r, r, -Math.PI / 2, 0, false);
+    s.lineTo(hw, hl - r);  s.absarc(hw - r, hl - r, r, 0, Math.PI / 2, false);
+    s.lineTo(-hw + r, hl); s.absarc(-hw + r, hl - r, r, Math.PI / 2, Math.PI, false);
+    s.lineTo(-hw, -hl + r); s.absarc(-hw + r, -hl + r, r, Math.PI, 1.5 * Math.PI, false);
+    return s;
+  }
+  function hole(x, y, r) { var p = new THREE.Path(); p.absarc(x, y, r, 0, Math.PI * 2, false); return p; }
+  // Extrude a Shape drawn in the XY plane and lay it flat: local y -> world Z, extrude along +Y from y0.
+  function plate(shape, thick, y0, mat) {
+    var g = new THREE.ExtrudeGeometry(shape, { depth: thick, bevelEnabled: false, curveSegments: 24 });
+    g.rotateX(-Math.PI / 2); g.scale(1, 1, -1); g.computeVertexNormals();
+    var m = new THREE.Mesh(g, mat); m.position.y = y0;
+    return shadowed(m);
+  }
+  // PCB: W along X, L along Z, with mount holes at the given [x, z] list
+  function pcb(g, W, L, cornerR, holes, holeR, y, mat, thick) {
+    var s = roundedRectShape(L, W, cornerR);
+    holes.forEach(function (p) { s.holes.push(hole(p[0], p[1], holeR)); });
+    var m = plate(s, thick || PCB_T, y, mat); g.add(m); return m;
+  }
+  function standoffs(g, holes, r, h, mat, y0) {
+    holes.forEach(function (p) { cyl(g, r, h, mat, p[0], (y0 || 0) + h / 2, p[1], 6); });
+  }
+  // JST-GH 1.25 mm: 1.25 * (n - 1) + 3.5 mm long, 4.25 wide, 4.4 tall; JST-SH 1.0 mm: 1.0 * (n - 1) + 3.0 long, 3.0 wide, 4.3 tall (as in variants/)
+  function jstGH(g, n, x, y, z, alongX) { var len = 1.25 * (n - 1) + 3.5; return box(g, alongX ? len : 4.25, 4.4, alongX ? 4.25 : len, M.jst, x, y + 2.2, z); }
+  function jstSH(g, n, x, y, z, alongX) { var len = 1.0 * (n - 1) + 3.0; return box(g, alongX ? len : 3.0, 4.3, alongX ? 3.0 : len, M.jst, x, y + 2.15, z); }
+  function bolts(g, holes, y, mat) { holes.forEach(function (p) { cyl(g, 1.9, 1.2, mat, p[0], y + 0.6, p[1], 12); }); }
+
+  // --- 2.54 mm pin header: n positions starting at (x0, z0), stepping +pitch along X (alongX) or Z, base on surface yC
+  var pinH = HD.above + HD.base + HD.below;
+  var pinGeo = new THREE.BoxGeometry(HD.pin, pinH, HD.pin);
+  var pinTotals = {};
+  function header(g, n, x0, z0, alongX, yC, tag) {
+    var len = n * HD.pitch - (HD.pitch - HD.base);
+    var base = shadowed(new THREE.Mesh(new THREE.BoxGeometry(alongX ? len : HD.base, HD.base, alongX ? HD.base : len), M.hdrBase));
+    var cx = x0 + (alongX ? (n - 1) * HD.pitch / 2 : 0), cz = z0 + (alongX ? 0 : (n - 1) * HD.pitch / 2);
+    base.position.set(cx, yC + HD.base / 2, cz); g.add(base);
+    for (var k = 0; k < n; k++) {
+      var pn = shadowed(new THREE.Mesh(pinGeo, M.hdrPin));
+      pn.position.set(x0 + (alongX ? k * HD.pitch : 0), yC + pinH / 2 - HD.below, z0 + (alongX ? 0 : k * HD.pitch)); g.add(pn);
+    }
+    pinTotals[tag] = (pinTotals[tag] || 0) + n;
+  }
+  // flat SMD pad row (gold squares) for the pads that take wire, not headers
+  var padGeo = new THREE.BoxGeometry(1.5, 0.12, 1.5);
+  function pads(g, n, x0, z0, alongX, yC, pitch) {
+    for (var k = 0; k < n; k++) {
+      var p = new THREE.Mesh(padGeo, M.pad);
+      p.position.set(x0 + (alongX ? k * pitch : 0), yC + 0.06, z0 + (alongX ? 0 : k * pitch)); g.add(p);
+    }
+  }
+  function chevron(g, x, yC, z, s) {   // forward (-Z) direction mark
+    var a = new THREE.Mesh(new THREE.ConeGeometry(s * 0.55, s, 3), M.usb); a.rotation.x = -Math.PI / 2; a.position.set(x, yC + 0.1, z); g.add(a);
+  }
+
+  // Board label: front-row labels sit flat-ish in front of the row (+Z), back-row labels float behind the back row (-Z).
+  function boardLabel(g, lines, width, row, from, dx) {
+    var spr = makeLabel(lines, row === 'back' ? LBL_W_BACK : width);   // back-row labels larger: farther from the 3/4 camera
+    var lz = (row === 'front' ? LBL_FRONT_Z : LBL_BACK_Z) - g.position.z, ly = row === 'front' ? LBL_FRONT_Y : LBL_BACK_Y;
+    spr.position.set(dx || 0, ly, lz); g.add(spr);
+    leader(g, from, new THREE.Vector3(dx || 0, ly, lz));
+    return spr;
+  }
+
+  // Canvas label sprite (dark rounded panel, white text), multi-line
+  function makeLabel(lines, widthMM, compact) {
+    var cv = document.createElement('canvas'); cv.width = compact ? 400 : 1024;
+    var lh = compact ? 150 : 62, top = compact ? 20 : 30; cv.height = top * 2 + lh * lines.length + 10;
+    var cx = cv.getContext('2d');
+    function fitFont(weight, size, text) {           // shrink the font until the line fits the panel
+      for (var fs = size; fs > 14; fs -= 2) { cx.font = weight + ' ' + fs + 'px system-ui, Helvetica, Arial, sans-serif'; if (cx.measureText(text).width <= cv.width - 56) break; }
+    }
+    cx.fillStyle = '#16181c'; roundRect(cx, 2, 2, cv.width - 4, cv.height - 4, 26); cx.fill();
+    cx.strokeStyle = '#55595f'; cx.lineWidth = 4; roundRect(cx, 2, 2, cv.width - 4, cv.height - 4, 26); cx.stroke();
+    cx.textBaseline = 'middle'; cx.textAlign = 'center';
+    for (var i = 0; i < lines.length; i++) {
+      if (i === 0) { cx.fillStyle = '#ffffff'; fitFont('600', compact ? 120 : 54, lines[i]); }
+      else if (/^NDAA: GREEN/.test(lines[i])) { cx.fillStyle = '#7fdc98'; fitFont('600', 40, lines[i]); }
+      else if (/^NDAA: YELLOW/.test(lines[i])) { cx.fillStyle = '#f0c75a'; fitFont('600', 40, lines[i]); }
+      else if (/^NDAA: RED/.test(lines[i]) || /^NDAA: FC GREEN/.test(lines[i])) { cx.fillStyle = /^NDAA: RED/.test(lines[i]) ? '#ff8a7a' : '#7fdc98'; fitFont('600', 40, lines[i]); }
+      else { cx.fillStyle = '#c3cad3'; fitFont('400', 40, lines[i]); }
+      cx.fillText(lines[i], cv.width / 2, top + lh * i + lh / 2 + (i === 0 ? 2 : 6));
+    }
+    var tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 4;
+    var spr = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, depthTest: false }));
+    spr.scale.set(widthMM, widthMM * cv.height / cv.width, 1); spr.renderOrder = 10;
+    return spr;
+  }
+  function roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+  }
+  function leader(g, from, to) {
+    g.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([from, to]), new THREE.LineBasicMaterial({ color: 0x8a929c })));
+  }
+  // ---------------------------------------------------------------------
+  // Layout: two rows, all boards long axis along Z, flat on the grid. Front row (+Z, toward the 3/4 camera) holds the small
+  // FPV boards, back row (-Z) the Wing and the two carriers; the two Raspberry Pi boards form a third column on the right. X centres chosen for >= 20 mm between boards and room for labels.
+  // ---------------------------------------------------------------------
+  var Z_FRONT = 26, Z_BACK = -78;
+  var X_WMO = -150, X_LUX = -90, X_H7 = -30, X_F765 = 30, X_H743 = 90;   // front: 22, 28, 36, 38, 37.5 mm wide
+  var X_WING = -130, X_ARK = -55, X_CUBE = 25;                  // back: 36, 43.5, 44.3 mm wide
+  var X_PI = 150;                                               // Raspberry Pi 5 (back) and Pi Zero W (front), right of the FCs
+  var LBL_W = 53, LBL_W_BACK = 66, LBL_FRONT_Z = 80, LBL_FRONT_Y = 8, LBL_BACK_Z = -150, LBL_BACK_Y = 44;
+  var P = HD.pitch;
+  M.pcbWhite = new THREE.MeshStandardMaterial({ color: 0xe6e6df, roughness: 0.7, metalness: 0.05 });
+  M.shell    = new THREE.MeshStandardMaterial({ color: 0x1b1c1f, roughness: 0.75, metalness: 0.05, transparent: false, opacity: 1 });
+  M.orange   = new THREE.MeshStandardMaterial({ color: 0xf26b1d, roughness: 0.55, metalness: 0.1, transparent: false, opacity: 1 });   // Cube housing, solid orange
+  M.molex    = new THREE.MeshStandardMaterial({ color: 0xf7f7f2, roughness: 0.65, metalness: 0.0 });
+  M.rubber   = new THREE.MeshStandardMaterial({ color: 0x111214, roughness: 0.95, metalness: 0.0 });
+  M.fet      = new THREE.MeshStandardMaterial({ color: 0x202226, roughness: 0.4, metalness: 0.3 });
+  M.aluDark  = new THREE.MeshStandardMaterial({ color: 0x5b6068, roughness: 0.4, metalness: 0.8 });
+
+  // =====================================================================
+  // 1. Matek F405-WMO: FC (top) + PDB (bottom) sandwich, 22 mm (X) x 32 mm (Z). The separate USB-C / buzzer board is not modelled (designer, 2026-11-08).
+  //    Geometry from the mateksys.com F405-WMO layout drawing and photos (read 2026-11-08), 20.6 px/mm:
+  //    8 x 3 through-hole block 1.3 / 3.9 / 6.4 mm from the rear edge; 5 x 3 servo block S5-S9 1.1 mm from the front edge;
+  //    mount holes measured at 18.1 x 12.0 mm, 2.0 mm dia (M2 brass standoffs in the photo); STM32F405 LQFP64 centre;
+  //    JST-SH-6P USB / buzzer port on the front-right; G/4V5/LED/S4 flat pads on the left edge; 3 LEDs on the right edge.
+  // =====================================================================
+  (function () {
+    var g = new THREE.Group(); g.position.set(X_WMO, 0, Z_FRONT);
+    var W = 22, L = 32, hx = 9.05, hz = 6.0;
+    var holes = [[hx, hz], [-hx, hz], [hx, -hz], [-hx, -hz]];
+    standoffs(g, holes, 1.6, STANDOFF, M.brass);
+    var yP = STANDOFF;                                   // PDB
+    pcb(g, W, L, 1.5, holes, 1.0, yP, M.pcbBlue);
+    var yPc = yP + PCB_T;
+    // PDB parts: BAT/ESC pad blocks along the rear edge, S1-S3 pads left, inductors, caps, TVS, 1.27 mm board-to-board header
+    [-7.5, -2.5, 2.5, 7.5].forEach(function (x) { box(g, 3.6, 0.15, 3.2, M.pad, x, yPc + 0.07, 13.2); });
+    [[-9.6, -9], [-9.6, -4], [-9.6, 11]].forEach(function (p) { box(g, 1.6, 0.12, 1.6, M.pad, p[0], yPc + 0.06, p[1]); });
+    box(g, 7, 3.6, 7, M.ind, -2.5, yPc + 1.8, 5);        // 6R8 inductor
+    box(g, 5, 3, 5, M.ind, 4.5, yPc + 1.5, 7.5);         // 100 inductor
+    box(g, 5, 2.4, 5, M.ind, 3, yPc + 1.2, -4);          // 100 inductor
+    box(g, 3.2, 1.4, 4.5, M.chipTxt, -4.5, yPc + 0.7, 10.5);   // TVS
+    box(g, 4, 1.8, 2, M.chipSm, 3.5, yPc + 0.9, 11.2);   // shunt
+    [[-6, -6], [-6, -2], [0, -9], [6, -9]].forEach(function (p) { box(g, 3.2, 1.6, 1.6, M.cap, p[0], yPc + 0.8, p[1]); });
+    // board-to-board 2 x 6 header, 1.27 mm pitch, front-right (rises to the FC board)
+    var gap = 5.5, yF = yPc + gap;                       // board gap ASSUMED (overall 12.7 mm spec)
+    box(g, 3.4, gap, 8.2, M.chip, 5.1, yPc + gap / 2, 11.2);
+    standoffs(g, holes.map(function (p) { return [p[0], p[1]]; }), 1.6, 0, M.brass);
+    holes.forEach(function (p) { cyl(g, 1.6, gap, M.brass, p[0], yPc + gap / 2, p[1], 6); });
+    // FC board
+    pcb(g, W, L, 1.5, holes, 1.0, yF, M.pcbBlue);
+    var yC = yF + PCB_T;
+    bolts(g, holes, yC, M.usb);
+    // 8 x 3 through-hole block on the rear edge, 2.54 mm pitch; columns centred on the board
+    for (var r = 0; r < 3; r++) header(g, 8, -3.5 * P, L / 2 - 1.3 - r * P, true, yC, 'wmo');
+    // 5 x 3 servo block S5-S9 on the front edge, left side
+    for (var r2 = 0; r2 < 3; r2++) header(g, 5, -8.8, -L / 2 + 1.1 + r2 * P, true, yC, 'wmo');
+    // left-edge flat pads G / 4V5 / LED / S4
+    pads(g, 4, -10.0, -3.3, false, yC, 2.2);
+    // MCU STM32F405 LQFP64 (10 x 10 body), crystal, 3V3 LDO
+    box(g, 10, 1.4, 10, M.chip, 0.3, yC + 0.7, 0.9);
+    box(g, 2.5, 0.8, 1.6, M.chipSm, 1.5, yC + 0.4, -6.2);
+    box(g, 2, 0.9, 2.2, M.chipSm, -8, yC + 0.45, -6.5);
+    // LEDs on the right edge (red 3V3, blue, green)
+    box(g, 0.8, 0.5, 1.4, M.ledR, 10.1, yC + 0.25, -3);
+    box(g, 0.8, 0.5, 1.4, M.ledB, 10.1, yC + 0.25, 0);
+    box(g, 0.8, 0.5, 1.4, M.ledG, 10.1, yC + 0.25, 3);
+    // JST-SH 6-pin USB / buzzer port, front-right, opening toward the front edge
+    box(g, 8, 3, 4.3, M.jst, 6.4, yC + 1.5, -13.2);
+    box(g, 6.6, 1.6, 0.8, M.chipSm, 6.4, yC + 1.5, -15.1);
+    chevron(g, 7.5, yC, -6.5, 2.6);
+
+
+    // label
+    var top = yC + HD.base + HD.above;
+    boardLabel(g, ['Matek F405-WMO (4-inch reference quad)', 'FC + PDB 32 x 22 x 12.7 mm, 9 g', 'mount 18 x 12 mm, M2 (measured)', '2.54 mm through-hole: 8x3 rear + 5x3 servo, 39 pos.', 'JST-SH 6-pin USB / buzzer port; SD + OSD underside', 'NDAA: RED (PRC)', 'ArduPilot: supported (MatekF405-TE)'], LBL_W, 'front', new THREE.Vector3(0, top, L / 2 - 1.3));
+    scene.add(g);
+  })();
+
+  // =====================================================================
+  // 2. Triumph Lucid H7 FC NDAA, V2 board (RMRC 86342 "Lucid H7 Flight Controller V2"): single board 36 x 36 mm, 30.5 x 30.5 mm M3.
+  //    Top side = TBS Lucid manual rev 1.15 p.38 (V2), rectified at 20 px/mm (lucid_topdown/lucid_h7_v2_manual_p38_top.png; 2026-11-09):
+  //    12 plated 2.54 mm through-holes only: a 10-hole column 1 mm inside the right edge (CL1 DA1 G 4V5 R2 T2 G 4V5 R6 T6) and the
+  //    G / VBat pair front-left; all else square SMD pads. (The former 10 front + 9 rear model was the V1 board.) USB-C mid-mount on the
+  //    left edge. Underside (positions ASSUMED): MCU, microSD, ESC JST-SH 8-pin front, CAN JST-GH rear-right, HD VTX JST-SH rear-left.
+  // =====================================================================
+  (function () {
+    var g = new THREE.Group(); g.position.set(X_H7, 0, Z_FRONT);
+    var W = 36, L = 36, h = 30.5 / 2;
+    var holes = [[h, h], [-h, h], [h, -h], [-h, -h]];
+    standoffs(g, holes, 2.4, STANDOFF, M.nylon);
+    var yB = STANDOFF;
+    pcb(g, W, L, 4.5, holes, 1.6, yB, M.pcbGreen);
+    var yC = yB + PCB_T, yU = yB;                        // top surface, underside
+    bolts(g, holes, yC, M.nylon);
+    header(g, 10, 17.0, -11.75, false, yC, 'h7');                // CL1 DA1 G 4V5 R2 T2 G 4V5 R6 T6 (right edge, front to rear)
+    header(g, 2, -11.5, -17.0, true, yC, 'h7');                  // G VBat (front-left)
+    pads(g, 8, -6.4, -17.0, true, yC, P);                        // DA2 CL2 R8 T8 9V C1 C2 VTx
+    pads(g, 10, -11.5, -14.5, true, yC, P);                      // PC1 G S1 S2 S3 S4 9V G G G
+    pads(g, 4, 3.75, -12.0, true, yC, P);                        // 5V 5V Vsw CAM
+    pads(g, 10, 14.5, -11.75, false, yC, P);                     // inner column CL1 DA1 G 4V5 Rts7 Cts7 G 5V R7 T7
+    pads(g, 10, -11.5, 13.25, true, yC, P); pads(g, 10, -11.5, 16.75, true, yC, P);   // 9V LED S12-S5 / R1 T1 R3 T3 R4 T4 5V G CL CH
+    pads(g, 7, -14.75, -7.75, false, yC, 2.54); pads(g, 7, -11.25, -6.75, false, yC, 2.54);
+    pads(g, 3, -17.0, -10.0, false, yC, 2.0); pads(g, 4, -17.0, 0, false, yC, 2.0);   // USB breakout / SWD
+    box(g, 1.6, 0.12, 1.6, M.pad, -8.75, yC + 0.06, -4.25); box(g, 1.6, 0.12, 1.6, M.pad, 8.75, yC + 0.06, -4.25); box(g, 1.2, 0.12, 4.4, M.pad, 6.75, yC + 0.06, -3.25);
+    chevron(g, 0, yC, 0.5, 3.2);
+    box(g, 7.3, 3.2, 9.0, M.usb, -W / 2 + 1.85, yB + 0.5, -6.0);                     // USB-C mid-mount, left edge
+    // underside parts (positions ASSUMED)
+    box(g, 10, 1.4, 10, M.chip, 4, yU - 0.7, 4.5);                // STM32H743
+    box(g, 12, 1.9, 14, M.usb, -2, yU - 0.95, 6);                 // microSD holder
+    box(g, 11.5, 3, 3.8, M.jst, 5, yU - 1.5, -L / 2 + 3.5);       // ESC JST-SH 8-pin, front
+    box(g, 9.2, 3.8, 5, M.jstGrey, 7, yU - 1.9, L / 2 - 4);       // CAN JST-GH 4-pin, rear-right
+    box(g, 9, 3, 3.8, M.jst, -6, yU - 1.5, L / 2 - 3.5);          // HD VTX JST-SH 6-pin, rear-left
+    box(g, 2.6, 1.6, 2.6, M.chipTxt, 12, yU - 0.8, 10);
+    box(g, 4, 1.2, 4, M.chipSm, -11, yU - 0.6, 9);
+    box(g, 3, 1.2, 3, M.chipSm, 12, yU - 0.6, -9);
+
+    var top = yC + HD.base + HD.above;
+    boardLabel(g, ['Triumph Lucid H7 (V2): 12 x 2.54 mm through-holes', '36 x 36 x 5 mm, 7 g (TBS manual: 32 x 32)', 'mount 30.5 x 30.5 mm M3', '1 x 10 edge column + G / VBat pair; rest pads', 'JST-SH ESC / HD, JST-GH CAN, USB-C (left edge)', 'NDAA: GREEN (US-built)', 'ArduPilot: supported (TBS_LUCID_H7)'], LBL_W, 'front', new THREE.Vector3(0, top, L / 2 - 1.5));
+    scene.add(g);
+  })();
+
+  // =====================================================================
+  // 3. Triumph Lucid H7 Wing NDAA (TBS Lucid H7 Wing design): FC + PDB sandwich 54 (Z) x 36 (X) x 13 mm.
+  //    Header geometry reused from design/renders/quad5_render.html (TBS Lucid manual p.51 "Top Plate - Top", measured):
+  //    front edge: 13-hole row + inner 3 + 5 row; left edge: 8 rows x 3 (G / VS / S3..S10); rear edge: three 13-hole rows.
+  //    Board centre sits 4 mm aft of the 30.5 mm hole pattern. microSD front-centre, two JST-SH on the right edge.
+  // =====================================================================
+  (function () {
+    var g = new THREE.Group(); g.position.set(X_WING, 0, Z_BACK - 4);   // board centre (4 mm aft of the holes) on the back-row line
+    var fc = { L: 54, W: 36, H: 13, offZ: 4 };
+    var h = 30.5 / 2;
+    var holes = [[h, h], [-h, h], [h, -h], [-h, -h]];
+    standoffs(g, holes, 2.4, STANDOFF, M.nylon);
+    var y0 = STANDOFF;
+    function board(y) {
+      var s = roundedRectShape(fc.L, fc.W, 2.5);
+      holes.forEach(function (p) { s.holes.push(hole(p[0], p[1] - fc.offZ, 1.6)); });
+      var m = plate(s, PCB_T, y, M.pcbGreen); m.position.z = fc.offZ; g.add(m); return m;
+    }
+    var zFront = fc.offZ - fc.L / 2, zRear = fc.offZ + fc.L / 2;
+    var gapBoards = fc.H - 2 * PCB_T;
+    board(y0);                                           // PDB
+    var yPc = y0 + PCB_T;
+    box(g, 4, 1.2, 7, M.usb, 10, yPc + 0.6, 14);         // shunt
+    box(g, 6, 1.8, 6, M.chip, -9, yPc + 0.9, 14);        // regulator
+    cyl(g, 3, 3, M.chipSm, -9, yPc + 1.5, -10, 24);      // inductor
+    for (var i = -3; i <= 3; i++) {                      // board-to-board pins
+      box(g, 0.6, gapBoards, 0.6, M.pin, i * P, yPc + gapBoards / 2, zFront + 3);
+      box(g, 0.6, gapBoards, 0.6, M.pin, i * P, yPc + gapBoards / 2, zRear - 3);
+    }
+    box(g, 20, gapBoards - 1.6, 2.6, M.chip, 0, yPc + (gapBoards - 1.6) / 2, zFront + 3);
+    box(g, 20, gapBoards - 1.6, 2.6, M.chip, 0, yPc + (gapBoards - 1.6) / 2, zRear - 3);
+    holes.forEach(function (p) { cyl(g, 2.4, gapBoards, M.nylon, p[0], yPc + gapBoards / 2, p[1], 6); });
+    var yF = yPc + gapBoards;
+    board(yF);                                           // FC
+    var yC = yF + PCB_T;
+    bolts(g, holes, yC, M.nylon);
+    var colX = function (i) { return -0.8 + (i - 6) * P; };
+    var zRow1 = zFront + 1.9, zRow2 = zRow1 + P;
+    header(g, 13, colX(0), zRow1, true, yC, 'wing');     // G VS S1 CS1 CS2 MISO MOSI SCK Rx8 Tx8 VBAT2 AirS RSSI
+    header(g, 3, colX(0), zRow2, true, yC, 'wing');      // G VS S2
+    header(g, 5, colX(8), zRow2, true, yC, 'wing');      // BUZZ G VFC 5V CUR2
+    var zRearRow3 = zRear - 2.3, zRearRow2 = zRearRow3 - P, zRearRow1 = zRearRow3 - 2 * P;
+    header(g, 13, colX(0), zRearRow1, true, yC, 'wing'); header(g, 13, colX(0), zRearRow2, true, yC, 'wing'); header(g, 13, colX(0), zRearRow3, true, yC, 'wing');
+    for (var c = 0; c < 3; c++) {
+      header(g, 6, colX(c), -3.1, false, yC, 'wing');                     // S3..S8
+      header(g, 2, colX(c), zRearRow1 - 2 * P + 0.5, false, yC, 'wing');  // S9, S10
+    }
+    box(g, 12, 1.9, 15, M.usb, 0.5, yC + 0.95, zFront + 13.5);           // microSD holder
+    box(g, 12.2, 1.2, 1.0, M.chip, 0.5, yC + 0.6, zFront + 6.3);
+    chevron(g, 3, yC, 5, 3);
+    box(g, 3.2, 2.9, 8.5, M.jst, fc.W / 2 - 2.4, yC + 1.45, -4);          // JST-SH VTX
+    box(g, 3.2, 2.9, 8.5, M.jst, fc.W / 2 - 2.4, yC + 1.45, 6.5);         // JST-SH to USB board
+    box(g, 2.2, 1.1, 3.2, M.chipSm, 5, yC + 0.55, 13); box(g, 2.2, 1.1, 3.2, M.chipSm, -5, yC + 0.55, 15.5); box(g, 3, 1.0, 2.2, M.chipSm, 9, yC + 0.5, -12);
+    box(g, 1.2, 0.5, 0.7, M.ledB, 13.5, yC + 0.25, 11.5); box(g, 1.2, 0.5, 0.7, M.ledG, 13.5, yC + 0.25, 13.5);
+
+    var top = yC + HD.base + HD.above;
+    boardLabel(g, ['Triumph Lucid H7 Wing NDAA (TBS design)', 'FC + PDB 54 x 36 x 13 mm', 'mount 30.5 x 30.5 mm M3', '2.54 mm through-hole: 84 pos. (13 + 8, 8x3, 3x13)', 'JST-SH USB / HD, JST-GH CAN; strip ships unsoldered', 'NDAA: GREEN (US-built)', 'ArduPilot: supported (TBS_LUCID_H7_WING)'], LBL_W, 'back', new THREE.Vector3(0, top, zFront + 1.9));
+    scene.add(g);
+  })();
+
+  // =====================================================================
+  // 4. Lumenier LUX Mini F7 V2: 28 x 28 x 6 mm, 20 x 20 mm on M3 rubber grommets (lumenier.com, read 2026-11-08).
+  //    Block reused from variants/quad5_5in_lumenier-lux-mini-f7-v2.html: pad positions measured from the lumenier.com photos
+  //    (19.3 px/mm): 8 pads 2.0 mm pitch front, 7 pads 2.54 mm rear (0.6-0.7 mm wire holes, too small for header pins, so no
+  //    headers), 11 pads left, 4 right; F722 LQFP64, micro-USB right edge; underside JST-SH 8-pin ESC plug, OSD, flash, inductors.
+  // =====================================================================
+  (function () {
+    var g = new THREE.Group(); g.position.set(X_LUX, 0, Z_FRONT);
+    var W = 28, L = 28, k = 10;
+    var holes = [[k, k], [-k, k], [k, -k], [-k, -k]];
+    standoffs(g, holes, 2.4, STANDOFF, M.nylon);
+    var yB = STANDOFF; pcb(g, W, L, 2.5, holes, 1.8, yB, M.pcbGreen); var yC = yB + PCB_T, yU = yB;
+    holes.forEach(function (p) { cyl(g, 3.3, 1.6, M.rubber, p[0], yC + 0.8, p[1], 24); cyl(g, 3.3, 1.2, M.rubber, p[0], yU - 0.6, p[1], 24); cyl(g, 1.9, 1.0, M.aluDark, p[0], yC + 2.1, p[1], 12); });
+    pads(g, 8, -6.7, -13.3, true, yC, 2.0);              // GND PWR S/A VTX C_C CAM PWR GND
+    pads(g, 7, -5.4, 12.8, true, yC, 2.54);              // GND 3.3V DSM S.PORT SBUS 5V GND
+    pads(g, 11, -12.7, -11.5, false, yC, 1.9);           // BZ- BZ+ LED GND 5V GND 5V TX4 RX4 SCL SDA
+    pads(g, 4, 12.5, -8.5, false, yC, 2.3);              // 5V RX3 TX3 GND
+    box(g, 10, 1.4, 10, M.chip, 2, yC + 0.7, -2.6);      // STM32F722 LQFP64
+    box(g, 2.5, 0.8, 1.6, M.chipSm, -6.2, yC + 0.4, -4.7);
+    box(g, 3.5, 1.6, 3.5, M.chipTxt, -8.8, yC + 0.8, 4.4);
+    box(g, 1.6, 0.8, 2.2, M.chipSm, -9.6, yC + 0.4, 0.5); box(g, 3, 1.0, 2, M.chipSm, -6.5, yC + 0.5, 8.3);
+    box(g, 5, 1.2, 4, M.chipSm, -1, yC + 0.6, 8); box(g, 5, 1.2, 4, M.chipSm, 3.9, yC + 0.6, 7.8);
+    box(g, 0.8, 0.5, 1.4, M.ledB, 10.9, yC + 0.25, -6.5); box(g, 0.8, 0.5, 1.4, M.ledG, 10.9, yC + 0.25, -3.1);
+    box(g, 7.5, 2.8, 7.8, M.usb, 13.2, yC + 1.4, 3.2); box(g, 0.8, 2.0, 6.8, M.chip, 17.1, yC + 1.4, 3.2);   // micro-USB, right edge
+    chevron(g, -3, yC, -9.5, 2.4);
+    jstSH(g, 8, 1, yU - 4.3, 9.8, true);                 // ESC plug, underside near the rear edge
+    box(g, 4, 1.2, 4, M.chipSm, 3, yU - 0.6, 1); box(g, 5, 1.4, 4, M.chipTxt, -8.8, yU - 0.7, 2); box(g, 8, 1.2, 3, M.chipTxt, 1, yU - 0.6, -8.3);
+    box(g, 6, 3, 6, M.ind, 10, yU - 1.5, -1); box(g, 4, 3, 4, M.ind, -2, yU - 1.5, 1); box(g, 5, 1.4, 4, M.chipSm, -8.8, yU - 0.7, -5.2);
+    boardLabel(g, ['Lumenier LUX Mini F7 V2', '28 x 28 x 6 mm, 5 g', 'mount 20 x 20 mm, M3 rubber grommets', 'solder pads + 0.6 mm wire holes; no 2.54 mm headers', 'JST-SH 8-pin ESC plug underneath; micro-USB', 'NDAA: RED (China)', 'ArduPilot: none (Betaflight-only board)'], LBL_W, 'front', new THREE.Vector3(0, yC + 3, L / 2 - 2));
+    scene.add(g);
+  })();
+
+  // =====================================================================
+  // 5. CubePilot Cube Orange+ on the standard carrier: carrier 94.46 (Z) x 44.29 (X) x 13.4 mm black enclosure, cube
+  //    38.2 x 38.2 x 22.3 mm, 31.42 mm overall; mount holes 85 x 34.4 mm, 2.5 mm dia; connector zones from the CubePilot
+  //    standard-carrier dimension drawing (read 2026-11-08). Block reused from variants/quad5_5in_cubepilot-cube-orange-plus.html;
+  //    here the carrier sits flat on the grid. Servo rail 3 x 15 real 2.54 mm pins out the rear end face.
+  // =====================================================================
+  (function () {
+    var g = new THREE.Group(); g.position.set(X_CUBE, 0, Z_BACK);
+    var CL = 94.46, CW = 44.29, CH = 13.4, y0 = 0.2;
+    var holes = [[17.2, 42.5], [-17.2, 42.5], [17.2, -42.5], [-17.2, -42.5]];
+    (function () { var s = roundedRectShape(CL, CW, 4); holes.forEach(function (p) { s.holes.push(hole(p[0], p[1], 1.25)); }); g.add(plate(s, CH, y0, M.shell)); })();
+    var yT = y0 + CH;
+    holes.forEach(function (p) { cyl(g, 2.2, 0.6, M.aluDark, p[0], yT + 0.3, p[1], 12); });
+    (function () { var s = roundedRectShape(38.2, 38.2, 5); var m = plate(s, 22.3, y0 + 9.1, M.orange); m.position.z = 1.2; g.add(m); })();
+    var yCube = y0 + 9.1 + 22.3;
+    chevron(g, 0, yCube, -4, 5);
+    // front zone: 3 x 3 JST-GH 6-pin (GPS1 GPS2 TELEM1 TELEM2 CAN1 CAN2 ADC I2C2 USB) + SPKT 3-pin
+    var cz = [-39.8, -31.1, -22.7], cx = [-13, -0.7, 10.3];
+    for (var i = 0; i < 3; i++) for (var j = 0; j < 3; j++) { if (i === 1 && j === 2) continue; jstGH(g, 6, cx[j], yT - 3.4, cz[i], true); }
+    jstGH(g, 3, cx[2], yT - 3.4, cz[1] + 4.5, true);
+    // rear zone: POWER1 / POWER2 Molex Clik-Mate, SBUSo 3-pin 2.54 mm header
+    box(g, 14, 6, 7, M.molex, -13, yT - 2.5, 28.3); box(g, 14, 6, 7, M.molex, 3, yT - 2.5, 28.3);
+    header(g, 3, 14.5, 29.5, false, yT - 2.5, 'cube');
+    // servo rail: 3 rows x 15 pins (MAIN OUT 1-8, AUX OUT 1-6, RC IN) out of the rear end face, 2.54 mm pitch
+    (function () {
+      var n = 15, x0 = -1 - 7 * HD.pitch, rows = [4.0, 6.54, 9.08];
+      box(g, n * HD.pitch, 3 * HD.pitch, 2.5, M.hdrBase, -1, y0 + 6.54, CL / 2 - 1.25);
+      rows.forEach(function (ry) { for (var k = 0; k < n; k++) box(g, HD.pin, HD.pin, 6, M.hdrPin, x0 + k * HD.pitch, y0 + ry, CL / 2 + 3); });
+      pinTotals.cube = (pinTotals.cube || 0) + 3 * n;
+    })();
+    box(g, 3, 2.6, 7.5, M.usb, -CW / 2 - 0.2, y0 + 9.5, -5.2); box(g, 3, 2.6, 7.5, M.usb, -CW / 2 - 0.2, y0 + 9.5, 9.8);   // micro-USB x2
+    boardLabel(g, ['CubePilot Cube Orange+ on standard carrier', 'carrier 94.5 x 44.3 x 13.4; 31.4 mm tall; 73 g', 'carrier holes 85 x 34.4 mm, M2.5', '2.54 mm servo rail 3x15 (end face) + SBUSo 3-pin', 'JST-GH 1.25 mm ports, Molex Clik-Mate power, micro-USB', 'NDAA: GREEN (Blue UAS)', 'ArduPilot: supported (CubeOrangePlus)'], LBL_W, 'back', new THREE.Vector3(0, yCube, -10));
+    scene.add(g);
+  })();
+
+  // =====================================================================
+  // 6. ARK Electronics ARKV6X on the ARK PAB carrier: module 36 x 29 x 5 mm, 5 g; carrier 74 (Z) x 43.5 (X) x 12 mm, 22 g
+  //    (arkelectron.com, read 2026-11-08). Block reused from variants/quad5_5in_ark-arkv6x-pab.html: corner holes ~68 x 39 mm
+  //    and connector positions measured from the PX4 ark_pab_top photo (8.43 px/mm), ASSUMED. JST-GH / Clik-Mate only, no 2.54 mm.
+  // =====================================================================
+  (function () {
+    var g = new THREE.Group(); g.position.set(X_ARK, 0, Z_BACK);
+    var CL = 74, CW = 43.5;
+    var holes = [[19.5, 34], [-19.5, 34], [19.5, -34], [-19.5, -34]];
+    standoffs(g, holes, 2.4, STANDOFF, M.nylon);
+    var yB = STANDOFF; pcb(g, CW, CL, 2.5, holes, 1.6, yB, M.pcbGreen, 1.6); var yC = yB + 1.6, yU = yB;
+    bolts(g, holes, yC, M.nylon);
+    box(g, 14, 6, 7, M.molex, -9.9, yC + 3, 32.3); box(g, 14, 6, 7, M.molex, 7.9, yC + 3, 32.3);          // power inputs, rear end
+    [-14.6, -6.3, 2, 10.3].forEach(function (x) { jstGH(g, 6, x, yC, 24.5, true); });
+    [-11, 2, 12.6].forEach(function (x) { jstGH(g, 6, x, yC, 16.8, true); });
+    [14.5, 8.5, 2.6, -3.3, -9.3].forEach(function (z) { jstGH(g, 6, 17, yC, z, false); });
+    jstGH(g, 3, 17.5, yC, -15.2, false); jstGH(g, 3, 17.5, yC, -21, false); jstGH(g, 5, 17, yC, -27, false);
+    jstGH(g, 10, -14, yC, -29, true); jstGH(g, 6, -4, yC, -29, true); jstGH(g, 4, 4.5, yC, -29, true); jstGH(g, 4, 12, yC, -29, true);
+    jstGH(g, 4, -18.5, yC, 24, false); jstGH(g, 4, -18.5, yC, 16, false);
+    box(g, 8.9, 3.2, 7.3, M.usb, 14, yU - 1.6, 30); box(g, 7.8, 2.2, 0.8, M.chip, 14, yU - 1.6, 34.2);     // USB-C underside
+    jstSH(g, 10, -8, yU - 4.3, 32, true); box(g, 6, 1.2, 6, M.chipSm, 8, yU - 0.6, -5); box(g, 4, 1.0, 4, M.chipSm, -10, yU - 0.5, -20);
+    var mx = -6, mz = -3.8, mh = [[mx + 12.15, mz + 14.95], [mx - 12.15, mz + 14.95], [mx + 12.15, mz - 14.95], [mx - 12.15, mz - 14.95]];
+    box(g, 3.5, 4, 15, M.chip, mx, yC + 2, mz + 12.2); box(g, 3.5, 4, 15, M.chip, mx, yC + 2, mz - 12.2);  // DF40 pair
+    mh.forEach(function (p) { cyl(g, 1.1, 4, M.brass, p[0], yC + 2, p[1], 6); });
+    var yM = yC + 4; pcb(g, 29, 36, 2, mh, 1.0, yM, M.pcbGreen, 1.6); var yMc = yM + 1.6;
+    mh.forEach(function (p) { cyl(g, 1.4, 0.8, M.aluDark, p[0], yMc + 0.4, p[1], 10); });
+    box(g, 10, 1.4, 10, M.chip, mx + 2, yMc + 0.7, mz + 1);                                              // STM32H743
+    box(g, 3, 0.9, 3, M.chipSm, mx - 8, yMc + 0.45, mz - 8); box(g, 3, 0.9, 3, M.chipSm, mx - 8, yMc + 0.45, mz - 3); box(g, 3, 0.9, 3, M.chipSm, mx - 8, yMc + 0.45, mz + 2);
+    box(g, 2, 0.8, 2, M.chipSm, mx + 9, yMc + 0.4, mz - 10); box(g, 2.5, 0.8, 2, M.chipSm, mx + 9, yMc + 0.4, mz + 8);
+    box(g, 12, 1.9, 14, M.usb, mx + 1, yMc + 0.95, mz - 10);                                              // microSD
+    box(g, 0.8, 0.5, 1.4, M.ledB, mx - 12, yMc + 0.25, mz + 12); box(g, 0.8, 0.5, 1.4, M.ledG, mx - 12, yMc + 0.25, mz + 14.5);
+    chevron(g, mx + 9, yMc, mz + 12, 2.6);
+    boardLabel(g, ['ARK Electronics ARKV6X on ARK PAB carrier', 'module 36 x 29 x 5; carrier 74 x 43.5 x 12 mm; 27 g', 'carrier holes ~68 x 39 mm, M3 (assumed)', 'connectors only: JST-GH 1.25 mm, Clik-Mate, USB-C', 'no solder pads, no 2.54 mm pins', 'NDAA: GREEN (Blue UAS)', 'ArduPilot: supported (ARKV6X)'], LBL_W, 'back', new THREE.Vector3(0, yC + 6, -CL / 2 + 4));
+    scene.add(g);
+  })();
+
+  // =====================================================================
+  // 7. Lumenier LUX F765 NDAA (NDAA option, coordinator 2026-11-08): 38 x 38 x 4 mm, 9 g, 30.5 x 30.5 mm on M3 rubber grommets
+  //    (GetFPV page capture 2026-11-08). Connector side per the ArduPilot wiki LUXF765_NDAA_TOP pinout (scaled 14.6 px/mm,
+  //    positions by eye): JST-SH 1.0 mm GPS 6-pin and HD VTX 6-pin at the front edge, receiver 4-pin left, ESC M5-8 and M1-4
+  //    8-pin right, JST-GH 4-pin CAN at the rear; USB-C on the left edge. Other side: flat solder pads only (bottom pinout) and
+  //    the microSD slot, so no 2.54 mm headers. "All connectors are JST SH 1.0mm pitch EXCEPT the CANbus port, JST GH" (wiki).
+  // =====================================================================
+  (function () {
+    var g = new THREE.Group(); g.position.set(X_F765, 0, Z_FRONT);
+    var W = 38, L = 38, h = 30.5 / 2, holes = [[h, h], [-h, h], [h, -h], [-h, -h]];
+    standoffs(g, holes, 2.4, STANDOFF, M.nylon);
+    var yB = STANDOFF; pcb(g, W, L, 3.5, holes, 1.8, yB, M.pcbGreen); var yC = yB + PCB_T, yU = yB;
+    holes.forEach(function (p) { cyl(g, 3.3, 1.6, M.rubber, p[0], yC + 0.8, p[1], 24); cyl(g, 3.3, 1.2, M.rubber, p[0], yU - 0.6, p[1], 24); });
+    jstSH(g, 6, -6.8, yC, -13.7, true); jstSH(g, 6, 6.8, yC, -13.7, true);    // GPS, HD VTX
+    jstSH(g, 4, -12.9, yC, -2.7, false);                                       // receiver
+    jstSH(g, 8, 12.8, yC, -5.8, false); jstSH(g, 8, 12.8, yC, 5.1, false);     // ESC M5-8, M1-4
+    jstGH(g, 4, 7.8, yC, 14.7, true);                                          // CAN (JST-GH)
+    box(g, 12.5, 1.4, 12.5, M.chip, -3.2, yC + 0.7, 7.7);                      // STM32F765
+    box(g, 7.3, 3.2, 8.9, M.usb, -W / 2 + 3.4, yC + 1.6, 5.5); box(g, 0.8, 2.2, 7.8, M.chip, -W / 2 - 0.3, yC + 1.6, 5.5);   // USB-C, left edge
+    box(g, 4, 1.2, 4, M.chipSm, -6, yC + 0.6, -6); box(g, 5, 1.6, 3, M.chipSm, 2, yC + 0.8, -7.5); box(g, 5, 1.6, 3, M.chipSm, 2, yC + 0.8, -2);
+    box(g, 2.6, 1.4, 2.6, M.chipTxt, -16, yC + 0.7, -8);                       // BOOT0 button
+    chevron(g, 6, yC, 6, 2.6);
+    pads(g, 11, -16.2, -12.5, false, yU - 0.12, 2.4); pads(g, 10, 16.2, -11, false, yU - 0.12, 2.4);   // underside pad columns
+    pads(g, 11, -12.5, -16.2, true, yU - 0.12, 2.5); pads(g, 12, -13.5, 16.2, true, yU - 0.12, 2.4);   // underside pad rows
+    box(g, 12, 1.9, 14, M.usb, 4, yU - 0.95, 0);                               // microSD, underside
+    boardLabel(g, ['Lumenier LUX F765 NDAA', '38 x 38 x 4 mm, 9 g', 'mount 30.5 x 30.5 mm, M3 rubber grommets', 'JST-SH 1.0 mm ports + JST-GH CAN; pads; no 2.54 mm', 'USB-C; microSD on the pad side', 'NDAA: GREEN (vendor declaration; made in Thailand)', 'ArduPilot: supported (LumenierLUXF765-NDAA)'], LBL_W, 'front', new THREE.Vector3(0, yC + 4, L / 2 - 2));
+    scene.add(g);
+  })();
+
+  // =====================================================================
+  // 8. Lumenier LUX H743 NDAA (NDAA option, coordinator 2026-11-08): 37.5 x 37.5 mm, 30.5 x 30.5 mm M3 (ArduPilot PR #34831
+  //    hwdef README; GetFPV capture: 5 M3 rubber grommets supplied). "All connectors are JST GH 1.25mm pitch" (README).
+  //    Positions from the PR's LUXH743_NDAA_PINOUT_TOP render (15.9 px/mm, by eye): Telem #1 and GPS 6-pin front, ESC #1 8-pin
+  //    and CAN 4-pin left, Telem #2 6-pin right, ESC #2 8-pin rear, USB-C right edge, H743 centre. Other side: flat square pads,
+  //    microSD; no 2.54 mm through-holes. Thickness and weight not published: 5 mm board stack and no weight ASSUMED.
+  // =====================================================================
+  (function () {
+    var g = new THREE.Group(); g.position.set(X_H743, 0, Z_FRONT);
+    var W = 37.5, L = 37.5, h = 30.5 / 2, holes = [[h, h], [-h, h], [h, -h], [-h, -h]];
+    standoffs(g, holes, 2.4, STANDOFF, M.nylon);
+    var yB = STANDOFF; pcb(g, W, L, 3.5, holes, 1.8, yB, M.pcbGreen); var yC = yB + PCB_T, yU = yB;
+    holes.forEach(function (p) { cyl(g, 3.3, 1.6, M.rubber, p[0], yC + 0.8, p[1], 24); cyl(g, 3.3, 1.2, M.rubber, p[0], yU - 0.6, p[1], 24); });
+    jstGH(g, 6, -6.7, yC, -15.2, true); jstGH(g, 6, 4.7, yC, -15.2, true);    // Telem #1, GPS
+    jstGH(g, 8, -15.5, yC, -5.0, false); jstGH(g, 4, -15.5, yC, 7.4, false);   // ESC #1, CAN
+    jstGH(g, 6, 15.0, yC, 5.8, false);                                         // Telem #2
+    jstGH(g, 8, -5.7, yC, 15.3, true);                                         // ESC #2
+    box(g, 7.3, 3.2, 8.9, M.usb, W / 2 - 3.2, yC + 1.6, -7.0); box(g, 0.8, 2.2, 7.8, M.chip, W / 2 + 0.3, yC + 1.6, -7.0);   // USB-C, right edge
+    box(g, 14, 1.4, 14, M.chip, 1.9, yC + 0.7, 1.6);                           // STM32H743
+    box(g, 3, 1.0, 3, M.chipSm, -9, yC + 0.5, -10); box(g, 3.5, 1.0, 3.5, M.chipSm, 7, yC + 0.5, -10); box(g, 4.5, 1.0, 4.5, M.chipSm, -9.5, yC + 0.5, 7.5); box(g, 5, 1.0, 4.5, M.chipSm, 8.8, yC + 0.5, 12.5);
+    box(g, 2.6, 1.4, 2.6, M.chipTxt, -10.5, yC + 0.7, -1.5);                   // boot button
+    pads(g, 9, -16.3, -10, false, yU - 0.12, 2.5); pads(g, 9, 16.3, -10, false, yU - 0.12, 2.5);
+    pads(g, 9, -10, -16.3, true, yU - 0.12, 2.5); pads(g, 9, -10, 16.3, true, yU - 0.12, 2.5);
+    box(g, 12, 1.9, 14, M.usb, -5, yU - 0.95, 2);                              // microSD, pad side
+    boardLabel(g, ['Lumenier LUX H743 NDAA', '37.5 x 37.5 mm (thickness, weight not published)', 'mount 30.5 x 30.5 mm, M3 rubber grommets', 'JST-GH 1.25 mm ports only + pads; no 2.54 mm', 'USB-C; microSD on the pad side', 'NDAA: GREEN (vendor claim; made in USA)', 'ArduPilot: PR #34831 open; vendor 4.7.2 build'], LBL_W, 'front', new THREE.Vector3(0, yC + 4, L / 2 - 2));
+    scene.add(g);
+  })();
+
+  // =====================================================================
+  // 9-10. Companion-computer size references, to the right of the FCs (designer, 2026-11-08). Board outlines and hole patterns
+  //    from the raspberrypi.com mechanical drawings (Pi 5 / 4B: 85 x 56 mm, holes 3.5 mm in from the edges at 58 x 49 mm,
+  //    M2.5; Pi Zero W: 65 x 30 mm, holes 3.5 mm in at 58 x 23 mm, M2.5; 40-pin header centred 32.5 mm along, 3.5 mm in).
+  //    Connector and chip positions are approximate (by eye from the drawings / photos), ASSUMED. Board coordinates:
+  //    u along the long edge (world Z, u = max toward the camera), v across (world X, v = 0 is the 40-pin header edge, at -X).
+  // =====================================================================
+  M.pcbPi = new THREE.MeshStandardMaterial({ color: 0x1d6e3c, roughness: 0.62, metalness: 0.1 });
+  M.lid   = new THREE.MeshStandardMaterial({ color: 0xc4c8cd, roughness: 0.35, metalness: 0.85 });
+  // Raspberry Pi 5 (assumed for "a Raspberry Pi"; a Pi 4B has the same 85 x 56 mm board and 58 x 49 mm holes)
+  (function () {
+    var g = new THREE.Group(); g.position.set(X_PI, 0, Z_BACK);
+    var BL = 85, BW = 56;
+    function X(v) { return v - BW / 2; } function Z(u) { return u - BL / 2; }
+    function b(w_v, h, d_u, mat, u, v, y) { return box(g, w_v, h, d_u, mat, X(v), y, Z(u)); }
+    var holes = [[X(3.5), Z(3.5)], [X(3.5), Z(61.5)], [X(52.5), Z(3.5)], [X(52.5), Z(61.5)]];
+    standoffs(g, holes, 1.6, STANDOFF, M.brass);
+    var yB = STANDOFF; pcb(g, BW, BL, 3, holes, 1.35, yB, M.pcbPi, 1.4); var yC = yB + 1.4, yU = yB;
+    bolts(g, holes, yC, M.usb);
+    for (var r = 0; r < 2; r++) header(g, 20, X(3.5 - 1.27 + r * 2.54), Z(32.5 - 9.5 * 2.54), false, yC, 'pi5');   // 40-pin 2x20, fitted
+    b(16, 13.5, 21.5, M.usb, 77.5 + 2.5, 10.25, yC + 6.75);          // Ethernet (RJ45 with magnetics), overhangs the end
+    b(13.1, 16, 17.5, M.usb, 79 + 2.5, 29, yC + 8);                  // USB 3.0 pair
+    b(13.1, 16, 17.5, M.usb, 79 + 2.5, 47, yC + 8);                  // USB 2.0 pair
+    b(1.0, 6, 9, M.chip, 88.3, 29, yC + 8); b(1.0, 6, 9, M.chip, 88.3, 47, yC + 8);   // port mouths (blue/black inserts, dark)
+    b(7.5, 3.2, 9, M.usb, 11.2, 56 - 3.2, yC + 1.6);                 // USB-C power, long edge opposite the header
+    b(6.5, 3.5, 7.5, M.usb, 25.8, 56 - 3.0, yC + 1.75); b(6.5, 3.5, 7.5, M.usb, 39.2, 56 - 3.0, yC + 1.75);   // 2x micro-HDMI
+    b(4, 1.6, 15, M.jst, 48.5, 47, yC + 0.8); b(4, 1.6, 15, M.jst, 63, 47, yC + 0.8);   // CAM/DISP 22-pin FPC connectors (MIPI 0 / 1)
+    b(13, 1.6, 4, M.jst, 1.8, 28, yC + 0.8);                         // PCIe 16-pin FPC, left end
+    b(17, 1.6, 17, M.lid, 29, 30, yC + 0.8);                         // BCM2712 under its metal lid
+    b(11, 1.0, 15, M.chip, 46, 22, yC + 0.5);                        // LPDDR4X
+    b(7, 1.0, 7, M.chip, 63, 26, yC + 0.5);                          // RP1 I/O controller
+    b(10, 1.2, 12, M.chipSm, 8, 14, yC + 0.6);                       // wireless module
+    b(6, 1.0, 6, M.chipSm, 20, 46, yC + 0.5);                        // PMIC
+    b(3, 1.6, 3, M.chipTxt, 3.5, 52, yC + 0.8);                      // power button
+    b(5, 3, 3, M.jst, 72, 4.5, yC + 1.5);                            // fan connector
+    b(12, 1.4, 11, M.usb, 6, 28, yU - 0.7);                          // microSD, underside left end
+    boardLabel(g, ['Raspberry Pi 5 (assumed for "a Raspberry Pi")', '85 x 56 mm, about 46 g (Pi 4B: same board size)', 'mount 58 x 49 mm, M2.5', '40-pin 2.54 mm header, 2x20 fitted', 'USB-A x4, Ethernet, 2x micro-HDMI, USB-C, PCIe / CSI / DSI FPC', 'companion computer, size reference'], LBL_W, 'back', new THREE.Vector3(X(28), yC + 8, Z(8)));
+    scene.add(g);
+  })();
+  // Raspberry Pi Zero W: 65 x 30 mm, about 9 g, 40-pin footprint left unpopulated (no header fitted)
+  (function () {
+    var g = new THREE.Group(); g.position.set(X_PI, 0, Z_FRONT);
+    var BL = 65, BW = 30;
+    function X(v) { return v - BW / 2; } function Z(u) { return u - BL / 2; }
+    function b(w_v, h, d_u, mat, u, v, y) { return box(g, w_v, h, d_u, mat, X(v), y, Z(u)); }
+    var holes = [[X(3.5), Z(3.5)], [X(3.5), Z(61.5)], [X(26.5), Z(3.5)], [X(26.5), Z(61.5)]];
+    standoffs(g, holes, 1.6, STANDOFF, M.brass);
+    var yB = STANDOFF; pcb(g, BW, BL, 3, holes, 1.35, yB, M.pcbPi, 1.0); var yC = yB + 1.0, yU = yB;
+    bolts(g, holes, yC, M.usb);
+    var ring = new THREE.CylinderGeometry(0.85, 0.85, 0.12, 16), bore = new THREE.CylinderGeometry(0.5, 0.5, 0.16, 12);
+    for (var r = 0; r < 2; r++) for (var k = 0; k < 20; k++) {                                   // 40 plated holes, empty
+      var x = X(3.5 - 1.27 + r * 2.54), z = Z(32.5 - 9.5 * 2.54 + k * 2.54);
+      var a = new THREE.Mesh(ring, M.pad); a.position.set(x, yC + 0.06, z); g.add(a);
+      var c = new THREE.Mesh(bore, M.chip); c.position.set(x, yC + 0.08, z); g.add(c);
+    }
+    b(11.2, 3.3, 7.6, M.usb, 12.4, 30 - 3.3, yC + 1.65);              // mini-HDMI
+    b(8, 3, 5.6, M.usb, 41.4, 30 - 2.6, yC + 1.5); b(8, 3, 5.6, M.usb, 54, 30 - 2.6, yC + 1.5);   // micro-USB data / power
+    b(17, 1.3, 4.5, M.jst, 63, 15, yC + 0.65);                        // CSI camera FPC, right end
+    b(11, 1.4, 12, M.usb, 6.5, 16.5, yC + 0.7);                       // microSD, left end (top side)
+    b(12, 1.4, 12, M.chip, 31, 16, yC + 0.7);                         // BCM2835 + RAM (PoP)
+    b(6, 1.0, 6, M.chipSm, 20, 22, yC + 0.5);                         // wireless chip
+    b(0.8, 0.5, 1.4, M.ledG, 60.5, 27, yC + 0.25);
+    boardLabel(g, ['Raspberry Pi Zero W', '65 x 30 mm, about 9 g', 'mount 58 x 23 mm, M2.5', '40-pin 2.54 mm footprint, unpopulated (no header)', 'mini-HDMI, 2x micro-USB, CSI FPC, microSD', 'companion computer, size reference'], LBL_W, 'front', new THREE.Vector3(X(15), yC + 3, Z(60)));
+    scene.add(g);
+  })();
+  window.__headerPins = pinTotals;
+
+  // ---------------------------------------------------------------------
+  // Ground, grid, lights
+  // ---------------------------------------------------------------------
+  var groundY = 0;
+  var grid10 = new THREE.GridHelper(800, 80, 0xffffff, 0xffffff); grid10.position.y = groundY; scene.add(grid10);
+  var grid50 = new THREE.GridHelper(800, 16, 0xffffff, 0xffffff); grid50.position.y = groundY + 0.05; scene.add(grid50);
+  var ground = new THREE.Mesh(new THREE.PlaneGeometry(1400, 1400), new THREE.ShadowMaterial({ opacity: 0.32 }));
+  ground.rotation.x = -Math.PI / 2; ground.position.y = groundY - 0.05; ground.receiveShadow = true; scene.add(ground);
+
+  // ---------------------------------------------------------------------
+  // Scale bar: 6 in along X, flat on the grid in front of the front-row labels (+Z), 1 in ticks plus a half-inch tick, labels in inches.
+  // ---------------------------------------------------------------------
+  (function () {
+    var IN = 25.4, nIn = 6, barZ = 122, x0 = -nIn * IN / 2, w = 4, t = 0.8, yb = groundY + 0.6;
+    var sg = new THREE.Group();
+    for (var i = 0; i < nIn; i++) {
+      var seg = new THREE.Mesh(new THREE.BoxGeometry(IN, t, w), i % 2 ? M.barLight : M.barDark);
+      seg.position.set(x0 + (i + 0.5) * IN, yb, barZ); seg.receiveShadow = true; sg.add(seg);
+    }
+    var outline = new THREE.Mesh(new THREE.BoxGeometry(nIn * IN + 1.6, t * 0.5, w + 1.6), M.barDark);
+    outline.position.set(x0 + nIn * IN / 2, yb - t * 0.3, barZ); sg.add(outline);
+    function tick(x, len) {
+      var tk = new THREE.Mesh(new THREE.BoxGeometry(0.9, t + 0.4, len), M.barTick);
+      tk.position.set(x, yb, barZ - w / 2 - len / 2); sg.add(tk);
+    }
+    for (var k = 0; k <= nIn; k++) tick(x0 + k * IN, 5);
+    tick(x0 + IN / 2, 3);
+    for (var m = 0; m <= nIn; m++) {
+      var lb = makeLabel([m === 0 ? '0' : m + ' in'], 13, true);
+      lb.position.set(x0 + m * IN, yb + 1, barZ + 9); sg.add(lb);
+    }
+    var note = makeLabel(['6 in scale bar, 1 in ticks (1 in = 25.4 mm)'], 52);
+    note.position.set(x0 + nIn * IN / 2, yb + 1, barZ + 24); sg.add(note);
+    scene.add(sg);
+  })();
+
+  // >>> PENNY (generated by tools/render/penny_refs.py; model in lib/penny.js)
+  // US one-cent coin, 19.05 mm x 1.52 mm, flat on the grid, obverse up: a size reference everyone knows (designer, 2026-11-09).
+  (function () {
+    if (!window.PennyModel) return;
+    var cfg = {"p": [100, 122], "lab": [100, 4, 107]}, gy = groundY;
+    var p = PennyModel.make(); p.position.set(cfg.p[0], gy, cfg.p[1]); scene.add(p);
+    var l = (function (t) { return makeLabel([t], 34, false); })('US penny, 19.05 mm (0.75 in)', null, 6.5); l.position.set(cfg.lab[0], gy + cfg.lab[1], cfg.lab[2]); scene.add(l);
+    window.__penny = p; window.__pennyLabel = l;
+  })();
+  // <<< PENNY
+
+  var hemi = new THREE.HemisphereLight(0xd7dde5, 0x2b2e33, 0.9); scene.add(hemi);
+  var key = new THREE.DirectionalLight(0xffffff, 2.4); key.position.set(140, 300, 200); key.castShadow = true;
+  key.shadow.mapSize.set(2048, 2048); key.shadow.camera.near = 50; key.shadow.camera.far = 1000;
+  key.shadow.camera.left = -260; key.shadow.camera.right = 260; key.shadow.camera.top = 260; key.shadow.camera.bottom = -260; key.shadow.bias = -0.0005; key.shadow.normalBias = 0.2;
+  scene.add(key);
+  var fill = new THREE.DirectionalLight(0xcfd8e6, 0.8); fill.position.set(-200, 120, -160); scene.add(fill);
+  var rim = new THREE.DirectionalLight(0xffffff, 0.5); rim.position.set(0, 90, -300); scene.add(rim);
+
+  // ---------------------------------------------------------------------
+  // Minimal orbit controls (inline so the page works from file://)
+  // ---------------------------------------------------------------------
+  var ctl = { target: new THREE.Vector3(0, 0, 0), theta: 0.5, phi: 0.95, radius: 650, minR: 30, maxR: 2000 };
+  function applyCamera() {
+    var sp = Math.sin(ctl.phi);
+    camera.position.set(ctl.target.x + ctl.radius * sp * Math.sin(ctl.theta), ctl.target.y + ctl.radius * Math.cos(ctl.phi), ctl.target.z + ctl.radius * sp * Math.cos(ctl.theta));
+    camera.lookAt(ctl.target);
+  }
+  var views = {
+    iso: { theta: 0.16, phi: 0.9, radius: 900, target: [-5, 4, -6] },
+    top: { theta: 0.0001, phi: 0.0001, radius: 790, target: [16, 0, -8] }
+  };
+  function setView(v) { ctl.theta = v.theta; ctl.phi = v.phi; ctl.radius = v.radius; ctl.target.set(v.target[0], v.target[1], v.target[2]); applyCamera(); }
+  setView(views.iso);
+
+  var el = renderer.domElement, dragging = false, mode = 'rotate', lx = 0, ly = 0;
+  el.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+  el.addEventListener('pointerdown', function (e) { dragging = true; mode = (e.button === 2 || e.shiftKey || e.ctrlKey) ? 'pan' : 'rotate'; lx = e.clientX; ly = e.clientY; el.setPointerCapture(e.pointerId); });
+  el.addEventListener('pointerup', function () { dragging = false; });
+  el.addEventListener('pointermove', function (e) {
+    if (!dragging) return;
+    var dx = e.clientX - lx, dy = e.clientY - ly; lx = e.clientX; ly = e.clientY;
+    if (mode === 'rotate') {
+      ctl.theta -= dx * 0.006; ctl.phi -= dy * 0.006; ctl.phi = Math.max(0.0001, Math.min(Math.PI - 0.0001, ctl.phi));
+    } else {
+      var k = ctl.radius * 0.0012;
+      var right = new THREE.Vector3(), up = new THREE.Vector3();
+      camera.matrix.extractBasis(right, up, new THREE.Vector3());
+      ctl.target.addScaledVector(right, -dx * k).addScaledVector(up, dy * k);
+    }
+    applyCamera();
+  });
+  el.addEventListener('wheel', function (e) { e.preventDefault(); ctl.radius *= Math.exp(e.deltaY * 0.0012); ctl.radius = Math.max(ctl.minR, Math.min(ctl.maxR, ctl.radius)); applyCamera(); }, { passive: false });
+
+  // ---------------------------------------------------------------------
+  // Theme (light default, house style of quad5_render.html), buttons, URL hash (#top, #dark)
+  // ---------------------------------------------------------------------
+  function setTheme(name) {
+    var t = themes[name];
+    document.documentElement.setAttribute('data-theme', name);
+    scene.background = new THREE.Color(t.bg);
+    grid10.material.color.setHex(t.grid1); grid10.material.transparent = false; grid10.material.opacity = 1;   // all materials opaque (designer's rule); shadow catcher below is not a component
+    grid50.material.color.setHex(t.grid2);
+    hemi.color.setHex(t.hemiSky); hemi.groundColor.setHex(t.hemiGnd);
+    ground.material.opacity = name === 'dark' ? 0.32 : 0.22;
+    currentTheme = name;
+  }
+  var currentTheme = 'dark';
+  var hash = (location.hash || '').toLowerCase();
+  setTheme(hash.indexOf('dark') >= 0 ? 'dark' : 'light');
+  if (hash.indexOf('top') >= 0) setView(views.top);
+  document.getElementById('bIso').onclick = function () { setView(views.iso); };
+  document.getElementById('bTop').onclick = function () { setView(views.top); };
+  document.getElementById('bTheme').onclick = function () { setTheme(currentTheme === 'dark' ? 'light' : 'dark'); };
+
+
+  window.addEventListener('resize', function () {
+    camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  var frames = 0;
+  window.__pause = false;
+  function loop() { requestAnimationFrame(loop); if (window.__pause) return; renderer.render(scene, camera); if (++frames === 3) window.__rendered = true; }
+  loop();
+})();
+</script>
+</body>
+</html>

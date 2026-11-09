@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Drone Renders</title>
+<!-- Generated 2026-11-09 20:11 by tools/render/build_gallery.py; do not edit by hand. -->
+<style>
+:root { --bg:#f7f8f9; --fg:#15181c; --muted:#5b636e; --card:#ffffff; --line:#dde1e5; --link:#1f5fa8; --ph:#eef0f2; }
+:root[data-theme="dark"] { --bg:#1d2024; --fg:#e6e8eb; --muted:#9aa3ad; --card:#25292e; --line:#3a3f46; --link:#8cb8ff; --ph:#2c3137; }
+* { box-sizing:border-box; }
+html, body { margin:0; background:var(--bg); color:var(--fg); font:15px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; }
+body { overflow-x:hidden; }
+.wrap { max-width:1400px; margin:0 auto; padding:20px 16px 40px; }
+header { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+h1 { font-size:18px; font-weight:600; margin:0; }
+#theme { background:transparent; color:var(--muted); border:1px solid var(--line); border-radius:6px; padding:3px 9px; font:inherit; font-size:12px; cursor:pointer; flex:none; }
+h2 { font-size:15px; font-weight:600; color:var(--muted); margin:28px 0 10px; text-transform:none; }
+.grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap:16px; }
+.card { background:var(--card); border:1px solid var(--line); border-radius:8px; overflow:hidden; min-width:0; }
+.pic { display:block; aspect-ratio:4 / 3; background:var(--ph); }
+.pic img { display:block; width:100%; height:100%; object-fit:cover; }
+.pic.fit { background:#ffffff; }
+.pic.fit img { object-fit:contain; }
+.pic.none { display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:13px; text-decoration:none; }
+.body { padding:8px 12px 10px; }
+.title { font-weight:600; margin:0; overflow-wrap:anywhere; }
+.links { font-size:12px; color:var(--muted); margin-top:2px; }
+.links a { color:var(--link); text-decoration:none; }
+.links a:hover { text-decoration:underline; }
+.arch { margin:32px 0 0; font-size:15px; }
+.arch a { color:var(--link); }
+.pubnote { margin:0 0 10px; font-size:13px; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><h1>Drone renders - click a picture to open the 3D view</h1><button id="theme" type="button">Dark</button></header>
+<h2>5-inch quad (MOD-L 5-inch, plate v2)</h2>
+<div class="grid">
+<article class="card"><a class="pic" href="quad5_render.html" target="_blank" rel="noopener"><img src="thumbs/quad5_render.jpg" alt="5-inch quad: Lucid H7 Wing" title="5-inch quad: Lucid H7 Wing (rev 11, 2026-11-09)" loading="lazy"></a><div class="body"><p class="title">5-inch quad: Lucid H7 Wing</p><div class="links"><a href="quad5_render.png" target="_blank" rel="noopener">3/4</a> &middot; <a href="quad5_render_top.png" target="_blank" rel="noopener">top</a> &middot; <a href="quad5_render_side.png" target="_blank" rel="noopener">side</a> &middot; <a href="quad5_render_unoq.png" target="_blank" rel="noopener">UNO Q</a></div></div></article>
+</div>
+<h2>4-inch reference quad (MOD-L 4-inch)</h2>
+<div class="grid">
+<article class="card"><a class="pic" href="quad4_ref_render.html" target="_blank" rel="noopener"><img src="thumbs/quad4_ref_render.jpg" alt="4-inch reference quad" title="4-inch reference quad render (2026-11-08)" loading="lazy"></a><div class="body"><p class="title">4-inch reference quad</p><div class="links"><a href="quad4_ref_render.png" target="_blank" rel="noopener">3/4</a> &middot; <a href="quad4_ref_render_top.png" target="_blank" rel="noopener">top</a> &middot; <a href="quad4_ref_render_side.png" target="_blank" rel="noopener">side</a></div></div></article>
+<article class="card"><a class="pic" href="quad4_vs_quad5_render.html" target="_blank" rel="noopener"><img src="thumbs/quad4_vs_quad5_render.jpg" alt="4-inch reference quad vs 5-inch quad" title="4-inch reference quad vs 5-inch quad, same scene and scale (rev 2026-11-09: synced to the standalone renders)" loading="lazy"></a><div class="body"><p class="title">4-inch reference quad vs 5-inch quad</p><div class="links"><a href="quad4_vs_quad5_render.png" target="_blank" rel="noopener">3/4</a> &middot; <a href="quad4_vs_quad5_render_top.png" target="_blank" rel="noopener">top</a> &middot; <a href="quad4_vs_quad5_render_side.png" target="_blank" rel="noopener">side</a> &middot; <a href="quad4_vs_quad5_render_unoq.png" target="_blank" rel="noopener">UNO Q</a></div></div></article>
+</div>
+<h2>Studies</h2>
+<div class="grid">
+<article class="card"><a class="pic" href="fc_comparison_render.html" target="_blank" rel="noopener"><img src="thumbs/fc_comparison_render.jpg" alt="Flight controllers side by side" title="FC comparison render (2026-11-08, rev 2: every FC in designer&#x27;s document + Lumenier NDAA options + Pi references)" loading="lazy"></a><div class="body"><p class="title">Flight controllers side by side</p><div class="links"><a href="fc_comparison_render.png" target="_blank" rel="noopener">3/4</a> &middot; <a href="fc_comparison_render_top.png" target="_blank" rel="noopener">top</a></div></div></article>
+<article class="card"><a class="pic" href="lib/motor_models_test.html" target="_blank" rel="noopener"><img src="thumbs/lib__motor_models_test.jpg" alt="Motor and prop models" title="Motor model test" loading="lazy"></a><div class="body"><p class="title">Motor and prop models</p><div class="links"><a href="lib/motor_models_test.png" target="_blank" rel="noopener">3/4</a></div></div></article>
+</div>
+</div>
+<script>
+(function () {
+  var root = document.documentElement, btn = document.getElementById('theme');
+  function apply(t) { root.setAttribute('data-theme', t); btn.textContent = t === 'dark' ? 'Light' : 'Dark'; }
+  var saved = null;
+  try { saved = localStorage.getItem('quad5-gallery-theme'); } catch (e) {}
+  apply(saved === 'dark' ? 'dark' : 'light');
+  btn.addEventListener('click', function () {
+    var t = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    apply(t);
+    try { localStorage.setItem('quad5-gallery-theme', t); } catch (e) {}
+  });
+})();
+</script>
+</body>
+</html>

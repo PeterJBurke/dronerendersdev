@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Motor model test</title>
+<style>
+  :root { --bg:#f7f8f9; --fg:#15181c; --muted:#4e5661; --panel:rgba(255,255,255,0.86); --line:#c3c8cf; }
+  :root[data-theme="dark"] { --bg:#1d2024; --fg:#e6e8eb; --muted:#9aa3ad; --panel:rgba(20,22,26,0.82); --line:#3a3f46; }
+  html,body { margin:0; height:100%; background:var(--bg); color:var(--fg); font:14px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; overflow:hidden; }
+  canvas { display:block; }
+  #legend { position:fixed; left:16px; top:16px; max-width:min(330px, calc(100vw - 32px)); background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:12px 14px; }
+  #legend h1 { font-size:15px; margin:0 0 6px 0; font-weight:600; }
+  #legend ol { margin:0 0 8px 18px; padding:0; font-size:13px; }
+  #legend .scale { font-size:12px; color:var(--muted); border-top:1px solid var(--line); padding-top:6px; margin-top:6px; }
+  #ctrls { position:fixed; right:16px; top:16px; display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end; }
+  button { background:var(--panel); color:var(--fg); border:1px solid var(--line); border-radius:6px; padding:6px 10px; font:inherit; font-size:13px; cursor:pointer; }
+</style>
+<script src="legend_panel.js"></script>
+<style id="homeCss">/* ui_chrome.py: Home button (link back to the gallery) */ #bHome { display:inline-block; background:var(--panel, var(--card, rgba(255,255,255,0.88))); color:var(--fg, var(--ink, inherit)); border:1px solid var(--line, #c3c8cf); border-radius:6px; padding:6px 10px; font:inherit; font-size:13px; line-height:normal; text-decoration:none; cursor:pointer; box-sizing:border-box; } #bHome:hover { border-color:var(--muted, #888); } #bHome.fixed { position:fixed; right:16px; top:16px; z-index:22; }</style>
+</head>
+<body>
+<div id="legend">
+  <h1>Motor and prop models (lib/motor_models.js)</h1>
+  <div class="scale" style="border:0;margin:0;padding:0">Left to right: <b>4-inch reference quad</b> XING2 1404 + Gemfan 4024; <b>5-inch default</b> 2004-size (T-Motor F2004) + HQ T5x2x3 T-mount on the MOD-L 5" arm (2 M2 screws); <b>5-inch fallback</b> UM2207 + HQ V2S 5x4.3x3; other presets. Back: on the arm with prop; front: bare. 1 unit = 1 mm; bar in inches. Views: Close, Detail, Drone scale (fov 32, r 690 as the drone renders), Top.</div>
+</div>
+<div id="ctrls"><a id="bHome" href="../index.html">Home</a><button id="bClose">Close</button><button id="bDetail">Detail</button><button id="bFar">Drone scale</button><button id="bTop">Top</button><button id="bTheme">Light / dark</button></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
+<script src="motor_models.js"></script>
+<script src="../lib/penny.js"></script>
+<script>
+(function () {
+  'use strict';
+  var MM = window.MotorModels;
+  var renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
+  document.body.appendChild(renderer.domElement);
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(32, window.innerWidth / window.innerHeight, 2, 5000);
+  var themes = {
+    dark:  { bg: 0x1d2024, grid1: 0x3a3f46, grid2: 0x5a616b, hemiSky: 0xd7dde5, hemiGnd: 0x2b2e33 },
+    light: { bg: 0xf7f8f9, grid1: 0xd9dde2, grid2: 0xb4bbc4, hemiSky: 0xffffff, hemiGnd: 0x9aa2ab }
+  };
+  var carbon = new THREE.MeshStandardMaterial({ color: 0x16181b, roughness: 0.45, metalness: 0.3 });
+  var groundY = 0;
+
+  function label(text, sub, hMM) {
+    var c = document.createElement('canvas'), g = c.getContext('2d'), fs = 64;
+    g.font = '700 ' + fs + 'px system-ui, sans-serif'; var w1 = g.measureText(text).width;
+    g.font = '500 ' + (fs * 0.5) + 'px system-ui, sans-serif'; var w2 = sub ? g.measureText(sub).width : 0;
+    c.width = Math.ceil(Math.max(w1, w2) + 40); c.height = sub ? fs * 1.9 : fs * 1.3;
+    g.fillStyle = 'rgba(28,30,34,0.92)'; g.fillRect(0, 0, c.width, c.height);
+    g.fillStyle = '#fff'; g.textAlign = 'center'; g.font = '700 ' + fs + 'px system-ui, sans-serif'; g.fillText(text, c.width / 2, fs * 1.0);
+    if (sub) { g.font = '500 ' + (fs * 0.5) + 'px system-ui, sans-serif'; g.fillStyle = '#d6dade'; g.fillText(sub, c.width / 2, fs * 1.65); }
+    var t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace;
+    var s = new THREE.Sprite(new THREE.SpriteMaterial({ map: t, depthTest: false }));
+    s.scale.set(hMM * c.width / c.height, hMM, 1); s.renderOrder = 10;
+    return s;
+  }
+
+  // ---- MOD-L 5" Arm v2-0 outline from the designer's DXF (reference/ref4-drone/frame-modl/files/MOD-L_arm_5in_4mm_v2-0.dxf),
+  // frame coordinates, motor centre (96.562, 65.05); pad holes 4 x M2 on a 12 mm circle at 30 / 75 / 210 / 255 deg.
+  var ARM5 = {"loops": [[[87.0, 55.48], [60.97, 40.23], [25.3, 18.86], [20.89, 16.62], [14.23, 14.23], [8.9, 11.79], [7.86, 11.03], [6.99, 10.1], [6.29, 9.03], [5.8, 7.8], [5.5, 5.79], [5.5, 0.7], [4.8, -0.0], [0.7, -0.0], [-0.0, 0.7], [0.0, 7.5], [0.71, 7.79], [1.0, 8.5], [0.71, 9.21], [-0.0, 9.5], [-0.0, 12.3], [0.7, 13.0], [1.79, 13.27], [10.39, 18.93], [13.33, 21.01], [16.16, 23.24], [19.85, 24.8], [86.15, 63.08], [87.92, 64.39], [95.92, 72.9], [96.83, 73.56], [97.34, 73.74], [98.42, 73.83], [99.48, 73.52], [100.74, 72.77], [102.03, 72.59], [103.3, 72.98], [106.72, 74.87], [107.39, 75.02], [108.73, 74.93], [109.93, 74.34], [110.85, 73.3], [111.29, 71.98], [111.31, 71.31], [110.97, 70.02], [110.15, 68.93], [106.35, 66.63], [105.2, 65.71], [97.2, 57.2], [96.57, 56.69], [95.84, 56.37], [95.06, 56.25], [92.4, 56.65], [90.54, 56.6], [88.72, 56.21]]], "circles": [[18.385, 19.917, 1.0], [101.758, 68.05, 1.0], [98.115, 70.846, 1.0], [91.366, 62.05, 1.0], [95.009, 59.254, 1.0], [96.562, 65.05, 3.0]]};
+  function armMesh() {
+    var lp = ARM5.loops[0], sh = new THREE.Shape(); sh.moveTo(lp[0][0], lp[0][1]); for (var i = 1; i < lp.length; i++) sh.lineTo(lp[i][0], lp[i][1]); sh.closePath();
+    ARM5.circles.forEach(function (c) { var h = new THREE.Path(); h.absarc(c[0], c[1], c[2], 0, Math.PI * 2, false); sh.holes.push(h); });
+    var g = new THREE.ExtrudeGeometry(sh, { depth: 4, bevelEnabled: false, curveSegments: 16 });
+    g.rotateX(-Math.PI / 2); g.translate(-96.562, 0, 65.05);   // motor centre to the origin, arm top at y = 4
+    var m = new THREE.Mesh(g, carbon); m.castShadow = m.receiveShadow = true; return m;
+  }
+  // rotate the arm so it runs straight back (-Z) from the motor; the pad holes rotate with it
+  var ARM_ROT = (Math.atan2(65.05, -96.562) + Math.PI / 2);   // = 236 deg
+  var PAD_ANGLE = Math.PI / 6 + ARM_ROT;                        // pad hole pair on the arm axis, in motor-library angle convention
+
+  // ---- slots: one per drone, motor + prop on its arm (back), the same motor bare (front) ----
+  var armY = 6, zBare = 92;
+  var slots = [
+    { x: -170, group: '4-inch reference quad', motor: 'XING2_1404', prop: 'GEMFAN_4024_2', dir: 'CW', arm: 'pad3', t: 'iFlight XING2 1404 3800KV', s: '19.9 x 13.5 mm, 1.5 mm shaft, 9x9 M2; Gemfan 4024 2-blade' },
+    { x: -20, group: '5-inch quad: default', motor: 'F2004', prop: 'HQ_T5x2x3', dir: 'CCW', arm: 'modl', t: 'T-Motor F2004 3000KV (2004-size)', s: '24.3 x 17.25 mm, 1.5 mm T-mount, 12x12 M2 on the MOD-L pad; HQ T5x2x3' },
+    { x: 135, group: '5-inch quad: fallback', motor: 'UM2207', prop: 'HQ_V2S_5x43x3', dir: 'CCW', arm: 'modl', t: 'Unusual Machines UM2207 1860KV', s: '29.8 x 19.2 mm, M5 + nut, 4x M3 PCD 19 (off the pad); HQ V2S 5x4.3x3' }
+  ];
+  slots.forEach(function (o) {
+    var y0 = groundY + armY, over = { leads: { angle: Math.PI / 2 } }, leadOnly = false;
+    if (o.arm === 'modl') {
+      var am = armMesh(); am.rotation.y = ARM_ROT; am.position.set(o.x, y0 - 4, 0); scene.add(am);
+      if (o.motor === 'F2004') { over.mount = { angle: PAD_ANGLE }; over.screwHoles = [0, 2]; over.screwsBelow = 4; }
+    } else {
+      var pad = new THREE.Mesh(new THREE.BoxGeometry(14, 3, 70), carbon); pad.position.set(o.x, y0 - 1.5, -28); pad.castShadow = pad.receiveShadow = true; scene.add(pad);
+      over.screwsBelow = 3;
+    }
+    MM.mountMotorAndProp(scene, { x: o.x, y: y0, z: 0, motor: o.motor, prop: o.prop, dir: o.dir, motorOver: over });
+    var bare = MM.makeMotor(o.motor, { propHubH: 0, leads: { angle: Math.PI / 2 } }); bare.position.set(o.x, groundY, zBare); scene.add(bare);
+    var g = label(o.group, null, 13); g.position.set(o.x, groundY + 2, -122); scene.add(g);
+    var l = label(o.t, o.s, 10); l.position.set(o.x, groundY + 1, zBare + 34); scene.add(l);
+  });
+  // other presets, bare, at the right
+  [{ p: 'TC2004', x: 245, t: 'BrotherHobby TC2004', s: '12x12 M2 (colours not verified)' }, { p: 'generic2203', x: 245, z: -10, t: 'Generic 2203', s: 'estimated' }].forEach(function (m, i) {
+    var mo = MM.makeMotor(m.p, { propHubH: 0, leads: { angle: Math.PI / 2 } }); mo.position.set(m.x, groundY, i ? 20 : zBare); scene.add(mo);
+    var l = label(m.t, m.s, 8); l.position.set(m.x, groundY + 1, (i ? 20 : zBare) + 30); scene.add(l);
+  });
+  var og = label('Other presets', null, 11); og.position.set(245, groundY + 2, -45); scene.add(og);
+
+  // ---- one scale bar (inches), in front of the row ----
+  function inchBar(x0, z, nIn, sub, h) {
+    var IN = 25.4, g = new THREE.Group(), dark = new THREE.MeshStandardMaterial({ color: 0x15171a, roughness: 0.9 }), light = new THREE.MeshStandardMaterial({ color: 0xf2f3f4, roughness: 0.9 }), tickM = new THREE.MeshStandardMaterial({ color: 0xd08a3a, roughness: 0.8 });
+    for (var i = 0; i < nIn; i++) { var seg = new THREE.Mesh(new THREE.BoxGeometry(IN, 0.8, 4), i % 2 ? light : dark); seg.position.set(x0 + (i + 0.5) * IN, groundY + 0.4, z); seg.receiveShadow = true; g.add(seg); }
+    var ol = new THREE.Mesh(new THREE.BoxGeometry(nIn * IN + 1.2, 0.4, 5.2), light); ol.position.set(x0 + nIn * IN / 2, groundY + 0.2, z); g.add(ol);
+    for (var k = 0; k <= nIn * sub; k++) { var major = k % sub === 0, t = new THREE.Mesh(new THREE.BoxGeometry(0.8, 1.0, major ? 7 : 4), tickM); t.position.set(x0 + k * IN / sub, groundY + 0.5, z - 2.5 - (major ? 3.5 : 2)); g.add(t); }
+    for (var m = 0; m <= nIn; m++) { var lb = label(m === 0 ? '0' : m + ' in', null, h); lb.position.set(x0 + m * IN, groundY + 1, z + 6 + h / 2); g.add(lb); }
+    var note = label('1 in = 25.4 mm', null, h); note.position.set(x0 + nIn * IN + 40, groundY + 1, z); g.add(note);
+    scene.add(g);
+  }
+  inchBar(-152.4, 175, 6, 4, 7);         // one 6 in bar in front of the row, 1/4 in ticks
+
+  // ---- ground, grid, lights (house style) ----
+  var grid10 = new THREE.GridHelper(800, 80, 0xffffff, 0xffffff); grid10.position.y = groundY - 0.6; scene.add(grid10);
+  var grid50 = new THREE.GridHelper(800, 16, 0xffffff, 0xffffff); grid50.position.y = groundY - 0.55; scene.add(grid50);
+  var ground = new THREE.Mesh(new THREE.PlaneGeometry(2000, 2000), new THREE.ShadowMaterial({ opacity: 0.22 }));
+  ground.rotation.x = -Math.PI / 2; ground.position.y = groundY - 0.65; ground.receiveShadow = true; scene.add(ground);
+  // >>> PENNY (generated by tools/render/penny_refs.py; model in lib/penny.js)
+  // US one-cent coin, 19.05 mm x 1.52 mm, flat on the grid, obverse up: a size reference everyone knows (designer, 2026-11-09).
+  (function () {
+    if (!window.PennyModel) return;
+    var cfg = {"p": [-178, 175], "lab": [-178, 4, 160]}, gy = groundY;
+    var p = PennyModel.make(); p.position.set(cfg.p[0], gy, cfg.p[1]); scene.add(p);
+    var l = (function (t) { return label(t, null, 6.5); })('US penny, 19.05 mm (0.75 in)', null, 6.5); l.position.set(cfg.lab[0], gy + cfg.lab[1], cfg.lab[2]); scene.add(l);
+    window.__penny = p; window.__pennyLabel = l;
+  })();
+  // <<< PENNY
+
+  var hemi = new THREE.HemisphereLight(0xffffff, 0x9aa2ab, 0.9); scene.add(hemi);
+  var key = new THREE.DirectionalLight(0xffffff, 2.4); key.position.set(220, 380, 260); key.castShadow = true;
+  key.shadow.mapSize.set(2048, 2048); key.shadow.camera.near = 50; key.shadow.camera.far = 1200;
+  key.shadow.camera.left = -330; key.shadow.camera.right = 330; key.shadow.camera.top = 330; key.shadow.camera.bottom = -330; key.shadow.bias = -0.0005; key.shadow.normalBias = 0.3;
+  scene.add(key);
+  var fill = new THREE.DirectionalLight(0xcfd8e6, 0.8); fill.position.set(-300, 160, -220); scene.add(fill);
+  var rim = new THREE.DirectionalLight(0xffffff, 0.5); rim.position.set(0, 120, -400); scene.add(rim);
+
+  // ---- camera / controls ----
+  var ctl = { target: new THREE.Vector3(), theta: 0.5, phi: 1.0, radius: 300 };
+  function apply() { var sp = Math.sin(ctl.phi); camera.position.set(ctl.target.x + ctl.radius * sp * Math.sin(ctl.theta), ctl.target.y + ctl.radius * Math.cos(ctl.phi), ctl.target.z + ctl.radius * sp * Math.cos(ctl.theta)); camera.lookAt(ctl.target); }
+  var views = {
+    close: { theta: 0.0, phi: 0.86, radius: 760, target: [22, 0, 20] },
+    far:   { theta: 0.62, phi: 1.02, radius: 690, target: [-30, 20, 20] },      // same fov 32 and radius 690 as the quad5_render.html 3/4 view
+    detail:{ theta: 0.0, phi: 1.0, radius: 300, target: [-20, 8, 85] },
+    top:   { theta: 0.0001, phi: 0.0001, radius: 900, target: [32, 0, 30] }
+  };
+  function setView(v) { ctl.theta = v.theta; ctl.phi = v.phi; ctl.radius = v.radius; ctl.target.set(v.target[0], v.target[1], v.target[2]); apply(); }
+  setView(views.close);
+  var el = renderer.domElement, drag = false, mode = 'rot', lx = 0, ly = 0;
+  el.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+  el.addEventListener('pointerdown', function (e) { drag = true; mode = (e.button === 2 || e.shiftKey) ? 'pan' : 'rot'; lx = e.clientX; ly = e.clientY; el.setPointerCapture(e.pointerId); });
+  el.addEventListener('pointerup', function () { drag = false; });
+  el.addEventListener('pointermove', function (e) {
+    if (!drag) return; var dx = e.clientX - lx, dy = e.clientY - ly; lx = e.clientX; ly = e.clientY;
+    if (mode === 'rot') { ctl.theta -= dx * 0.006; ctl.phi = Math.max(0.0001, Math.min(Math.PI - 0.0001, ctl.phi - dy * 0.006)); }
+    else { var k = ctl.radius * 0.0012, r = new THREE.Vector3(), u = new THREE.Vector3(); camera.matrix.extractBasis(r, u, new THREE.Vector3()); ctl.target.addScaledVector(r, -dx * k).addScaledVector(u, dy * k); }
+    apply();
+  });
+  el.addEventListener('wheel', function (e) { e.preventDefault(); ctl.radius = Math.max(30, Math.min(2500, ctl.radius * Math.exp(e.deltaY * 0.0012))); apply(); }, { passive: false });
+
+  var current = 'light';
+  function setTheme(n) {
+    var t = themes[n]; current = n; document.documentElement.setAttribute('data-theme', n);
+    scene.background = new THREE.Color(t.bg);
+    grid10.material.color.setHex(t.grid1); grid10.material.transparent = true; grid10.material.opacity = 0.7; grid50.material.color.setHex(t.grid2);
+    hemi.color.setHex(t.hemiSky); hemi.groundColor.setHex(t.hemiGnd); ground.material.opacity = n === 'dark' ? 0.32 : 0.22;
+  }
+  var hash = (location.hash || '').toLowerCase();
+  setTheme(hash.indexOf('dark') >= 0 ? 'dark' : 'light');
+  if (hash.indexOf('far') >= 0) setView(views.far);
+  if (hash.indexOf('top') >= 0) setView(views.top);
+  if (hash.indexOf('detail') >= 0) setView(views.detail);
+  document.getElementById('bClose').onclick = function () { setView(views.close); };
+  document.getElementById('bDetail').onclick = function () { setView(views.detail); };
+  document.getElementById('bFar').onclick = function () { setView(views.far); };
+  document.getElementById('bTop').onclick = function () { setView(views.top); };
+  document.getElementById('bTheme').onclick = function () { setTheme(current === 'dark' ? 'light' : 'dark'); };
+  window.addEventListener('resize', function () { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); });
+  var frames = 0; window.__pause = false;
+  function loop() { requestAnimationFrame(loop); if (window.__pause) return; renderer.render(scene, camera); if (++frames === 3) window.__rendered = true; }
+  loop();
+})();
+</script>
+</body>
+</html>
