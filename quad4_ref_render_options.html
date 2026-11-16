@@ -1,0 +1,1534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4-inch reference quad: FC and companion options</title>
+<meta name="gallery-title" content="4-inch reference quad: FC and companion options">
+<style>
+  :root { --bg:#1d2024; --fg:#e6e8eb; --muted:#9aa3ad; --panel:rgba(20,22,26,0.82); --line:#3a3f46; --lead:#9aa3ad; }
+  :root[data-theme="light"] { --bg:#f7f8f9; --fg:#15181c; --muted:#4e5661; --panel:rgba(255,255,255,0.88); --line:#c3c8cf; --lead:#5d6570; }
+  html,body { margin:0; height:100%; background:var(--bg); color:var(--fg); font:14px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; overflow:hidden; }
+  canvas { display:block; }
+  #legend { position:fixed; left:16px; top:16px; max-width:min(330px, calc(100vw - 32px)); max-height:calc(100vh - 70px); overflow:auto; background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:12px 14px; backdrop-filter: blur(4px); font-size:12.5px; z-index:3; }
+  #legend h1 { font-size:15px; margin:0 0 6px 0; font-weight:600; }
+  #legend .sub { color:var(--muted); font-size:12px; margin-bottom:8px; }
+  #legend ol { margin:0 0 8px 18px; padding:0; }
+  #legend li { margin:3px 0; }
+  #legend li b { font-weight:600; }
+  #legend .sw { display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:6px; vertical-align:-1px; border:1px solid rgba(128,128,128,0.4); }
+  #legend .scale { font-size:12px; color:var(--muted); border-top:1px solid var(--line); padding-top:6px; margin-top:6px; }
+  #legend .va { font-size:12px; border-top:1px solid var(--line); padding-top:6px; margin-top:6px; }
+  #ctrls { position:fixed; right:16px; top:16px; display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end; z-index:3; }
+  button { background:var(--panel); color:var(--fg); border:1px solid var(--line); border-radius:6px; padding:6px 10px; font:inherit; font-size:13px; cursor:pointer; }
+  button:hover { border-color:var(--muted); }
+  #callouts { position:fixed; inset:0; pointer-events:none; z-index:1; }
+  #callouts svg { position:absolute; inset:0; width:100%; height:100%; overflow:visible; }
+  #callouts svg polyline { fill:none; stroke:var(--lead); stroke-width:1.2; }
+  #callouts svg polyline.hid { stroke-dasharray:4 3; }
+  #callouts svg circle { fill:var(--bg); stroke:var(--lead); stroke-width:1.4; }
+  .co { position:absolute; background:var(--panel); border:1px solid var(--line); border-radius:6px; padding:3px 7px; font-size:12px; line-height:1.3; white-space:nowrap; }
+  .co b { font-weight:600; }
+  .co span { display:block; color:var(--muted); font-size:11px; }
+  @media (max-width: 899px) { #callouts { display:none; } #legend { font-size:12px; } }
+</style>
+<script src="lib/legend_panel.js"></script>
+<style id="homeCss">/* ui_chrome.py: Home button (link back to the gallery) */ #bHome { display:inline-block; background:var(--panel, var(--card, rgba(255,255,255,0.88))); color:var(--fg, var(--ink, inherit)); border:1px solid var(--line, #c3c8cf); border-radius:6px; padding:6px 10px; font:inherit; font-size:13px; line-height:normal; text-decoration:none; cursor:pointer; box-sizing:border-box; } #bHome:hover { border-color:var(--muted, #888); } #bHome.fixed { position:fixed; right:16px; top:16px; z-index:22; }</style>
+<script src="lib/callouts.js"></script>
+<style id="optsCss">/* onboard.py: Options panel (FC / companion radio buttons) */ #opts { position:fixed; right:16px; top:60px; z-index:3; background:var(--panel); color:var(--fg); border:1px solid var(--line); border-radius:8px; padding:4px 10px 8px; font-size:12px; line-height:1.35; backdrop-filter:blur(4px); max-height:calc(100vh - 80px); overflow:auto; } #optsT { background:transparent; border:0; padding:3px 0; font-weight:600; font-size:12px; color:var(--fg); width:100%; text-align:left; } #optsT::after { content:" \2212"; color:var(--muted); } #opts.closed #optsT::after { content:" +"; } #opts.closed #optsB { display:none; } #opts fieldset { border:0; margin:4px 0 0; padding:0; min-width:0; } #opts legend { color:var(--muted); padding:0; margin:0 0 1px; font-size:11px; } #opts label { display:block; padding:1px 0; cursor:pointer; white-space:nowrap; } #opts input { margin:0 6px 0 0; vertical-align:-2px; } button:disabled { opacity:0.45; cursor:not-allowed; } #opts { max-width:min(250px, calc(100vw - 32px)); } #optsN { margin-top:6px; border-top:1px solid var(--line); padding-top:4px; white-space:normal; color:var(--muted); font-size:11.5px; } #optsN:empty { display:none; } #optsN p { margin:3px 0; } #optsN p.nofit { color:var(--warn); font-weight:600; } :root { --warn:#ff8a80; } :root[data-theme="light"] { --warn:#b3261e; }</style>
+</head>
+<body>
+<div id="legend">
+  <h1>4-inch reference quad: FC and companion options</h1>
+  <div class="sub">Standalone model of the reference quad as the build photos show it; nose toward the orange arrow. V = verified from a design file or the maker's page; A = assumed or estimated from photos.</div>
+  <ol>
+    <li><span class="sw" style="background:#16181b"></span><b>Frame</b> - CNC Drones MOD-L (Dave_C / ledroneclub, CC BY), 4" Arm v1-1 (3 mm) + HD_CARGO plates and cross plate (2 mm), 6x M2 x 25 standoffs; <b>180.0 mm wheelbase, 147.2 x 103.6 mm</b> stretched X (DXF, V).</li>
+    <li><span class="sw" style="background:#2756a8"></span><b>Matek F405-WMO</b> FC + PDB, <b>32 x 22 x 12.7 mm</b>, STM32F405 (mateksys.com, V); 8x3 and 5x3 blocks with right-angle headers and Dupont housings, arrow forward, VHB on the bottom plate; USB-C / buzzer extender at the tail (photos 167-186).</li>
+    <li><span class="sw" style="background:#f28c28"></span><b>Orange Pi Zero 3W</b> - <b>65 x 32 x 1.2 mm</b> (orangepi.org, V), flat on a riser above the top plate, long axis on the roll axis, ports right, 40-pin left, fan rear (photos 167-170); PCB drawn orange for contrast; heatsink case (opaque, 40-pin strip left open, case edge ASSUMED) hidden by default so the board shows; Pi case button shows it.</li>
+    <li><span class="sw" style="background:#1f6fe0"></span><b>Battery</b> - Zeee 2S 2200 mAh (BOM) under the cross plate, drawn as a blue wrap with a white label band; strap not drawn.</li>
+    <li><span class="sw" style="background:#2e9e9a"></span><b>Motors, props, ESCs</b> - XING2 1404 3800KV (gunmetal bell, teal top), Gemfan 4024 translucent blue (3 + 4 CW, 1 + 2 CCW), 20 A ESCs taped on the arms.</li>
+    <li><span class="sw" style="background:#2b2d31"></span><b>Other</b> - M100-PRO GPS on a tail mast, AKK A11T camera at the nose, EP2 RX rear-left, XIAO ESP32-C3 under the top plate.</li>
+    <li><span class="sw" style="background:#1f7a3a"></span><b>Options</b> (panel, top right) - one flight controller and one companion computer at a time. As built: Matek F405-WMO and Orange Pi Zero 3W. The other boards are the 5-inch page's models placed on this frame. Lucid H7 Wing, Lucid H7 V2 + PDB and ARKV6X + PAB need the 5-inch quad bottom plate v2 (30.5 x 30.5 M3 press nuts, same HD_CARGO outline); Wing and ARK also need the middle standoffs in the forward holes. Wing: right-angle headers only (25 mm stack). Cube Orange+ and Raspberry Pi 5 do not fit and are drawn to show why. Wiring and the USB-C extender are drawn for the Matek only. Option mounts are a proposal (ASSUMED).</li>
+  </ol>
+  <div class="va"><b>Verified:</b> frame outlines, holes, thicknesses (DXF/STL); FC envelope, MCU, pad names (Matek); Pi PCB size (Orange Pi); kit parts (BOM). <b>Assumed:</b> FC holes 18.1 x 12.0 mm and part positions (from Matek's layout image, +/-0.3 mm); Pi part positions, holes and riser; battery, ESC, GPS, RX sizes; wiring; the Pi FPC antenna (not in the photos).</div>
+  <div class="scale">1 unit = 1 mm; grid 10 / 50 mm; 6 in bar (1 in = 25.4 mm) ahead of the nose, under the drone in the side view; exact on the grid, the perspective top view reads 4-9 percent large. Drag to orbit, wheel to zoom, right-drag to pan.</div>
+</div>
+<div id="ctrls">
+  <a id="bHome" href="index.html">Home</a>
+  <button id="bIso">3/4 view</button>
+  <button id="bTop">Top view</button>
+  <button id="bSide">Side view</button>
+  <button id="bCase">Pi case</button>
+  <button id="bLabels">Labels on/off</button>
+  <button id="bTheme">Light / dark</button>
+</div>
+<div id="opts">
+  <button id="optsT" type="button" aria-controls="optsB">Options</button>
+  <div id="optsB">
+  <fieldset><legend>Flight controller</legend>
+    <label><input type="radio" name="fc" value="matek"> Matek F405-WMO (as built)</label>
+    <label><input type="radio" name="fc" value="wing"> Lucid H7 Wing</label>
+    <label><input type="radio" name="fc" value="h7"> Lucid H7 V2 + PDB</label>
+    <label><input type="radio" name="fc" value="ark"> ARKV6X + PAB</label>
+    <label><input type="radio" name="fc" value="cube"> Cube Orange+ (does not fit)</label>
+  </fieldset>
+  <fieldset><legend>Companion computer</legend>
+    <label><input type="radio" name="pc" value="opi"> Orange Pi Zero 3W (as built)</label>
+    <label><input type="radio" name="pc" value="zero"> Pi Zero 2 W</label>
+    <label><input type="radio" name="pc" value="pi5"> Pi 5 (does not fit)</label>
+    <label><input type="radio" name="pc" value="uno"> Arduino UNO Q</label>
+    <label><input type="radio" name="pc" value="none"> None</label>
+  </fieldset>
+  <div id="optsN"></div>
+  </div>
+</div>
+<div id="callouts"><svg id="coSvg"></svg></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
+<script src="lib/motor_models.js"></script>
+<script src="lib/penny.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  // ---------------------------------------------------------------------
+  // Dimensions (mm). Scene: x = frame x (right +), z = -frame y (nose toward -Z), y up.
+  // ---------------------------------------------------------------------
+  var U = {
+    frame: {
+      // VERIFIED from the MOD-L design files (reference/ref4-drone/frame-modl/files/, audit 2026-11-08): 4" Arm v1-1, HD_CARGO plates, cross plate.
+      motorX: 73.58, motorZ: 51.782,   // motor centres: arm bolt at (18.385, 19.917), 63.733 mm bolt-to-motor at 30.0 deg off lateral -> 147.2 x 103.6 mm, wheelbase 180.0 mm
+      kneeX: 18.385, kneeZ: 19.917,    // arm pivot = lobe press nut of the bottom plate
+      armW: 5.5, armT: 3,              // shank 5.1-6.4 mm (DXF); 3.0 mm (STL extrusion and the vendor 8 mm screw rule)
+      braceT: 2, plateT: 2,            // cross plate and plates 2.0 mm (STL)
+      standoffH: 25, standoffD: 4.5,   // 6x M2 x 25 knurled standoffs (kit photos 040, 049)
+      // 6 of the 8 holes common to both plates (DXF), scene z = -frame y: nose prongs, (+/-16.6, -28) and tail. Which middle pair is used is ESTIMATED.
+      standoffs: [[13.499, -55], [-13.499, -55], [16.605, 28], [-16.605, 28], [7.999, 57.5], [-7.999, 57.5]],
+      pressNuts: [[18.385, -19.917], [-18.385, -19.917], [18.385, 19.917], [-18.385, 19.917], [0, -8.5], [0, 8.5]]
+    },
+    motor: { bellD: 19.9, H: 14 },                                  // XING2 1404 (iFlight 19.9 x 18.4 mm); H = prop seat above the arm (lib/motor_models.js XING2_1404); used for callout anchors
+    prop: { D: 101.6, pitch: 2.4 * 25.4, blades: 2, hubD: 10, hubH: 5 },   // Gemfan 4024, BOM
+    fc: { L: 32, W: 22, H: 12.7, pcbT: 1.6, vhb: 1, x: -1, z: 0 },  // Matek: 32 x 22 x 12.7 mm (VERIFIED); 1.6 mm boards and 1 mm VHB ASSUMED; centred 1 mm left of the centreline (clears the nose standoffs)
+    esc: { L: 24, W: 12, H: 5.5 },                                  // 20 A BLHeli_S in heat shrink, ESTIMATED
+    batt: { L: 76, W: 36, H: 17, r: 4 },                            // Zeee 2S 2200 shorty, ESTIMATED
+    strapW: 20, strapZ: 6,                                          // 0.8 in strap (BOM); position from photo 093 (just ahead of the Pi fan), ESTIMATED
+    gps: { W: 25, H: 8, mastH: 45, mastR: 4.5, cupR: 12.5, cupH: 6, z: 46 },  // M100-PRO and printed mast, ESTIMATED from photos 170, 178, 181
+    cam: { W: 14, H: 12, z: -60 },                                  // AKK A11T 13.9 x 12 mm (manual, photo 125)
+    rx: { W: 10, L: 10, H: 3 },                                     // Happymodel EP2, ESTIMATED
+    xiao: { L: 21, W: 17.5 },                                       // XIAO ESP32-C3 published size
+    pi: { L: 65, W: 32, T: 1.2, zc: -1, riserT: 2, standH: 3, caseH: 12 }   // Orange Pi Zero 3W PCB 65 x 32 x 1.2 (orangepi.org); riser, standoffs, case ESTIMATED
+  };
+
+  // ---------------------------------------------------------------------
+  // Renderer / scene
+  // ---------------------------------------------------------------------
+  var renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.05;
+  document.body.appendChild(renderer.domElement);
+
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(32, window.innerWidth / window.innerHeight, 5, 5000);
+
+  var themes = {
+    dark:  { bg: 0x1d2024, grid1: 0x3a3f46, grid2: 0x5a616b, hemiSky: 0xd7dde5, hemiGnd: 0x2b2e33 },
+    light: { bg: 0xf7f8f9, grid1: 0xd9dde2, grid2: 0xb4bbc4, hemiSky: 0xffffff, hemiGnd: 0x9aa2ab }
+  };
+
+  // ---------------------------------------------------------------------
+  // Materials (house style: black carbon, smoke-grey props)
+  // ---------------------------------------------------------------------
+  function std(c, r, m, extra) { var o = { color: c, roughness: r, metalness: m }; for (var k in extra || {}) o[k] = extra[k]; return new THREE.MeshStandardMaterial(o); }
+  var M = {
+    carbon: std(0x16181b, 0.45, 0.3), carbonEdge: std(0x22252a, 0.6, 0.2),
+    alu: std(0x9aa0a8, 0.35, 0.85), aluDark: std(0x5b6068, 0.4, 0.8),
+    stator: std(0x2c2e32, 0.6, 0.5), copper: std(0xb87333, 0.5, 0.7), shaft: std(0xc0c4ca, 0.3, 0.9), nut: std(0x8a8f96, 0.45, 0.8),
+    teal: std(0x2e9e9a, 0.4, 0.7), tealTop: std(0x3fb3ae, 0.35, 0.75),
+    prop: std(0x7d858f, 0.3, 0.05, { transparent: true, opacity: 0.62, side: THREE.DoubleSide }),
+    propHub: std(0x6f7781, 0.35, 0.05),   // hub opaque; blades stay translucent (smoke-grey clear plastic)
+    pcbBlue: std(0x2756a8, 0.6, 0.1), pcbEdge: std(0x1d3f7c, 0.7, 0.1), piPcb: std(0xf28c28, 0.55, 0.1),
+    gold: std(0xd4af37, 0.35, 0.9), chip: std(0x111214, 0.45, 0.2), chipSm: std(0x24262a, 0.5, 0.2), grey: std(0x5a5e66, 0.5, 0.4),
+    usb: std(0xb8bcc2, 0.3, 0.9), jst: std(0xf2f2ee, 0.7, 0.0), tan: std(0xc9a77a, 0.6, 0.1), brass: std(0xc8a24a, 0.35, 0.85),
+    nylon: std(0x2c2f34, 0.8, 0.0), white: std(0xeeeeea, 0.8, 0.0),
+    hdrBase: std(0x0e0f11, 0.92, 0.0), hdrPin: std(0xd9dcdf, 0.28, 0.9),
+    barDark: std(0x15171a, 0.9, 0.0), barLight: std(0xf2f3f4, 0.9, 0.0), barTick: std(0xd08a3a, 0.8, 0.0),
+    heatshrink: std(0x141517, 0.7, 0.05), clearShrink: std(0xc3ccd6, 0.45, 0.05),
+    paper: std(0xf7f7f2, 0.95, 0.0), battery: std(0x1f6fe0, 0.6, 0.05), battLabel: std(0xf4f4f0, 0.7, 0.0),
+    velcro: std(0x101113, 1.0, 0.0), strap: std(0xe0702a, 0.9, 0.0), printed: std(0x202226, 0.85, 0.0), gpsTop: std(0x2b2d31, 0.6, 0.1),
+    xt60: std(0xf2c230, 0.6, 0.0), wireRed: std(0xc8301e, 0.7, 0.0), wireBlk: std(0x151515, 0.7, 0.0), wireYel: std(0xd8c020, 0.7, 0.0),
+    wireWht: std(0xe8e8e4, 0.7, 0.0), wireGrn: std(0x2f9a4a, 0.7, 0.0), wireBlu: std(0x2f5fc8, 0.7, 0.0),
+    lens: std(0x0a0b0d, 0.3, 0.3),
+    caseShell: std(0x34373d, 0.45, 0.65),
+    caseFin: std(0x3c4047, 0.4, 0.7),
+    fan: std(0x0c0d0f, 0.8, 0.1, { side: THREE.DoubleSide }),
+    fpc: std(0x8a5a1c, 0.6, 0.1)
+  };
+  function led(c) { return new THREE.MeshStandardMaterial({ color: c, emissive: c, emissiveIntensity: 0.6, roughness: 0.4 }); }
+
+  function shadowed(mesh) { mesh.castShadow = true; mesh.receiveShadow = true; return mesh; }
+  function roundedRectShape(L, W, r) {   // L along local y (-> world Z), W along local x (-> world X)
+    var s = new THREE.Shape(), hw = W / 2, hl = L / 2;
+    s.moveTo(-hw + r, -hl);
+    s.lineTo(hw - r, -hl); s.absarc(hw - r, -hl + r, r, -Math.PI / 2, 0, false);
+    s.lineTo(hw, hl - r);  s.absarc(hw - r, hl - r, r, 0, Math.PI / 2, false);
+    s.lineTo(-hw + r, hl); s.absarc(-hw + r, hl - r, r, Math.PI / 2, Math.PI, false);
+    s.lineTo(-hw, -hl + r); s.absarc(-hw + r, -hl + r, r, Math.PI, 1.5 * Math.PI, false);
+    return s;
+  }
+  function hole(x, y, r) { var p = new THREE.Path(); p.absarc(x, y, r, 0, Math.PI * 2, false); return p; }
+  // Extrude a Shape drawn in the XY plane and lay it flat: local x -> world X, local y -> world Z, extruded along +Y from y0.
+  function plate(shape, thick, y0, mat) {
+    var g = new THREE.ExtrudeGeometry(shape, { depth: thick, bevelEnabled: false, curveSegments: 24 });
+    g.rotateX(-Math.PI / 2); g.scale(1, 1, -1); g.computeVertexNormals();
+    var m = new THREE.Mesh(g, mat || M.carbon); m.position.y = y0;
+    return shadowed(m);
+  }
+  function box(w, h, d, mat, x, y, z, parent) {   // y = bottom face
+    var m = shadowed(new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat)); m.position.set(x, y + h / 2, z); if (parent) parent.add(m); return m;
+  }
+  function cyl(r, h, mat, x, y, z, parent, seg) {   // vertical, y = bottom face
+    var m = shadowed(new THREE.Mesh(new THREE.CylinderGeometry(r, r, h, seg || 20), mat)); m.position.set(x, y + h / 2, z); if (parent) parent.add(m); return m;
+  }
+  function tube(points, r, mat, parent) {
+    var c = new THREE.CatmullRomCurve3(points.map(function (p) { return new THREE.Vector3(p[0], p[1], p[2]); }));
+    var m = new THREE.Mesh(new THREE.TubeGeometry(c, Math.max(24, points.length * 16), r, 8, false), mat); m.castShadow = true;
+    if (parent) parent.add(m); return m;
+  }
+  // small paper flag with text (Dupont housing labels)
+  function paperMat(txt) {
+    var cv = document.createElement('canvas'); cv.width = 128; cv.height = 64; var c = cv.getContext('2d');
+    c.fillStyle = '#f7f7f2'; c.fillRect(0, 0, 128, 64); c.fillStyle = '#111'; c.font = 'bold 44px Arial, Helvetica, sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(txt, 64, 34);
+    var t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4;
+    return new THREE.MeshStandardMaterial({ map: t, roughness: 0.95 });
+  }
+
+  // MOD-L outlines flattened from the Thingiverse DXF files (ledroneclub, CC BY), frame coordinates in mm: x lateral, +y toward the nose.
+  // Loops[0] is the outer outline, the rest are cutouts; circles are [x, y, r]. Same data block as quad4_vs_quad5_render.html (RDP 0.08 mm):
+  // arm4 = MOD-L_arm_4in_3.5mm_v1-1, bottom = MOD-L_HD_CARGO_bottom_plate_2mm_v1-0, top = MOD-L_HD_CARGO_top_plate_2mm_v1-1, cross = MOD-L_bottom_cross_2mm_v2-0.
+  var MODL = {"arm4":{"loops":[[[24.78,76.65],[25.27,77.1],[25.92,78.21],[26.13,79.46],[26.06,80.1],[25.57,81.31],[23.73,84.13],[23.45,84.87],[23.35,85.58],[23.45,86.33],[23.73,87.1],[24.95,88.9],[25.02,89.48],[24.75,90.01],[24.23,90.29],[23.92,90.3],[20.98,89.95],[19.77,89.96],[18.07,90.5],[16.66,91.61],[12.39,96.43],[12.16,96.63],[11.59,96.77],[11.03,96.56],[10.69,96.07],[10.64,95.77],[10.64,87.89],[10.73,87.14],[10.97,86.42],[15.36,76.82],[15.83,74.7],[15.89,26.23],[15.61,23.91],[14.57,21.12],[14.39,19.86],[14.99,15.37],[15.35,10.88],[15.84,2.22],[15.53,1.14],[15.79,0.19],[18.21,-1.21],[18.82,-0.75],[19.58,-0.85],[20.05,-1.45],[19.95,-2.21],[25.83,-5.61],[26.79,-5.36],[28.84,-1.81],[28.58,-0.85],[24.18,1.69],[22.67,2.87],[21.86,3.86],[21.25,4.98],[20.85,6.24],[20.68,7.59],[21.16,12.98],[21.56,15.6],[22.36,19.47],[22.54,22.19],[21.35,47.85],[21.05,59.05],[20.94,69.33],[21.25,71.29],[21.94,73.14],[23.37,75.31]],[[21.92,78.7],[22.63,78.41],[23.18,78.57],[23.56,79.03],[23.56,79.78],[22.12,81.3],[21.57,81.47],[21.19,81.39],[20.64,80.84],[20.64,80.09]],[[14.85,88.6],[14.14,88.89],[13.59,88.73],[13.22,88.27],[13.22,87.52],[14.65,86.0],[15.2,85.83],[15.58,85.91],[16.13,86.46],[16.13,87.21]]],"circles":[[18.387,83.65,2.5],[18.385,19.917,1.0]]},"bottom":{"loops":[[[-9.29,60.0],[9.63,59.98],[10.65,59.76],[15.68,57.93],[16.45,57.43],[16.79,56.94],[16.97,56.36],[17.0,53.95],[16.9,53.34],[16.64,52.8],[16.22,52.37],[14.53,51.63],[14.05,51.26],[13.71,50.76],[13.52,50.19],[13.5,34.55],[13.65,33.0],[14.43,30.81],[15.28,29.52],[21.93,22.69],[22.46,21.82],[22.79,20.85],[22.88,19.83],[22.75,18.81],[22.38,17.85],[21.82,17.0],[20.63,16.02],[15.06,12.76],[14.03,11.59],[13.53,10.12],[13.54,7.1],[14.08,6.09],[15.1,5.54],[18.38,5.5],[19.36,5.3],[19.78,5.07],[20.46,4.4],[20.83,3.5],[20.88,3.0],[20.83,2.5],[20.46,1.6],[19.78,0.93],[19.36,0.7],[18.38,0.5],[15.11,0.46],[14.08,-0.09],[13.65,-0.73],[13.5,-1.5],[13.5,-9.59],[13.64,-10.63],[14.32,-12.02],[15.06,-12.76],[21.32,-16.5],[22.33,-17.75],[22.84,-19.26],[22.88,-20.06],[22.53,-21.66],[19.37,-29.17],[18.91,-29.92],[17.89,-30.71],[17.05,-30.97],[13.5,-31.0],[12.72,-31.16],[12.09,-31.59],[11.66,-32.22],[11.5,-33.0],[11.5,-44.43],[11.84,-45.54],[12.85,-46.82],[13.0,-48.41],[12.85,-49.18],[11.84,-50.46],[11.54,-51.18],[11.46,-59.4],[10.91,-60.41],[9.9,-60.96],[7.13,-61.0],[6.13,-60.73],[5.4,-60.0],[4.21,-58.08],[3.32,-57.57],[2.8,-57.5],[-3.32,-57.57],[-4.21,-58.08],[-5.72,-60.42],[-6.61,-60.93],[-9.9,-60.96],[-10.62,-60.66],[-11.16,-60.12],[-11.5,-59.0],[-11.54,-51.18],[-11.84,-50.46],[-12.85,-49.18],[-13.0,-48.41],[-12.85,-46.82],[-11.84,-45.54],[-11.5,-44.43],[-11.54,-32.6],[-11.84,-31.88],[-12.72,-31.16],[-13.5,-31.0],[-17.05,-30.97],[-17.89,-30.71],[-18.91,-29.92],[-19.37,-29.17],[-22.78,-20.87],[-22.84,-19.26],[-22.33,-17.75],[-21.88,-17.09],[-20.63,-16.02],[-15.06,-12.76],[-14.03,-11.59],[-13.53,-10.12],[-13.5,-1.5],[-13.84,-0.39],[-14.39,0.16],[-15.11,0.46],[-18.38,0.5],[-19.36,0.7],[-19.78,0.93],[-20.46,1.6],[-20.83,2.5],[-20.88,3.0],[-20.83,3.5],[-20.46,4.4],[-19.78,5.07],[-19.36,5.3],[-18.38,5.5],[-15.1,5.54],[-14.08,6.09],[-13.66,6.72],[-13.5,7.5],[-13.5,9.59],[-13.64,10.63],[-14.32,12.02],[-15.06,12.76],[-20.63,16.02],[-21.82,17.0],[-22.38,17.85],[-22.75,18.81],[-22.86,20.35],[-22.46,21.82],[-21.93,22.69],[-15.81,28.93],[-14.82,30.15],[-14.1,31.52],[-13.65,33.0],[-13.5,34.55],[-13.52,50.19],[-13.71,50.76],[-14.28,51.46],[-15.97,52.2],[-16.45,52.57],[-16.79,53.06],[-17.0,53.95],[-16.9,56.66],[-16.45,57.43],[-15.68,57.93],[-10.65,59.76]],[[7.68,54.87],[4.68,55.96],[3.74,56.07],[2.85,55.72],[2.49,55.4],[2.06,54.56],[2.0,54.08],[2.05,40.84],[2.39,40.35],[2.66,40.21],[6.79,38.77],[7.72,38.89],[8.51,39.44],[8.94,40.28],[9.0,40.76],[8.97,53.3],[8.79,53.88],[8.45,54.37]],[[-4.68,55.96],[-7.97,54.74],[-8.64,54.14],[-8.97,53.3],[-9.0,40.76],[-8.94,40.28],[-8.51,39.44],[-8.15,39.12],[-7.26,38.77],[-6.32,38.88],[-2.66,40.21],[-2.18,40.57],[-2.0,41.15],[-2.06,54.56],[-2.49,55.4],[-3.28,55.95],[-4.21,56.07]],[[6.5,-52.15],[6.48,-38.28],[6.14,-37.45],[5.47,-36.84],[3.68,-36.17],[2.74,-36.07],[1.85,-36.41],[1.49,-36.73],[1.06,-37.57],[1.0,-38.05],[1.02,-51.91],[1.21,-52.49],[1.78,-53.18],[2.31,-53.48],[4.29,-54.13],[5.22,-54.01],[6.01,-53.46],[6.44,-52.62]],[[-6.5,-38.6],[-6.44,-52.62],[-6.01,-53.46],[-5.65,-53.78],[-5.22,-54.01],[-4.29,-54.13],[-2.31,-53.48],[-1.78,-53.18],[-1.21,-52.49],[-1.02,-51.91],[-1.06,-37.57],[-1.49,-36.73],[-1.85,-36.41],[-2.28,-36.18],[-3.21,-36.06],[-5.18,-36.72],[-5.72,-37.01],[-6.29,-37.71]],[[-9.0,31.18],[-8.99,24.11],[-8.19,22.1],[-7.33,21.39],[-6.23,21.25],[-2.39,22.66],[-2.05,23.15],[-2.0,23.45],[-2.0,32.27],[-2.06,32.75],[-2.49,33.59],[-3.28,34.13],[-4.21,34.26],[-7.68,33.06],[-8.22,32.76],[-8.64,32.33],[-8.9,31.79]],[[9.0,24.31],[9.0,31.18],[8.9,31.79],[8.64,32.33],[7.97,32.93],[4.68,34.15],[3.74,34.25],[2.85,33.91],[2.23,33.19],[2.0,32.27],[2.0,23.45],[2.18,22.88],[2.66,22.51],[5.85,21.35],[6.98,21.28],[7.65,21.57],[8.19,22.1],[8.91,23.72]],[[5.13,-25.38],[3.17,-24.78],[2.25,-24.92],[1.48,-25.47],[1.06,-26.3],[1.0,-26.77],[1.0,-30.6],[1.21,-31.49],[1.55,-31.98],[2.03,-32.35],[4.29,-33.13],[5.22,-33.01],[6.01,-32.46],[6.44,-31.62],[6.5,-31.15],[6.47,-26.96],[6.28,-26.37],[5.92,-25.87]],[[-3.63,-24.88],[-5.69,-25.67],[-6.28,-26.37],[-6.47,-26.96],[-6.44,-31.62],[-6.01,-32.46],[-5.65,-32.78],[-4.76,-33.13],[-3.82,-33.03],[-2.03,-32.35],[-1.36,-31.75],[-1.02,-30.91],[-1.0,-26.77],[-1.22,-25.86],[-1.83,-25.15],[-2.25,-24.92],[-3.17,-24.78]],[[6.01,-16.74],[2.36,-19.53],[2.16,-20.02],[2.25,-20.56],[2.86,-21.09],[8.33,-22.81],[8.62,-22.86],[9.16,-22.71],[9.54,-22.28],[9.62,-21.72],[7.52,-17.12],[7.25,-16.77],[6.86,-16.57],[6.42,-16.56]],[[-2.56,-19.33],[-6.01,-16.74],[-6.64,-16.54],[-7.07,-16.65],[-7.52,-17.12],[-9.54,-21.44],[-9.62,-21.72],[-9.54,-22.28],[-9.16,-22.71],[-8.62,-22.86],[-8.33,-22.81],[-2.86,-21.09],[-2.4,-20.79],[-2.17,-20.3],[-2.23,-19.76]],[[-5.29,-3.79],[-2.21,-0.71],[-1.93,-0.2],[-1.93,0.2],[-2.21,0.71],[-5.29,3.79],[-5.53,3.97],[-6.09,4.08],[-6.64,3.86],[-6.96,3.38],[-7.0,3.09],[-7.0,-3.09],[-6.83,-3.64],[-6.38,-4.01],[-5.8,-4.07]],[[2.21,-0.71],[5.53,-3.97],[6.09,-4.08],[6.64,-3.86],[6.96,-3.38],[7.0,-3.09],[7.0,3.09],[6.96,3.38],[6.64,3.86],[6.09,4.08],[5.53,3.97],[2.21,0.71],[1.91,0.0]],[[-4.97,17.74],[-7.62,15.96],[-7.97,15.2],[-7.86,14.36],[-7.32,13.73],[-6.94,13.54],[-4.27,12.71],[-3.52,12.67],[-2.85,13.0],[-2.59,13.28],[-2.33,13.97],[-2.77,17.05],[-3.21,17.64],[-3.89,17.95],[-4.63,17.9]],[[7.3,16.24],[4.63,17.9],[3.89,17.95],[3.21,17.64],[2.77,17.05],[2.67,16.69],[2.34,14.35],[2.33,13.97],[2.59,13.28],[3.17,12.79],[3.89,12.64],[7.32,13.73],[7.86,14.36],[7.97,15.2],[7.62,15.96]],[[2.09,6.0],[-2.38,5.96],[-2.86,5.64],[-3.01,5.38],[-3.07,4.8],[-2.79,4.29],[-0.71,2.21],[-0.38,1.99],[0.38,1.99],[2.97,4.53],[3.08,5.09],[2.86,5.64],[2.38,5.96]],[[-2.09,-6.0],[2.38,-5.96],[2.86,-5.64],[3.01,-5.38],[3.07,-4.8],[2.79,-4.29],[0.71,-2.21],[0.38,-1.99],[-0.38,-1.99],[-2.97,-4.53],[-3.08,-5.09],[-2.86,-5.64],[-2.38,-5.96]]],"circles":[[-0.0,21.385,1.0],[0.0,8.5,1.55],[0.0,-8.5,1.55],[9.999,-48.0,1.0],[9.999,-28.0,1.0],[16.605,-28.0,1.0],[13.499,55.0,1.0],[13.499,27.0,1.0],[18.385,19.917,1.55],[18.385,-19.917,1.55],[10.0,10.0,1.0],[10.0,-10.0,1.0],[8.0,8.0,1.0],[8.0,-8.0,1.0],[18.385,3.0,1.0],[7.999,-57.5,1.0],[-9.999,-48.0,1.0],[-9.999,-28.0,1.0],[-16.605,-28.0,1.0],[-13.499,55.0,1.0],[-13.499,27.0,1.0],[-18.385,19.917,1.55],[-18.385,-19.917,1.55],[-10.0,10.0,1.0],[-10.0,-10.0,1.0],[-8.0,8.0,1.0],[-8.0,-8.0,1.0],[-18.385,3.0,1.0],[-7.999,-57.5,1.0],[-0.0,-15.385,1.0]]},"top":{"loops":[[[-4.8,33.0],[5.07,33.02],[5.8,33.27],[9.5,35.4],[10.13,35.88],[10.77,36.85],[11.0,38.0],[11.03,58.44],[11.25,58.86],[11.64,59.14],[12.34,59.15],[15.97,57.8],[16.64,57.2],[16.97,56.36],[17.0,24.12],[16.95,23.72],[16.56,23.06],[14.08,21.49],[13.57,20.6],[13.45,8.97],[13.06,8.31],[11.94,7.54],[11.55,6.87],[11.5,6.48],[11.5,-13.12],[11.77,-14.12],[12.08,-14.53],[12.92,-15.17],[13.43,-16.06],[13.5,-21.01],[13.77,-22.01],[14.5,-22.74],[19.52,-25.72],[20.04,-26.61],[20.1,-28.87],[20.04,-29.39],[19.52,-30.28],[12.5,-34.41],[12.08,-34.73],[11.57,-35.62],[11.5,-60.1],[11.43,-60.62],[10.92,-61.51],[10.01,-62.03],[8.99,-62.03],[8.5,-61.83],[0.75,-57.36],[0.0,-57.16],[-0.75,-57.36],[-8.99,-62.03],[-10.01,-62.03],[-10.92,-61.51],[-11.43,-60.62],[-11.5,-60.1],[-11.57,-35.62],[-12.08,-34.73],[-12.5,-34.41],[-19.1,-30.6],[-19.52,-30.28],[-20.04,-29.39],[-20.04,-26.61],[-19.52,-25.72],[-14.5,-22.74],[-13.77,-22.01],[-13.5,-21.01],[-13.43,-16.06],[-12.92,-15.17],[-12.08,-14.53],[-11.77,-14.12],[-11.5,-13.12],[-11.5,6.48],[-11.55,6.87],[-11.94,7.54],[-13.06,8.31],[-13.45,8.97],[-13.57,20.6],[-14.08,21.49],[-16.56,23.06],[-16.95,23.72],[-17.0,24.12],[-17.0,56.05],[-16.9,56.66],[-16.45,57.43],[-15.97,57.8],[-12.34,59.15],[-11.64,59.14],[-11.11,58.67],[-11.0,58.21],[-11.0,38.0],[-10.9,37.22],[-10.38,36.18],[-9.83,35.62],[-5.8,33.27]],[[7.0,-12.0],[6.66,-13.12],[6.12,-13.66],[5.4,-13.96],[4.6,-13.96],[3.88,-13.66],[3.34,-13.12],[3.04,-12.4],[3.0,5.0],[3.34,6.12],[3.88,6.66],[4.6,6.96],[5.4,6.96],[6.12,6.66],[6.66,6.12],[6.96,5.4]],[[-3.0,-12.0],[-3.34,-13.12],[-3.88,-13.66],[-4.6,-13.96],[-5.4,-13.96],[-6.12,-13.66],[-6.66,-13.12],[-6.96,-12.4],[-7.0,5.0],[-6.93,5.52],[-6.42,6.41],[-6.0,6.73],[-5.0,7.0],[-4.0,6.73],[-3.58,6.41],[-3.07,5.52],[-3.0,5.0]],[[6.05,17.44],[1.17,23.54],[0.65,23.95],[-0.0,24.1],[-0.65,23.95],[-1.17,23.54],[-6.05,17.44],[-6.27,17.07],[-6.36,16.25],[-6.0,15.5],[-5.3,15.06],[-4.88,15.0],[4.88,15.0],[5.68,15.23],[6.23,15.85],[6.37,16.67]],[[7.0,-50.0],[6.66,-51.12],[6.12,-51.66],[5.4,-51.96],[4.6,-51.96],[3.88,-51.66],[3.34,-51.12],[3.04,-50.4],[3.04,-36.6],[3.59,-35.59],[4.6,-35.04],[5.4,-35.04],[6.12,-35.34],[6.66,-35.88],[6.96,-36.6]],[[-3.0,-50.0],[-3.34,-51.12],[-3.88,-51.66],[-4.6,-51.96],[-5.4,-51.96],[-6.12,-51.66],[-6.66,-51.12],[-6.96,-50.4],[-6.96,-36.6],[-6.41,-35.59],[-5.4,-35.04],[-4.6,-35.04],[-3.88,-35.34],[-3.34,-35.88],[-3.04,-36.6]],[[9.0,23.28],[8.98,26.08],[8.82,26.55],[8.32,27.08],[7.86,27.28],[4.84,27.96],[4.0,27.63],[3.68,27.28],[3.5,26.85],[3.54,25.94],[6.67,22.02],[7.54,21.78],[8.41,22.08],[8.93,22.82]],[[-9.0,25.83],[-8.93,22.82],[-8.41,22.08],[-8.0,21.86],[-7.09,21.83],[-6.33,22.34],[-3.78,25.53],[-3.54,25.94],[-3.5,26.85],[-4.0,27.63],[-4.84,27.96],[-5.31,27.92],[-8.32,27.08],[-8.82,26.55]],[[5.44,-18.56],[3.48,-20.59],[3.28,-21.31],[3.32,-21.69],[3.67,-22.36],[4.3,-22.77],[6.37,-23.41],[7.07,-23.31],[7.64,-22.89],[7.96,-22.27],[7.93,-19.18],[7.46,-18.46],[6.64,-18.13],[5.8,-18.3]],[[-3.72,-20.28],[-5.8,-18.3],[-6.64,-18.13],[-7.07,-18.24],[-7.46,-18.46],[-7.93,-19.18],[-8.0,-21.92],[-7.84,-22.6],[-7.38,-23.14],[-7.07,-23.31],[-6.37,-23.41],[-3.96,-22.6],[-3.45,-22.05],[-3.28,-21.31],[-3.48,-20.59]]],"circles":[[13.499,27.0,1.0],[16.605,-28.0,1.0],[13.499,55.0,1.0],[7.999,-57.5,1.0],[-7.999,-57.5,1.0],[-13.499,55.0,1.0],[-16.605,-28.0,1.0],[-13.499,27.0,1.0],[0.0,-29.0,1.55]]},"cross":{"loops":[[[-15.86,-23.64],[-16.61,-24.05],[-18.21,-24.41],[-19.81,-24.17],[-21.24,-23.38],[-22.1,-22.43],[-22.65,-21.3],[-22.83,-20.51],[-22.75,-18.89],[-22.5,-18.11],[-21.84,-17.05],[-16.37,-11.45],[-15.16,-9.49],[-14.35,-7.56],[-12.84,-5.37],[-12.12,-3.8],[-11.67,-2.14],[-11.52,-0.41],[-11.56,1.29],[-11.86,2.99],[-12.44,4.61],[-13.3,6.12],[-14.35,7.58],[-15.71,10.52],[-17.14,12.33],[-21.84,17.06],[-22.49,18.11],[-22.75,18.88],[-22.83,20.49],[-22.34,22.04],[-21.87,22.75],[-21.28,23.35],[-19.87,24.17],[-18.28,24.42],[-16.69,24.1],[-4.59,16.74],[-2.18,15.78],[0.15,15.51],[2.38,15.83],[4.74,16.8],[16.71,24.1],[17.5,24.33],[19.12,24.37],[20.64,23.83],[21.31,23.35],[22.15,22.4],[22.69,21.28],[22.89,19.68],[22.52,18.11],[21.87,17.06],[17.17,12.33],[15.74,10.52],[14.38,7.58],[12.87,5.38],[12.15,3.82],[11.7,2.15],[11.55,-0.41],[11.7,-2.14],[12.47,-4.6],[13.33,-6.1],[14.38,-7.56],[15.74,-10.51],[17.17,-12.32],[21.87,-17.05],[22.53,-18.11],[22.78,-18.89],[22.86,-20.5],[22.35,-22.06],[21.87,-22.77],[21.27,-23.38],[19.84,-24.17],[18.24,-24.41],[16.64,-24.05],[1.13,-13.72],[0.59,-13.46],[0.01,-13.38],[-0.56,-13.46],[-1.1,-13.72]],[[11.43,-8.58],[11.98,-9.61],[11.98,-10.38],[11.69,-11.09],[11.43,-11.41],[10.77,-11.85],[9.63,-11.96],[8.6,-11.41],[6.6,-9.41],[6.16,-8.75],[6.05,-7.61],[6.34,-6.89],[6.91,-6.32],[7.63,-6.03],[8.4,-6.03],[9.43,-6.58]],[[8.6,11.42],[9.63,11.97],[10.4,11.97],[11.11,11.68],[11.43,11.42],[11.87,10.76],[11.98,9.62],[11.43,8.59],[9.43,6.59],[8.77,6.15],[7.63,6.04],[6.91,6.34],[6.34,6.91],[6.05,7.62],[6.05,8.39],[6.6,9.42]],[[-9.4,6.59],[-8.37,6.04],[-7.6,6.04],[-6.88,6.34],[-6.13,7.25],[-6.02,8.39],[-6.57,9.42],[-8.57,11.42],[-9.23,11.86],[-10.37,11.97],[-11.09,11.68],[-11.66,11.11],[-11.95,10.39],[-11.95,9.62],[-11.4,8.59]],[[-6.57,-9.41],[-6.02,-8.38],[-6.02,-7.61],[-6.31,-6.89],[-7.23,-6.14],[-8.37,-6.03],[-9.4,-6.58],[-11.4,-8.58],[-11.84,-9.24],[-11.95,-10.38],[-11.66,-11.09],[-11.09,-11.66],[-10.37,-11.96],[-9.6,-11.96],[-8.57,-11.41]]],"circles":[[0.014,-8.494,1.0],[0.014,8.506,1.0],[0.015,3.674,1.5],[18.399,19.923,1.0],[18.399,-19.911,1.0],[3.683,0.006,1.5],[-3.653,0.006,1.5],[-18.37,-19.911,1.0],[-18.37,19.923,1.0],[0.015,-3.662,1.5]]}};
+  function modlShape(part, tf) {   // frame (x, +y nose) -> plate-local (x, -y) so the nose ends up at world -Z
+    var P = MODL[part]; tf = tf || function (p) { return p; };
+    function path(pts, dst) { var q = tf(pts[0]); dst.moveTo(q[0], -q[1]); for (var i = 1; i < pts.length; i++) { q = tf(pts[i]); dst.lineTo(q[0], -q[1]); } dst.closePath(); return dst; }
+    var s = path(P.loops[0], new THREE.Shape());
+    for (var k = 1; k < P.loops.length; k++) s.holes.push(path(P.loops[k], new THREE.Path()));
+    P.circles.forEach(function (c) { var q = tf([c[0], c[1]]); s.holes.push(hole(q[0], -q[1], c[2])); });
+    return s;
+  }
+  var ARM_BOLT = [18.385, 19.917], ARM_ANG = -Math.PI / 3;   // arm DXF is drawn bolt-to-motor along +y; rotated -60 deg about its bolt (STL: motor at (73.580, 51.782))
+  function armTf(p) { var c = Math.cos(ARM_ANG), s = Math.sin(ARM_ANG), x = p[0] - ARM_BOLT[0], y = p[1] - ARM_BOLT[1]; return [ARM_BOLT[0] + x * c - y * s, ARM_BOLT[1] + x * s + y * c]; }
+
+  // =====================================================================
+  // Drone group. y = 0 is the underside of the cross plate; the group is lifted so the battery rests on the ground.
+  // =====================================================================
+  var ref4 = new THREE.Group(); scene.add(ref4);
+  var GM = new THREE.Group(), GMP = new THREE.Group(), MIDS = [], PIG = null; ref4.add(GM); ref4.add(GMP);   // options page (gen_ref4_options.py): Matek-only parts, Pi -> Matek leads, middle standoffs, Orange Pi
+  var UF = U.frame;
+  var uBrace = 0, uArm = uBrace + UF.braceT, uBottom = uArm + UF.armT, uBottomTop = uBottom + UF.plateT;
+  var uTop = uBottomTop + UF.standoffH, uTopFace = uTop + UF.plateT, uArmTop = uArm + UF.armT;
+  ref4.position.set(0, U.batt.H + 0.6, 0);
+
+  // --- frame: cross plate under the arms, arms, HD_CARGO bottom plate (press nuts) on the arm roots, standoffs, HD_CARGO top plate ---
+  ref4.add(plate(modlShape('cross'), UF.braceT, uBrace, M.carbonEdge));
+  var botStock = plate(modlShape('bottom'), UF.plateT, uBottom); ref4.add(botStock);
+  ref4.add(plate(modlShape('top'), UF.plateT, uTop));
+  (function () {
+    var sg = new THREE.CylinderGeometry(UF.standoffD / 2, UF.standoffD / 2, UF.standoffH, 12), b = new THREE.CylinderGeometry(1.8, 1.8, 1.4, 12);
+    UF.standoffs.forEach(function (p) {
+      var m = shadowed(new THREE.Mesh(sg, M.nylon)); m.position.set(p[0], uBottomTop + UF.standoffH / 2, p[1]); ref4.add(m);
+      var bt = shadowed(new THREE.Mesh(b, M.aluDark)); bt.position.set(p[0], uTopFace + 0.7, p[1]); ref4.add(bt);
+      var bb = shadowed(new THREE.Mesh(b, M.aluDark)); bb.position.set(p[0], uBottom - 0.7, p[1]); ref4.add(bb);
+      if (p[1] === 28) MIDS.push(m, bt, bb);   // as-built middle pair (options page)
+    });
+    UF.pressNuts.forEach(function (p) {
+      cyl(2.3, 0.8, M.nut, p[0], uBottomTop, p[1], ref4, 16);
+      var bb = shadowed(new THREE.Mesh(b, M.aluDark)); bb.position.set(p[0], uBrace - 0.7, p[1]); ref4.add(bb);   // M2 x 8 arm screws from below
+    });
+  })();
+
+  var ref4ArmGeom = modlShape('arm4', armTf);
+  var ref4Motors = [
+    { name: 'FL', x: -UF.motorX, z: -UF.motorZ, dir: 'CW',  sx: -1, sz: 1,  num: '3' },
+    { name: 'FR', x:  UF.motorX, z: -UF.motorZ, dir: 'CCW', sx: 1,  sz: 1,  num: '1' },
+    { name: 'RL', x: -UF.motorX, z:  UF.motorZ, dir: 'CCW', sx: -1, sz: -1, num: '2' },
+    { name: 'RR', x:  UF.motorX, z:  UF.motorZ, dir: 'CW',  sx: 1,  sz: -1, num: '4' }
+  ];
+  // ESC on the arm (front-right frame, mirrored per arm): black tape over the shank with the ESC on top near the knee (photos 081, 160, 178, 181)
+  var escDX = UF.motorX - UF.kneeX, escDZ = -UF.motorZ + UF.kneeZ, escLen = Math.hypot(escDX, escDZ), escA = -Math.atan2(escDZ, escDX);
+  var escT = 0.34, escX = UF.kneeX + escDX * escT, escZ = -UF.kneeZ + escDZ * escT;
+  var escRootX = escX - 11 * escDX / escLen, escRootZ = escZ - 11 * escDZ / escLen;
+  var numMats = {};
+  ref4Motors.forEach(function (mt) {
+    var g = new THREE.Group();
+    g.add(plate(ref4ArmGeom, UF.armT, uArm + 0.02));
+    var esc = shadowed(new THREE.Mesh(new THREE.BoxGeometry(U.esc.L, U.esc.H, U.esc.W), M.heatshrink));
+    esc.position.set(escX, uArmTop + U.esc.H / 2, escZ); esc.rotation.y = escA; g.add(esc);
+    var tape = shadowed(new THREE.Mesh(new THREE.BoxGeometry(escLen * 0.62, UF.armT + 1.0, UF.armW + 1.6), M.heatshrink));
+    var tt = 0.47; tape.position.set(UF.kneeX + escDX * tt, uArm + UF.armT / 2, -UF.kneeZ + escDZ * tt); tape.rotation.y = escA; g.add(tape);
+    g.scale.set(mt.sx, 1, mt.sz);
+    ref4.add(g);
+    // paper number label on the ESC (added outside the mirrored group so the number reads correctly)
+    numMats[mt.num] = numMats[mt.num] || paperMat(mt.num);
+    var lab = new THREE.Mesh(new THREE.BoxGeometry(7, 0.3, 6), [M.paper, M.paper, numMats[mt.num], M.paper, M.paper, M.paper]);
+    lab.position.set(mt.sx * escX, uArmTop + U.esc.H + 0.15, mt.sz * escZ); lab.rotation.y = mt.sx * mt.sz * escA; ref4.add(lab);
+  });
+
+  // --- motors (XING2 1404 3800KV) and Gemfan 4024 two-blade props from lib/motor_models.js ---
+  ref4Motors.forEach(function (mt) {
+    var mp = MotorModels.mountMotorAndProp(ref4, {
+      x: mt.x, y: uArmTop, z: mt.z, motor: 'XING2_1404', prop: 'GEMFAN_4024_2', dir: mt.dir,
+      motorOver: { mount: { pcd: 9, angle: Math.PI / 4 }, screwsBelow: null }
+    });
+    // two M2 screws from below through the two radial pad slots (DXF slot centres 10.5 mm apart, about 15 deg off the frame y axis)
+    [1, -1].forEach(function (s) { cyl(1.7, 1.4, M.aluDark, s * mt.sx * 1.34, -UF.armT - 1.4, s * mt.sz * -5.07, mp.motor, 12); });
+  });
+
+  // =====================================================================
+  // Matek F405-WMO: FC board on its PDB/BEC board, from Matek's product page images (reference/ref4-drone/matek-f405-wmo/).
+  // Board coordinates (u, v) in mm as in Matek's LAYOUT image: u from the left edge (0..22), v from the 8x3 edge (0..32).
+  // Mounted arrow-forward (photos 175-186): the 5x3 / JST end points at the nose, so group x = 11 - u, group z = 16 - v.
+  // =====================================================================
+  function fcTopTexture() {
+    var s = 40, W = 22 * s, H = 32 * s, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+    var c = cv.getContext('2d');
+    function X(u) { return (22 - u) * s; } function Y(v) { return (32 - v) * s; }   // canvas top = nose = v 32, canvas left = u 22 (drone left)
+    c.fillStyle = '#2756a8'; c.fillRect(0, 0, W, H);
+    c.strokeStyle = 'rgba(20,45,100,0.55)'; c.lineWidth = 0.25 * s;                    // a few copper traces under the mask
+    [[[4, 7.5], [4, 12], [7, 14]], [[18, 7.5], [18, 11], [15.5, 12.5]], [[3, 24], [6, 21.5]], [[9, 24], [9, 21.8]], [[19, 12], [17, 14]]].forEach(function (t) {
+      c.beginPath(); c.moveTo(X(t[0][0]), Y(t[0][1])); for (var i = 1; i < t.length; i++) c.lineTo(X(t[i][0]), Y(t[i][1])); c.stroke(); });
+    function pad(u, v, sq) {
+      c.fillStyle = '#d9b44a';
+      if (sq) c.fillRect(X(u) - 0.8 * s, Y(v) - 0.8 * s, 1.6 * s, 1.6 * s); else { c.beginPath(); c.arc(X(u), Y(v), 0.82 * s, 0, 2 * Math.PI); c.fill(); }
+      c.fillStyle = '#1a1c22'; c.beginPath(); c.arc(X(u), Y(v), 0.45 * s, 0, 2 * Math.PI); c.fill();
+    }
+    function txt(u, v, t, size, rot) {
+      c.save(); c.translate(X(u), Y(v)); c.rotate(rot || 0); c.fillStyle = '#ffffff'; c.font = '600 ' + (size * s) + 'px Arial, Helvetica, sans-serif';
+      c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(t, 0, 0); c.restore();
+    }
+    // 8x3 block (Matek layout, rows from the edge): row 1 / row 2 / row 3; 4V5 and Vbat pads square
+    var r8 = [['G', '4V5', 'RX2', 'TX2', 'SBus', 'PIO2', 'TX5', 'RX5'], ['G', '4V5', 'RX4', 'TX4', '4V5', 'G', 'SDA', 'SCL'], ['G', 'Vbat', 'Cam', 'VTx', 'Vbat', 'G', 'Tx3', 'Rx3']];
+    var v8 = [1.35, 3.89, 6.43], labV8 = [2.62, 5.16, 7.75];
+    for (var r = 0; r < 3; r++) for (var i = 0; i < 8; i++) { var u = 2.11 + 2.54 * i; pad(u, v8[r], /4V5|Vbat/.test(r8[r][i])); txt(u, labV8[r], r8[r][i], 0.78); }
+    // 5x3 block: S5..S9 / Vx / G
+    var v5 = [25.7, 28.25, 30.8];
+    for (var j = 0; j < 5; j++) { var u5 = 1.2 + 2.54 * j; for (var q = 0; q < 3; q++) pad(u5, v5[q], false); txt(u5, 24.35, 'S' + (5 + j), 0.85); txt(u5, 27.0, 'Vx', 0.75); txt(u5, 29.55, 'G', 0.75); }
+    // left-edge SMD pads G / 4V5 / LED / S4
+    ['G', '4V5', 'LED', 'S4'].forEach(function (t, k) { var v = 12.5 + 2.35 * k; c.fillStyle = '#d9b44a'; c.fillRect(X(1.3), Y(v) - 0.75 * s, 1.2 * s, 1.5 * s); txt(2.6, v, t, 0.75, Math.PI / 2); });
+    // mount-hole rings
+    [[2, 10], [20, 10], [2, 22], [20, 22]].forEach(function (h) { c.fillStyle = '#d9b44a'; c.beginPath(); c.arc(X(h[0]), Y(h[1]), 1.45 * s, 0, 2 * Math.PI); c.fill(); });
+    txt(12.9, 29.2, 'WMO', 1.25, Math.PI / 2); txt(16.6, 8.4, '3v3', 0.7);
+    c.strokeStyle = '#ffffff'; c.lineWidth = 0.22 * s; c.beginPath(); c.moveTo(X(18.9), Y(23.7)); c.lineTo(X(20.0), Y(25.0)); c.lineTo(X(21.1), Y(23.7)); c.stroke();   // forward arrow
+    var t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8;
+    return t;
+  }
+
+  var fcGroup = new THREE.Group();
+  (function buildFC() {
+    var fc = U.fc, g = fcGroup;
+    function P(u, v) { return [11 - u, 16 - v]; }
+    function part(w, h, d, mat, u, v, y) { var p = P(u, v); return box(w, h, d, mat, p[0], y, p[1], g); }   // w along u (X), d along v (Z)
+    var holes = [[2, 10], [20, 10], [2, 22], [20, 22]];   // 18.1 x 12.0 mm M2 pattern measured from Matek's layout image (A)
+    function board(y, mat) {
+      var s = roundedRectShape(fc.L, fc.W, 1.2);
+      holes.forEach(function (h) { var p = P(h[0], h[1]); s.holes.push(hole(p[0], p[1], 1.0)); });
+      var m = plate(s, fc.pcbT, y, mat); g.add(m); return m;
+    }
+    var y0 = fc.vhb;
+    box(fc.W - 3, fc.vhb, fc.L - 4, M.velcro, 0, 0, 0, g);                               // VHB pad (photos 025, 034)
+    // ---- PDB / BEC board (bottom): pads at the 8x3 (rear) end, TVS, shunt, Vx/5V regulators, inductors 6R8 / 100 (Matek photo 2, left) ----
+    board(y0, M.pcbBlue);
+    var yP = y0 + fc.pcbT;
+    [[2.7, '-'], [7.1, '-'], [13.1, 'ESC+'], [18.65, 'BAT+']].forEach(function (pd) { part(3.9, 0.12, 3.0, M.gold, pd[0], 1.85, yP); });
+    part(4.2, 2.2, 2.8, M.chip, 9.0, 6.4, yP);           // TVS
+    part(6.4, 0.8, 2.6, M.copper, 16.6, 5.6, yP);        // shunt 0m25 / 0m30
+    part(3.6, 1.1, 3.6, M.chip, 6.0, 15.0, yP);          // Vx regulator
+    part(4.0, 3.0, 4.0, M.grey, 16.6, 13.8, yP);         // inductor "100"
+    part(6.6, 4.0, 6.6, M.grey, 5.6, 27.6, yP);          // inductor "6R8"
+    part(4.0, 3.0, 4.0, M.grey, 13.0, 27.4, yP);         // inductor "100"
+    [[10, 22.5], [13, 21.3], [16, 22.5], [10, 25], [14.5, 31]].forEach(function (cp) { part(3.0, 1.4, 1.6, M.tan, cp[0], cp[1], yP); });
+    var gap = fc.H - 2 * fc.pcbT;                          // 9.5 mm between the boards
+    holes.forEach(function (h) { var p = P(h[0], h[1]); cyl(1.7, gap, M.alu, p[0], yP, p[1], g, 12); });
+    part(5.0, gap, 7.6, M.hdrBase, 19.3, 27.8, yP);      // 2x6 board-to-board header (S1-S3, Vx, 5V, Curr, Vbat)
+    // ---- FC board (top) ----
+    var yF = yP + gap;
+    board(yF, M.pcbBlue);
+    var yC = yF + fc.pcbT;
+    var top = new THREE.Mesh(new THREE.PlaneGeometry(fc.W - 0.02, fc.L - 0.02), new THREE.MeshStandardMaterial({ map: fcTopTexture(), roughness: 0.55, metalness: 0.1, alphaTest: 0.5 }));
+    top.geometry.rotateX(-Math.PI / 2); top.position.set(0, yC + 0.02, 0); top.receiveShadow = true; g.add(top);
+    // underside parts (Matek photo 2, right): AT7456E OSD, ICM42688-P IMU, SPL06 baro, microSD socket
+    part(7.0, 1.2, 7.0, M.chip, 11.0, 11.5, yF - 1.2);
+    part(3.0, 0.9, 3.0, M.chip, 7.3, 9.8, yF - 0.9);
+    part(2.0, 0.9, 2.5, M.usb, 9.6, 12.8, yF - 0.9);
+    part(12.0, 1.6, 10.0, M.usb, 10.5, 20.0, yF - 1.6);
+    // top parts: STM32F405RGT6 (LQFP64 10 x 10 mm body, leads to 12 x 12), crystal, LEDs (3V3 red, FC blue / green), JST-SH-6P, small passives
+    part(12.0, 0.25, 12.0, M.usb, 11.3, 16.8, yC);
+    part(10.0, 1.4, 10.0, M.chip, 11.3, 16.8, yC);
+    part(3.2, 0.8, 1.6, M.usb, 14.2, 8.6, yC);
+    part(0.9, 0.5, 1.7, led(0xff3030), 20.9, 13.1, yC); part(0.9, 0.5, 1.7, led(0x2a6bff), 20.9, 16.1, yC); part(0.9, 0.5, 1.7, led(0x30d050), 20.9, 19.0, yC);
+    part(8.5, 3.0, 4.6, M.jst, 17.55, 29.5, yC);         // JST-SH-6P side entry, opening toward the nose
+    [[4.5, 8.8], [7.5, 8.8], [3.3, 20.5], [19.0, 21.6], [5.0, 22.8], [8.2, 22.8], [18.6, 9.5]].forEach(function (cp) { part(1.6, 0.5, 0.8, M.chipSm, cp[0], cp[1], yC); });
+    holes.forEach(function (h) { var p = P(h[0], h[1]); cyl(1.9, 1.1, M.chip, p[0], yC, p[1], g, 16); });   // black M2 screws (Matek photos)
+    // ---- right-angle 2.54 mm headers at both short edges, pins pointing outward along the roll axis, 3 tiers (photos 009, 175, 186) ----
+    var tierY = [yC + 1.6, yC + 1.6 + 2.54, yC + 1.6 + 5.08], pinMat = M.hdrPin;
+    function raBlock(us, vs, edgeV, dir) {   // vs[0] = row at the edge -> lowest tier
+      var uMin = Math.min.apply(null, us) - 1.27, uMax = Math.max.apply(null, us) + 1.27, um = (uMin + uMax) / 2, w = uMax - uMin;
+      part(w, tierY[2] + 1.3 - yC - 0.3, 2.5, M.hdrBase, um, edgeV + dir * 1.55, yC + 0.3);   // plastic spacer just past the board edge
+      for (var r = 0; r < 3; r++) us.forEach(function (u) {
+        part(0.64, tierY[r] + 0.32 - (yF - 2.5), 0.64, pinMat, u, vs[r], yF - 2.5);           // vertical leg through the board
+        var vEnd = edgeV + dir * 8.8, len = Math.abs(vEnd - vs[r]);
+        part(0.64, 0.64, len, pinMat, u, (vEnd + vs[r]) / 2, tierY[r] - 0.32);               // horizontal leg
+      });
+      return { uMin: uMin, uMax: uMax };
+    }
+    var u8 = [], u5 = []; for (var i = 0; i < 8; i++) u8.push(2.11 + 2.54 * i); for (var k = 0; k < 5; k++) u5.push(1.2 + 2.54 * k);
+    raBlock(u8, [1.35, 3.89, 6.43], 0, -1);
+    raBlock(u5, [30.8, 28.25, 25.7], 32, 1);
+    // Dupont housings: 2.54 mm per position, 14 mm long, starting 3 mm past the edge
+    function housing(u0, u1, t0, t1, edgeV, dir, label) {
+      var uA = Math.min(u0, u1) - 1.27, uB = Math.max(u0, u1) + 1.27, h = tierY[t1] - tierY[t0] + 2.54, vm = edgeV + dir * 10;
+      var hb = part(uB - uA - 0.1, h - 0.1, 14, M.hdrBase, (uA + uB) / 2, vm, tierY[t0] - 1.27);
+      if (label) {
+        var lm = paperMat(label), p = P((uA + uB) / 2, vm + dir * 1.5);
+        var lb = new THREE.Mesh(new THREE.BoxGeometry(Math.max(uB - uA, 5.2), 0.3, 6), [M.paper, M.paper, lm, M.paper, M.paper, M.paper]);
+        lb.position.set(p[0], tierY[t1] + 1.27 + 0.15, p[1]); if (dir < 0) lb.rotation.y = Math.PI; g.add(lb);
+      }
+      return hb;
+    }
+    // rear (8x3): tier 0 = edge row (G 4V5 RX2 TX2 | SBus PIO2 TX5 RX5), tier 1 (G 4V5 RX4 TX4 | 4V5 G SDA SCL), tier 2 (G Vbat Cam VTx | Vbat G Tx3 Rx3)
+    housing(u8[0], u8[3], 0, 0, 0, -1, null);        // R: ELRS RX on TX2/RX2
+    housing(u8[6], u8[7], 0, 0, 0, -1, null);        // TELE: XIAO on TX5/RX5
+    housing(u8[0], u8[3], 1, 1, 0, -1, null);        // GPS: 4V5 G TX4 RX4
+    housing(u8[6], u8[7], 1, 1, 0, -1, null);        // GPS I2C: SDA SCL
+    housing(u8[2], u8[3], 2, 2, 0, -1, 'CAM');       // camera video Cam / VTx
+    housing(u8[6], u8[7], 2, 2, 0, -1, 'PI');        // PIFC: Tx3 / Rx3 to the Orange Pi
+    // front (5x3): one vertical housing per motor output (S, Vx, G), S5..S8 = motors 3, 4, 1, 2 (wiring reference); S9 Vx / G = camera power
+    ['3', '4', '1', '2'].forEach(function (n, k2) { housing(u5[k2], u5[k2], 0, 2, 32, 1, n); });
+    housing(u5[4], u5[4], 0, 1, 32, 1, null);
+    g.userData = { yC: yC, yP: yP, P: P, tierY: tierY, u8: u8 };
+    g.position.set(fc.x, uBottomTop, fc.z);
+    ref4.add(g);
+  })();
+  var FCD = fcGroup.userData;
+  function fcWorld(u, v, y) { var p = FCD.P(u, v); return [p[0] + U.fc.x, uBottomTop + y, p[1] + U.fc.z]; }   // ref4-local point from FC (u, v)
+
+  // --- USB-C / buzzer extender (Matek layout: 22 x 22 mm, JST-SH-6P, DFU button, passive buzzer with ON/OFF switch, USB-C), at the tail on the bottom plate ---
+  var EXT = { x: 0, z: 44 };
+  (function () {
+    var g = new THREE.Group();
+    function Q(ex, ey) { return [11 - ey, ex - 11]; }   // drawing (ex right, ey down) -> USB-C edge facing -X (photos 167, 178), JST facing +X
+    function part(w, h, d, mat, ex, ey, y) { var p = Q(ex, ey); return box(d, h, w, mat, p[0], y, p[1], g); }   // w along ex (Z), d along ey (X)
+    box(20, 0.8, 20, M.velcro, 0, 0, 0, g);
+    var s = roundedRectShape(22, 22, 2); [[3, 3], [19, 3]].forEach(function (h) { var p = Q(h[0], h[1]); s.holes.push(hole(p[0], p[1], 1.4)); });
+    g.add(plate(s, 1.2, 0.8, M.pcbBlue));
+    var y = 2.0;
+    part(8.0, 2.9, 4.2, M.jst, 10.5, 2.3, y);           // JST-SH-6P
+    part(3.0, 1.2, 3.0, M.chipSm, 5.6, 8.0, y);         // DFU button
+    var bz = Q(15.5, 10.5); cyl(6.0, 7.5, M.chip, bz[0], y, bz[1], g, 32);   // passive buzzer
+    part(9.0, 3.2, 7.4, M.usb, 6.2, 18.8, y);           // USB-C receptacle at the edge
+    part(2.0, 1.2, 3.4, M.white, 18.5, 20.5, y);        // buzzer ON/OFF switch
+    part(0.9, 0.5, 1.6, led(0xff3030), 2.6, 10.0, y);   // USB power LED
+    g.position.set(EXT.x, uBottomTop, EXT.z); GM.add(g);
+  })();
+
+  // --- leads: JST-SH 6P cable FC -> extender; battery pigtail; ESC power leads; FC -> ESC signal leads ---
+  (function () {
+    var jA = fcWorld(17.55, 31.8, 13.7 + 1.5);
+    var cols = [M.wireBlk, M.wireRed, M.wireWht, M.wireGrn, M.wireYel, M.wireBlu];
+    cols.forEach(function (m, i) {
+      var o = (i - 2.5) * 0.75;
+      tube([[jA[0] + o, jA[1], jA[2] - 1], [jA[0] - 4 + o, jA[1] + 1, jA[2] - 6], [-14 + o * 0.3, 12, -18], [-14 + o * 0.3, 10, 14], [-12 + o * 0.3, 9, 30],
+            [EXT.x + 12.5, 9 + o * 0.2, EXT.z - 8], [EXT.x + 10.5, uBottomTop + 3.4, EXT.z - 0.5 + o * 0.6]], 0.32, m, GM);
+    });
+    // battery pigtail from BAT+ / - pads (rear) over the tail, down to the XT60 behind the battery
+    var bp = fcWorld(18.65, 1.85, 2.7), bm = fcWorld(2.7, 1.85, 2.7), yX = -U.batt.H / 2 - 0.6;
+    tube([bp, [bp[0], bp[1] + 5, bp[2] + 6], [-3, 20, 40], [-3, 18, 60], [-2.2, 4, 70], [-2.2, yX, 82]], 1.0, M.wireRed, GM);
+    tube([bm, [bm[0], bm[1] + 5, bm[2] + 6], [3, 20, 40], [3, 18, 60], [2.2, 4, 70], [2.2, yX, 82]], 1.0, M.wireBlk, GM);
+    // ESC power leads from ESC+ / - pads to each ESC root end
+    var ep = fcWorld(13.1, 1.85, 2.8), en = fcWorld(7.1, 1.85, 2.8);
+    ref4Motors.forEach(function (mt) {
+      var rx = mt.sx * escRootX, rz = mt.sz * escRootZ, yE = uArmTop + U.esc.H / 2;
+      [[ep, M.wireRed, -0.9], [en, M.wireBlk, 0.9]].forEach(function (w) {
+        var midZ = mt.sz > 0 ? -2 : 22;
+        tube([w[0], [w[0][0] * 0.5 + mt.sx * 6, 9.5, w[0][2] + 4], [mt.sx * 16 + w[2], 9.5, midZ], [rx * 0.8 + w[2], yE + 1.5, rz * 0.85], [rx + w[2], yE, rz]], 0.55, w[1], GM);
+      });
+      // signal + ground from the front 5x3 housings to the ESC (white / black pair)
+      var col = { '3': 0, '4': 1, '1': 2, '2': 3 }[mt.num], hu = 1.2 + 2.54 * col;
+      var hp = fcWorld(hu, 49, FCD.tierY[1]);
+      tube([[hp[0], hp[1], hp[2]], [hp[0] + mt.sx * 4, hp[1] - 2, hp[2] - 3], [mt.sx * 15, 10, mt.sz > 0 ? -34 : -26], [mt.sx * 18, 9, mt.sz > 0 ? -22 : 10], [rx, yE + 1.8, rz]], 0.35, M.wireWht, GM);
+    });
+  })();
+
+  // --- battery under the cross plate: Velcro pad, rounded pack, XT60 pair at the tail ---
+  (function () {
+    var b = U.batt;
+    box(30, 0.6, 50, M.velcro, 0, -0.6, 0, ref4);
+    ref4.add(plate(roundedRectShape(b.L, b.W, b.r), b.H, -b.H - 0.6, M.battery));
+    box(b.W + 0.4, b.H - 5, 34, M.battLabel, 0, -b.H - 0.6 + 2.5, -8, ref4);
+    var yX = -b.H / 2 - 0.6;
+    box(8.2, 8.2, 16, M.xt60, 0, yX - 4.1, 66, ref4);       // battery-side female
+    box(8.0, 8.0, 15, M.xt60, 0, yX - 4.0, 78, ref4);       // drone-side male (pigtail)
+    tube([[-2, yX, b.L / 2], [-2, yX, 52], [-1.8, yX, 58]], 1.0, M.wireRed, ref4);
+    tube([[2, yX, b.L / 2], [2, yX, 52], [1.8, yX, 58]], 1.0, M.wireBlk, ref4);
+    tube([[-3, yX + 1, b.L / 2 - 6], [-9, yX + 2, b.L / 2 + 2], [-12, yX - 2, b.L / 2 + 9]], 0.5, M.wireWht, ref4);   // balance lead
+  })();
+
+  // --- GPS: printed cup on the top plate tail, mast, HGLRC M100-PRO puck; harness down the mast to the FC GPS housing ---
+  var gpsTopY;
+  (function () {
+    var gp = U.gps;
+    var cup = shadowed(new THREE.Mesh(new THREE.CylinderGeometry(gp.cupR - 3, gp.cupR, gp.cupH, 32), M.printed)); cup.position.set(0, uTopFace + gp.cupH / 2, gp.z); ref4.add(cup);
+    cyl(gp.mastR, gp.mastH, M.printed, 0, uTopFace, gp.z, ref4, 20);
+    var yP = uTopFace + gp.mastH;
+    box(gp.W, gp.H, gp.W, M.gpsTop, 0, yP, gp.z, ref4);
+    box(gp.W - 5, 0.6, gp.W - 5, M.chipSm, 0, yP + gp.H, gp.z, ref4);
+    var l = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.6, 1.5), led(0xff3030)); l.position.set(gp.W / 2 - 2.5, yP + gp.H + 0.3, gp.z + gp.W / 2 - 2.5); ref4.add(l);
+    gpsTopY = yP + gp.H;
+    var hp = fcWorld(5, -17, FCD.tierY[1]);
+    [M.wireGrn, M.wireBlu, M.wireBlk, M.wireRed, M.wireWht, M.wireYel].forEach(function (m, i) {
+      var o = (i - 2.5) * 0.8;
+      tube([[gp.mastR + 0.8, yP - 1, gp.z + o], [gp.mastR + 0.9, uTopFace + 20, gp.z + o], [gp.mastR + 1, uTopFace + 2, gp.z - 4 + o], [4 + o * 0.5, uTop - 3, 36], [hp[0] + o * 0.5, hp[1] + 0.5, hp[2] + 1]], 0.35, m, GM);
+    });
+    [12, 30].forEach(function (yy) { box(gp.mastR * 2 + 4, 2.4, 3, M.wireYel, 1, uTopFace + yy, gp.z, ref4); });   // zip ties on the mast
+  })();
+
+  // --- AKK A11T AIO camera / VTX at the nose between the plates, lens forward, whip antenna up; two antenna tubes front-left (photo 178) ---
+  (function () {
+    var c = U.cam, yC = uBottomTop + 7;
+    box(c.W, c.H, 1.6, M.chip, 0, yC - c.H / 2, c.z, ref4);
+    var lens = shadowed(new THREE.Mesh(new THREE.CylinderGeometry(3.5, 3.5, 5, 20), M.lens)); lens.rotation.x = Math.PI / 2; lens.position.set(0, yC + 1, c.z - 3.3); ref4.add(lens);
+    var glass = new THREE.Mesh(new THREE.CylinderGeometry(2.2, 2.2, 0.4, 20), M.usb); glass.rotation.x = Math.PI / 2; glass.position.set(0, yC + 1, c.z - 6); ref4.add(glass);
+    var ant = shadowed(new THREE.Mesh(new THREE.CylinderGeometry(1.0, 1.0, 32, 8), M.heatshrink)); ant.position.set(5, yC + c.H / 2 + 16, c.z + 1); ant.rotation.z = -0.12; ref4.add(ant);
+    box(c.W + 2, 2, 4, M.printed, 0, uBottomTop, c.z + 1.5, ref4);
+    [[-19, -46], [-20, -53]].forEach(function (p) {
+      var tb = shadowed(new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.5, 40, 10), M.heatshrink)); tb.position.set(p[0], uBottomTop + 20, p[1]); tb.rotation.z = 0.1; ref4.add(tb);
+      box(4.5, 2.5, 4.5, M.wireRed, p[0] - 0.6, uBottomTop + 5, p[1], ref4);
+    });
+  })();
+
+  // --- Happymodel EP2 receiver (clear heat shrink) rear-left on the bottom-plate lobe (photo 108); XIAO ESP32-C3 under the top plate, USB-C to the right (photos 168, 179) ---
+  var XIAO = { x: 5, z: -1 };
+  (function () {
+    box(U.rx.W, U.rx.H, U.rx.L, M.clearShrink, -19, uBottomTop + 0.4, 26, ref4);
+    box(U.rx.W - 2, 1, U.rx.L - 2, M.chip, -19, uBottomTop + 0.9, 26, ref4);
+    tube([[-19, uBottomTop + 2, 31], [-20, uBottomTop + 6, 40], [-22, uBottomTop + 4, 52]], 0.4, M.wireBlk, ref4);
+    var rp = fcWorld(5.9, -17, FCD.tierY[0]);
+    [M.wireGrn, M.wireYel, M.wireRed, M.wireBlk].forEach(function (m, i) { tube([[-19 + (i - 1.5) * 0.7, uBottomTop + 2, 21], [-15, 12, 26], [rp[0] + (i - 1.5) * 0.7, rp[1], rp[2] + 1]], 0.3, m, GM); });
+    var y = uTop - 0.3;   // XIAO taped upside down under the top plate
+    box(U.xiao.L, 1.2, U.xiao.W, M.chip, XIAO.x, y - 1.2, XIAO.z, ref4);
+    box(10, 1.5, 10, M.usb, XIAO.x - 2, y - 2.7, XIAO.z, ref4);
+    box(7.4, 3.2, 9.0, M.usb, XIAO.x + U.xiao.L / 2 - 3.2, y - 4.4, XIAO.z, ref4);
+    box(1.6, 0.8, 1.6, M.brass, XIAO.x - 7, y - 2.0, XIAO.z + 6, ref4);          // u.FL
+    var tp = fcWorld(18.62, -17, FCD.tierY[0]);
+    [M.wireYel, M.wireWht, M.wireRed, M.wireBlk].forEach(function (m, i) { tube([[XIAO.x - 8, y - 2, XIAO.z + 4 + i * 0.8], [-2, 20, 12], [tp[0] + (i - 1.5) * 0.7, tp[1] + 0.5, tp[2] + 1]], 0.3, m, GM); });
+  })();
+
+  // =====================================================================
+  // Orange Pi Zero 3W, flat, long axis along the roll axis, on a printed riser + 3 mm standoffs above the top plate (photos 167-170).
+  // Board coordinates (u, v) in mm from Orange Pi's top-view image: u along the 65 mm edge from the PWR-IN USB-C end, v from the port edge.
+  // Placement (photos 168, 170): ports (USB-C PWR, USB-C, mini-HDMI) face right (+X), 40-pin header along the left edge, HDMI / fan end at the rear.
+  // =====================================================================
+  var piCase = new THREE.Group(), PI = {};
+  (function () {
+    var p = U.pi, g = new THREE.Group();
+    function Q(u, v) { return [16 - v, p.zc - 32.5 + u]; }
+    function part(w, h, d, mat, u, v, y) { var q = Q(u, v); return box(d, h, w, mat, q[0], y, q[1], g); }   // w along u (Z), d along v (X)
+    var yR = uTopFace + 1.4;                                   // riser rests on the top-plate standoff screw heads
+    var rs = roundedRectShape(60, 26, 3); g.add((function () { var m = plate(rs, p.riserT, yR, M.printed); m.position.z = p.zc; return m; })());
+    var holes = [[3.5, 3.5], [61.5, 3.5], [3.5, 28.5], [61.5, 28.5]];   // 58 x 25 mm, ASSUMED (3.5 mm corner inset as on the 65 x 30 Zero format)
+    var yB = yR + p.riserT + p.standH;
+    holes.forEach(function (h) { var q = Q(h[0], h[1]); cyl(2.4, p.standH, M.white, q[0], yR + p.riserT, q[1], g, 6); cyl(2.1, 1.0, M.white, q[0], yB + p.T, q[1], g, 6); });
+    var s = roundedRectShape(p.L, p.W, 3); holes.forEach(function (h) { var q = Q(h[0], h[1]); s.holes.push(hole(q[0], q[1] - p.zc, 1.4)); });
+    var pcb = plate(s, p.T, yB, M.piPcb); pcb.position.z = p.zc; g.add(pcb);
+    var yT = yB + p.T;
+    // top side
+    part(8.9, 3.2, 7.4, M.usb, 11.4, 2.7, yT);       // USB-C PWR-IN (5 V / 3 A)
+    part(8.9, 3.2, 7.4, M.usb, 24.6, 2.7, yT);       // USB-C (USB 2.0 / DP Alt Mode)
+    part(11.2, 3.5, 7.5, M.usb, 53.2, 3.2, yT);      // mini-HDMI
+    part(12.0, 1.3, 12.0, M.chip, 38.2, 11.3, yT);   // Allwinner A733
+    part(5.0, 0.2, 5.0, M.grey, 38.2, 11.3, yT + 1.3);
+    part(10.2, 1.0, 15.0, M.chip, 22.0, 16.2, yT);   // LPDDR5 / LPDDR4X
+    part(9.2, 1.8, 11.0, M.usb, 7.3, 14.2, yT);      // Wi-Fi 6 + BT 5.4 module (shield can)
+    part(9.5, 0.9, 9.5, M.chip, 57.3, 15.1, yT);     // AXP318W PMU
+    part(2.0, 1.2, 2.0, M.brass, 3.2, 22.4, yT);     // ANT u.FL (external antenna)
+    [[30, 21], [33, 21], [44, 20], [47, 21], [50, 9], [27, 8], [15, 6], [62, 22]].forEach(function (cp) { part(1.6, 0.5, 0.8, M.chipSm, cp[0], cp[1], yT); });
+    // 40-pin header with coloured bases as on Orange Pi's photo: pin 1 at the HDMI end, odd pins on the inner row
+    var gnd = [6, 9, 14, 20, 25, 30, 34, 39], pinGeo = new THREE.BoxGeometry(0.64, 9.7, 0.64);
+    var bMat = { blue: std(0x3d8bd8, 0.6, 0.0), black: M.hdrBase, red: std(0xd23a2a, 0.6, 0.0), orange: std(0xe8a33a, 0.6, 0.0) };
+    for (var k = 1; k <= 40; k++) {
+      var c = Math.floor((k - 1) / 2), u = 56.26 - 2.54 * c, v = (k % 2) ? 27.23 : 29.77;
+      var bm = gnd.indexOf(k) >= 0 ? bMat.black : (k === 2 || k === 4) ? bMat.red : (k === 1 || k === 17) ? bMat.orange : bMat.blue;
+      part(2.5, 2.5, 2.5, bm, u, v, yT);
+      var q = Q(u, v), pn = shadowed(new THREE.Mesh(pinGeo, M.gold)); pn.position.set(q[0], yT - 1.2 + 4.85, q[1]); g.add(pn);
+    }
+    // bottom side: TF slot, two CSI FPC sockets, fan connector
+    part(11.0, 1.4, 9.0, M.usb, 8.5, 12.5, yB - 1.4);
+    part(13.0, 1.2, 3.5, M.chip, 20.5, 29.0, yB - 1.2); part(13.0, 1.2, 3.5, M.chip, 35.0, 29.0, yB - 1.2);
+    part(2.5, 1.5, 3.0, M.white, 8.5, 29.5, yB - 1.5);
+    // "PI" Dupont housing on pins 4-10 (5 V, GND, UART TX/RX), wires looping down to the FC "PI" housing (Tx3 / Rx3)
+    var hq0 = Q(56.26 - 2.54 * 2.5, 29.77);
+    var ph = box(2.5, 14, 4 * 2.54, M.hdrBase, hq0[0], yT + 2.5, hq0[1], g);
+    var plm = paperMat('PI'), plb = new THREE.Mesh(new THREE.BoxGeometry(0.3, 6, 9), [plm, M.paper, M.paper, M.paper, M.paper, M.paper]);
+    plb.position.set(hq0[0] - 1.4, yT + 2.5 + 9, hq0[1]); plb.rotation.y = Math.PI; g.add(plb);
+    PI.hq = [hq0[0], yT + 2.5 + 14, hq0[1]];
+    // heatsink / fan case (black aluminium, photos 167-170), opaque; its left edge stops short of the 40-pin strip (X < -9.6) so the header and PI housing stay visible (ASSUMED)
+    var cg = piCase, yc = yT + 0.2, cx0 = -9.6, cx1 = 16.7, cw = cx1 - cx0, cl = 66.4, ch = p.caseH;
+    var shell = new THREE.Mesh(new THREE.BoxGeometry(cw, ch, cl), M.caseShell); shell.position.set((cx0 + cx1) / 2, yc + ch / 2, p.zc); cg.add(shell);
+    var edges = new THREE.LineSegments(new THREE.EdgesGeometry(shell.geometry), new THREE.LineBasicMaterial({ color: 0x1a1c20 })); edges.position.copy(shell.position); cg.add(edges);
+    for (var f = 0; f < 6; f++) { var fin = new THREE.Mesh(new THREE.BoxGeometry(1.2, 4, 44), M.caseFin); fin.position.set(-7.6 + f * 4.6, yc + ch + 2, p.zc - 10); cg.add(fin); }
+    var fz = p.zc + 21.5;
+    var ring = new THREE.Mesh(new THREE.CylinderGeometry(9, 9, 2.5, 32, 1, true), M.fan); ring.position.set(0, yc + ch + 1.25, fz); cg.add(ring);
+    for (var bl = 0; bl < 7; bl++) { var bb = new THREE.Mesh(new THREE.BoxGeometry(7, 0.5, 2.2), M.fan); var a = bl / 7 * Math.PI * 2; bb.position.set(Math.cos(a) * 5.2, yc + ch + 1.4, fz + Math.sin(a) * 5.2); bb.rotation.y = -a + 0.5; cg.add(bb); }
+    var hub = new THREE.Mesh(new THREE.CylinderGeometry(3, 3, 2.6, 20), M.fan); hub.position.set(0, yc + ch + 1.3, fz); cg.add(hub);
+    g.add(cg);
+    PI.caseTop = yc + ch + 4; PI.yT = yT;
+    // assumed FPC antenna on the case top (front part) with a u.FL pigtail; not visible in the build photos
+    var aq = Q(3.2, 22.4);
+    box(8, 0.3, 26, M.fpc, -5, PI.caseTop, p.zc - 20, cg);
+    tube([[aq[0], yT + 1.2, aq[1]], [aq[0] - 1, yT + 3, aq[1] - 3.5], [-5, PI.caseTop - 2, p.zc - 33.5], [-5, PI.caseTop + 0.2, p.zc - 31]], 0.5, M.wireBlk, cg);
+    ref4.add(g); PIG = g;
+    PI.yB = yB;
+  })();
+  // PI housing -> FC PI housing (4 wires: 5 V red, GND black, TX yellow, RX white), loop down the left side (photos 167, 169, 170)
+  (function () {
+    var fp = fcWorld(18.62, -17, FCD.tierY[2]);
+    [M.wireRed, M.wireBlk, M.wireYel, M.wireWht].forEach(function (m, i) {
+      var o = (i - 1.5) * 0.8;
+      tube([[PI.hq[0], PI.hq[1] - 1, PI.hq[2] + o], [PI.hq[0] - 3, PI.hq[1] + 3, PI.hq[2] + 2 + o], [-21, PI.yT + 4, 30 + o], [-20, uTop - 4, 36 + o], [fp[0] + o * 0.6, fp[1] + 0.5, fp[2] + 1]], 0.35, m, GMP);
+    });
+  })();
+
+  // battery strap removed 2026-11-08 (designer): not drawn
+
+  // >>> OPTIONS (generated by tools/render/gen_ref4_options.py; edit there)
+  // Flight-controller and companion-computer options, one of each shown at a time (Options panel, top right). The as-built
+  // Matek F405-WMO and Orange Pi Zero 3W are this page's own models; the others are the 5-inch page's models (Wing, H7 V2 + PDB,
+  // ARK copied from quad5_render.html; Cube from fc_blocks.py; Pis and UNO Q from onboard.py) placed on the 4-inch frame.
+  var OPT = { fc: 'matek', pc: 'opi' }, FCS = {}, COMP = {}, OPTC = [];
+  var botV2 = new THREE.Group(), MIDALT = new THREE.Group();
+  (function (M0) {
+    var M = Object.create(M0);
+    M.pcb = std(0x1f7a3a, 0.6, 0.1); M.pin = std(0xd4af37, 0.35, 0.9);     // 5-inch page materials missing here
+    var quad = ref4, yDeck = uBottomTop, yTopFace = uTopFace;
+    var F = { stack30: 30.5, fcNuts: [[15.25, 15.25], [-15.25, 15.25], [15.25, -15.25], [-15.25, -15.25]], fcNutHead: 5.6, fcNutH: 1.5 };
+    var HDR = { pitch: 2.54, base: 2.5, pin: 0.64, above: 6, below: 3 };
+    var D = { hdr: HDR };
+    var FC_PAGE_LABEL = true, FC_LABEL = null, FC_LEAD = null;   // fc_blocks finish(): no canvas label, HTML callouts instead
+
+    // 5-inch quad bottom plate v2 (stock HD_CARGO + four ears + four M3 press nuts on 30.5 x 30.5), shown with the boards that need it
+    MODL.bottomV2 = {"loops":[[[-9.286,60.0],[9.286,60.0],[9.721,59.976],[10.151,59.905],[10.57,59.788],[15.682,57.93],[16.097,57.722],[16.338,57.536],[16.546,57.318],[16.719,57.072],[16.853,56.801],[16.945,56.512],[16.993,56.207],[16.993,53.793],[16.945,53.488],[16.853,53.199],[16.719,52.928],[16.546,52.682],[16.338,52.464],[16.097,52.278],[15.682,52.07],[14.67,51.695],[14.4,51.546],[14.16,51.361],[13.952,51.142],[13.707,50.763],[13.594,50.483],[13.523,50.185],[13.499,49.875],[13.499,34.554],[13.521,33.965],[13.616,33.19],[13.839,32.245],[14.174,31.338],[14.616,30.476],[15.044,29.827],[15.408,29.368],[15.806,28.933],[21.758,22.895],[22.066,22.505],[22.44,21.869],[22.703,21.182],[22.815,20.704],[22.885,19.967],[22.862,19.468],[22.726,18.733],[22.474,18.039],[22.114,17.398],[21.817,17.007],[21.294,16.483],[20.638,15.977],[20.299,15.556],[20.084,15.06],[19.907,14.085],[19.708,13.468],[19.431,12.892],[19.084,12.362],[18.673,11.885],[18.203,11.466],[17.681,11.111],[17.307,10.913],[16.713,10.678],[16.297,10.565],[15.867,10.49],[15.227,10.436],[14.94,10.375],[14.671,10.276],[14.422,10.14],[14.126,9.909],[13.825,9.549],[13.615,9.126],[13.521,8.752],[13.499,7.5],[13.562,7.0],[13.656,6.722],[13.841,6.382],[14.019,6.155],[14.302,5.897],[14.546,5.741],[14.811,5.621],[15.294,5.51],[18.513,5.497],[18.889,5.449],[19.358,5.304],[19.681,5.138],[19.975,4.929],[20.235,4.681],[20.458,4.398],[20.638,4.084],[20.772,3.743],[20.856,3.381],[20.885,3.0],[20.806,2.375],[20.688,2.027],[20.523,1.704],[20.314,1.41],[20.066,1.149],[19.783,0.927],[19.469,0.747],[19.01,0.579],[18.513,0.503],[15.499,0.5],[15.107,0.461],[14.644,0.308],[14.309,0.108],[14.016,-0.158],[13.783,-0.473],[13.651,-0.735],[13.559,-1.012],[13.499,-1.5],[13.499,-8.455],[13.521,-8.752],[13.585,-9.035],[13.729,-9.387],[13.935,-9.702],[14.195,-9.972],[14.502,-10.189],[14.759,-10.313],[15.034,-10.4],[15.867,-10.49],[16.507,-10.617],[17.307,-10.913],[17.681,-11.111],[18.203,-11.466],[18.673,-11.885],[18.954,-12.197],[19.431,-12.892],[19.708,-13.468],[19.907,-14.085],[20.084,-15.06],[20.299,-15.556],[20.638,-15.977],[21.368,-16.548],[21.781,-16.964],[22.132,-17.424],[22.419,-17.922],[22.639,-18.449],[22.79,-18.999],[22.871,-19.565],[22.88,-20.14],[22.774,-20.909],[22.531,-21.665],[19.323,-29.269],[19.106,-29.657],[18.763,-30.084],[18.44,-30.373],[18.079,-30.613],[17.686,-30.798],[17.16,-30.948],[16.605,-31.0],[13.397,-31.003],[12.905,-31.09],[12.463,-31.29],[12.086,-31.586],[11.79,-31.963],[11.59,-32.405],[11.523,-32.695],[11.5,-33.0],[11.51,-44.628],[11.586,-45.012],[11.784,-45.457],[12.017,-45.772],[12.606,-46.396],[12.763,-46.644],[12.882,-46.911],[12.96,-47.194],[12.996,-47.487],[12.996,-48.513],[12.939,-48.902],[12.763,-49.356],[12.546,-49.682],[12.017,-50.228],[11.836,-50.46],[11.617,-50.896],[11.522,-51.275],[11.5,-51.57],[11.5,-59.0],[11.437,-59.5],[11.343,-59.778],[11.21,-60.037],[11.043,-60.272],[10.845,-60.48],[10.618,-60.658],[10.367,-60.803],[10.095,-60.91],[9.805,-60.977],[9.5,-61.0],[7.0,-60.995],[6.611,-60.931],[6.247,-60.793],[5.817,-60.506],[5.549,-60.221],[4.464,-58.387],[4.214,-58.083],[3.913,-57.836],[3.571,-57.653],[3.197,-57.539],[2.936,-57.504],[-2.803,-57.5],[-3.068,-57.518],[-3.449,-57.607],[-3.689,-57.707],[-4.018,-57.912],[-4.387,-58.279],[-5.471,-60.113],[-5.722,-60.417],[-5.918,-60.588],[-6.247,-60.793],[-6.738,-60.961],[-7.133,-61.0],[-9.5,-61.0],[-9.805,-60.977],[-10.095,-60.91],[-10.453,-60.759],[-10.772,-60.543],[-11.043,-60.272],[-11.259,-59.953],[-11.379,-59.688],[-11.459,-59.403],[-11.497,-59.103],[-11.5,-51.57],[-11.522,-51.275],[-11.617,-50.896],[-11.836,-50.46],[-12.017,-50.228],[-12.546,-49.682],[-12.763,-49.356],[-12.939,-48.902],[-12.999,-48.414],[-12.989,-47.388],[-12.939,-47.098],[-12.847,-46.82],[-12.715,-46.559],[-12.546,-46.318],[-12.017,-45.772],[-11.784,-45.457],[-11.586,-45.012],[-11.51,-44.628],[-11.5,-33.0],[-11.523,-32.695],[-11.59,-32.405],[-11.79,-31.963],[-12.086,-31.586],[-12.463,-31.29],[-12.905,-31.09],[-13.397,-31.003],[-16.605,-31.0],[-17.16,-30.948],[-17.686,-30.798],[-18.079,-30.613],[-18.44,-30.373],[-18.763,-30.084],[-19.106,-29.657],[-19.369,-29.165],[-22.531,-21.665],[-22.727,-21.1],[-22.844,-20.525],[-22.885,-19.948],[-22.852,-19.375],[-22.747,-18.814],[-22.499,-18.094],[-22.132,-17.424],[-21.781,-16.964],[-21.368,-16.548],[-20.638,-15.977],[-20.299,-15.556],[-20.084,-15.06],[-19.907,-14.085],[-19.708,-13.468],[-19.431,-12.892],[-18.954,-12.197],[-18.673,-11.885],[-18.203,-11.466],[-17.681,-11.111],[-17.307,-10.913],[-16.713,-10.678],[-16.297,-10.565],[-15.867,-10.49],[-15.227,-10.436],[-14.94,-10.375],[-14.671,-10.276],[-14.422,-10.14],[-14.126,-9.909],[-13.825,-9.549],[-13.615,-9.126],[-13.521,-8.752],[-13.499,-8.455],[-13.501,-1.401],[-13.585,-0.918],[-13.783,-0.473],[-14.016,-0.158],[-14.309,0.108],[-14.644,0.308],[-15.107,0.461],[-15.499,0.5],[-18.513,0.503],[-19.01,0.579],[-19.469,0.747],[-19.783,0.927],[-20.066,1.149],[-20.314,1.41],[-20.523,1.704],[-20.688,2.027],[-20.806,2.375],[-20.885,3.0],[-20.856,3.381],[-20.772,3.743],[-20.638,4.084],[-20.458,4.398],[-20.235,4.681],[-19.975,4.929],[-19.681,5.138],[-19.358,5.304],[-18.889,5.449],[-18.513,5.497],[-15.499,5.5],[-15.194,5.523],[-14.72,5.657],[-14.462,5.79],[-14.227,5.957],[-13.956,6.228],[-13.788,6.463],[-13.62,6.812],[-13.54,7.097],[-13.502,7.397],[-13.499,8.455],[-13.521,8.752],[-13.585,9.035],[-13.729,9.387],[-13.935,9.702],[-14.195,9.972],[-14.502,10.189],[-14.759,10.313],[-15.034,10.4],[-15.867,10.49],[-16.507,10.617],[-17.307,10.913],[-17.681,11.111],[-18.203,11.466],[-18.673,11.885],[-18.954,12.197],[-19.431,12.892],[-19.708,13.468],[-19.907,14.085],[-20.084,15.06],[-20.299,15.556],[-20.638,15.977],[-21.294,16.483],[-21.817,17.007],[-22.114,17.398],[-22.474,18.039],[-22.726,18.733],[-22.83,19.219],[-22.88,19.718],[-22.875,20.214],[-22.766,20.945],[-22.54,21.645],[-22.202,22.3],[-21.918,22.704],[-21.587,23.079],[-15.67,29.075],[-15.283,29.518],[-14.931,29.986],[-14.519,30.644],[-14.098,31.516],[-13.786,32.432],[-13.616,33.19],[-13.521,33.965],[-13.499,34.554],[-13.499,49.875],[-13.523,50.185],[-13.594,50.483],[-13.707,50.763],[-13.952,51.142],[-14.16,51.361],[-14.4,51.546],[-14.67,51.695],[-15.682,52.07],[-16.097,52.278],[-16.446,52.569],[-16.637,52.802],[-16.791,53.061],[-16.945,53.488],[-16.999,53.949],[-16.999,56.051],[-16.975,56.361],[-16.904,56.659],[-16.719,57.072],[-16.446,57.431],[-16.097,57.722],[-15.827,57.871],[-10.487,59.815],[-9.894,59.954]],[[7.682,54.872],[4.568,56.001],[4.214,56.072],[3.739,56.066],[3.391,55.988],[3.06,55.848],[2.853,55.721],[2.575,55.487],[2.348,55.211],[2.174,54.9],[2.058,54.562],[2.004,54.205],[2.0,41.146],[2.047,40.842],[2.14,40.636],[2.276,40.456],[2.586,40.236],[6.315,38.876],[6.548,38.807],[6.904,38.758],[7.378,38.792],[7.721,38.891],[8.044,39.051],[8.336,39.269],[8.581,39.532],[8.825,39.94],[8.941,40.277],[8.995,40.634],[8.993,53.149],[8.945,53.454],[8.853,53.743],[8.719,54.014],[8.546,54.26],[8.338,54.478],[8.097,54.664]],[[-4.683,55.963],[-7.682,54.872],[-8.097,54.664],[-8.446,54.373],[-8.719,54.014],[-8.904,53.601],[-8.975,53.303],[-8.999,52.993],[-8.984,40.514],[-8.941,40.277],[-8.825,39.94],[-8.651,39.629],[-8.423,39.352],[-8.146,39.118],[-7.939,38.991],[-7.608,38.851],[-7.26,38.773],[-6.785,38.767],[-6.431,38.838],[-2.586,40.236],[-2.389,40.355],[-2.226,40.512],[-2.073,40.771],[-2.012,40.991],[-2.0,54.083],[-2.033,54.445],[-2.129,54.79],[-2.348,55.211],[-2.663,55.57],[-2.954,55.788],[-3.391,55.988],[-3.857,56.078],[-4.333,56.055]],[[6.5,-52.146],[6.5,-38.595],[6.446,-38.134],[6.292,-37.707],[6.047,-37.328],[5.723,-37.013],[5.467,-36.845],[5.184,-36.716],[3.45,-36.1],[2.975,-36.049],[2.504,-36.111],[2.167,-36.23],[1.954,-36.344],[1.754,-36.483],[1.493,-36.733],[1.283,-37.022],[1.128,-37.342],[1.032,-37.687],[1.003,-37.927],[0.999,-51.6],[1.053,-52.061],[1.207,-52.488],[1.452,-52.867],[1.776,-53.182],[2.032,-53.35],[2.315,-53.479],[3.932,-54.063],[4.167,-54.118],[4.524,-54.146],[4.995,-54.084],[5.332,-53.965],[5.647,-53.784],[5.924,-53.55],[6.152,-53.273],[6.371,-52.852],[6.467,-52.507]],[[-6.5,-38.595],[-6.485,-52.388],[-6.41,-52.74],[-6.216,-53.173],[-5.924,-53.55],[-5.647,-53.784],[-5.332,-53.965],[-4.995,-54.084],[-4.524,-54.146],[-4.167,-54.118],[-3.816,-54.025],[-2.315,-53.479],[-1.9,-53.271],[-1.551,-52.98],[-1.279,-52.62],[-1.093,-52.208],[-1.023,-51.91],[-0.999,-51.6],[-1.014,-37.806],[-1.089,-37.455],[-1.283,-37.022],[-1.575,-36.645],[-1.852,-36.411],[-2.167,-36.23],[-2.504,-36.111],[-2.975,-36.049],[-3.332,-36.077],[-3.683,-36.169],[-5.184,-36.716],[-5.467,-36.845],[-5.723,-37.013],[-6.047,-37.328],[-6.292,-37.707],[-6.446,-38.134]],[[-8.999,31.179],[-8.989,24.111],[-8.857,23.573],[-8.332,22.352],[-8.13,22.023],[-7.804,21.684],[-7.329,21.395],[-6.794,21.246],[-6.323,21.241],[-5.851,21.35],[-2.658,22.511],[-2.389,22.66],[-2.226,22.817],[-2.104,23.007],[-2.003,23.373],[-2.0,32.27],[-2.015,32.512],[-2.09,32.864],[-2.226,33.193],[-2.418,33.494],[-2.663,33.757],[-2.853,33.908],[-3.06,34.035],[-3.391,34.175],[-3.739,34.253],[-4.095,34.268],[-4.451,34.218],[-4.683,34.149],[-7.682,33.059],[-8.097,32.851],[-8.446,32.56],[-8.637,32.327],[-8.791,32.068],[-8.945,31.641]],[[8.999,24.313],[8.999,31.179],[8.945,31.641],[8.853,31.93],[8.719,32.2],[8.546,32.447],[8.338,32.665],[8.097,32.851],[7.827,33.0],[4.568,34.188],[4.214,34.258],[3.739,34.253],[3.278,34.135],[2.954,33.975],[2.575,33.674],[2.284,33.297],[2.09,32.864],[2.004,32.392],[2.0,23.451],[2.027,23.221],[2.14,22.941],[2.33,22.708],[2.586,22.541],[5.851,21.35],[6.323,21.241],[6.886,21.261],[7.243,21.36],[7.654,21.572],[7.943,21.809],[8.185,22.1],[8.373,22.442],[8.875,23.62],[8.968,23.961]],[[-3.631,-24.877],[-5.282,-25.435],[-5.691,-25.668],[-5.924,-25.871],[-6.208,-26.234],[-6.401,-26.654],[-6.475,-26.958],[-6.5,-27.275],[-6.5,-31.146],[-6.442,-31.625],[-6.371,-31.852],[-6.216,-32.173],[-6.006,-32.462],[-5.837,-32.633],[-5.647,-32.784],[-5.332,-32.965],[-5.109,-33.051],[-4.761,-33.129],[-4.286,-33.134],[-3.932,-33.063],[-2.315,-32.479],[-2.032,-32.35],[-1.66,-32.085],[-1.361,-31.747],[-1.145,-31.35],[-1.023,-30.91],[-0.999,-30.6],[-0.999,-26.775],[-1.031,-26.419],[-1.168,-25.969],[-1.338,-25.661],[-1.559,-25.387],[-1.83,-25.152],[-2.137,-24.97],[-2.468,-24.847],[-2.931,-24.776],[-3.283,-24.795]],[[5.132,-25.378],[3.4,-24.816],[2.931,-24.776],[2.468,-24.847],[2.137,-24.97],[1.929,-25.085],[1.734,-25.225],[1.48,-25.474],[1.338,-25.661],[1.168,-25.969],[1.055,-26.303],[1.013,-26.536],[1.005,-30.756],[1.053,-31.061],[1.207,-31.488],[1.361,-31.747],[1.551,-31.98],[1.776,-32.182],[2.032,-32.35],[2.315,-32.479],[3.816,-33.025],[4.286,-33.134],[4.643,-33.141],[5.109,-33.051],[5.44,-32.911],[5.745,-32.711],[6.006,-32.462],[6.216,-32.173],[6.41,-31.74],[6.485,-31.388],[6.5,-27.275],[6.444,-26.804],[6.283,-26.368],[6.122,-26.106],[5.924,-25.871],[5.562,-25.58]],[[6.015,-16.739],[2.452,-19.423],[2.286,-19.64],[2.172,-19.957],[2.171,-20.3],[2.254,-20.563],[2.36,-20.737],[2.499,-20.885],[2.665,-21.003],[2.856,-21.086],[8.402,-22.835],[8.761,-22.853],[9.1,-22.745],[9.384,-22.521],[9.542,-22.276],[9.629,-21.932],[9.59,-21.576],[7.496,-17.066],[7.369,-16.883],[7.208,-16.734],[7.016,-16.623],[6.803,-16.557],[6.581,-16.54],[6.363,-16.571]],[[-2.557,-19.332],[-6.108,-16.677],[-6.31,-16.586],[-6.581,-16.54],[-6.803,-16.557],[-7.016,-16.623],[-7.293,-16.804],[-7.496,-17.066],[-9.538,-21.438],[-9.608,-21.646],[-9.632,-21.86],[-9.609,-22.073],[-9.542,-22.276],[-9.384,-22.521],[-9.1,-22.745],[-8.761,-22.853],[-8.474,-22.849],[-2.79,-21.063],[-2.551,-20.928],[-2.36,-20.737],[-2.227,-20.5],[-2.162,-20.231],[-2.172,-19.957],[-2.255,-19.7],[-2.404,-19.474]],[[2.207,-0.707],[5.407,-3.891],[5.734,-4.05],[6.095,-4.081],[6.383,-4.01],[6.691,-3.808],[6.831,-3.641],[6.932,-3.448],[7.0,-3.086],[6.997,3.161],[6.903,3.515],[6.691,3.808],[6.383,4.01],[6.095,4.081],[5.734,4.05],[5.407,3.891],[2.207,0.707],[1.99,0.383],[1.914,0.0],[1.99,-0.383]],[[-5.293,-3.793],[-2.173,-0.671],[-2.056,-0.513],[-1.957,-0.291],[-1.919,0.099],[-2.01,0.427],[-2.173,0.671],[-5.293,3.793],[-5.468,3.932],[-5.665,4.028],[-5.877,4.078],[-6.095,4.081],[-6.383,4.01],[-6.691,3.808],[-6.903,3.515],[-6.989,3.235],[-6.997,-3.161],[-6.932,-3.448],[-6.789,-3.7],[-6.578,-3.902],[-6.312,-4.036],[-6.022,-4.086],[-5.734,-4.05],[-5.468,-3.932]],[[-4.966,17.736],[-7.3,16.236],[-7.551,16.033],[-7.803,15.697],[-7.952,15.305],[-7.986,14.882],[-7.931,14.562],[-7.811,14.267],[-7.564,13.929],[-7.322,13.727],[-7.038,13.579],[-4.176,12.683],[-3.8,12.641],[-3.341,12.72],[-2.924,12.938],[-2.65,13.203],[-2.454,13.523],[-2.33,13.973],[-2.336,14.353],[-2.67,16.687],[-2.736,16.963],[-2.851,17.217],[-3.073,17.514],[-3.363,17.749],[-3.619,17.876],[-3.983,17.965],[-4.354,17.961],[-4.713,17.867]],[[7.3,16.236],[4.966,17.736],[4.713,17.867],[4.354,17.961],[3.983,17.965],[3.619,17.876],[3.363,17.749],[3.14,17.579],[2.9,17.297],[2.769,17.05],[2.686,16.781],[2.321,14.162],[2.363,13.788],[2.542,13.357],[2.778,13.063],[3.084,12.834],[3.431,12.692],[3.895,12.642],[4.268,12.709],[6.936,13.542],[7.232,13.671],[7.488,13.856],[7.759,14.176],[7.931,14.562],[7.986,14.882],[7.952,15.305],[7.803,15.697],[7.551,16.033]],[[2.086,6.0],[-2.086,6.0],[-2.308,5.975],[-2.515,5.903],[-2.7,5.789],[-2.942,5.516],[-3.072,5.168],[-3.085,4.949],[-3.05,4.734],[-2.932,4.468],[-2.793,4.293],[-0.631,2.138],[-0.465,2.029],[-0.191,1.933],[0.096,1.919],[0.285,1.955],[0.55,2.079],[0.707,2.207],[2.793,4.293],[3.001,4.597],[3.078,4.877],[3.081,5.095],[3.036,5.312],[2.942,5.516],[2.808,5.691],[2.58,5.87],[2.308,5.975]],[[-2.086,-6.0],[2.086,-6.0],[2.308,-5.975],[2.515,-5.903],[2.7,-5.789],[2.942,-5.516],[3.072,-5.168],[3.085,-4.949],[3.05,-4.734],[2.932,-4.468],[2.793,-4.293],[0.631,-2.138],[0.465,-2.029],[0.191,-1.933],[-0.096,-1.919],[-0.285,-1.955],[-0.55,-2.079],[-0.707,-2.207],[-2.793,-4.293],[-3.001,-4.597],[-3.078,-4.877],[-3.081,-5.095],[-3.036,-5.312],[-2.942,-5.516],[-2.808,-5.691],[-2.58,-5.87],[-2.308,-5.975]]],"circles":[[-0.0,21.385,1.0],[0.0,8.5,1.55],[0.0,-8.5,1.55],[9.999,-48.0,1.0],[9.999,-28.0,1.0],[16.605,-28.0,1.0],[13.499,55.0,1.0],[13.499,27.0,1.0],[18.385,19.917,1.55],[18.385,-19.917,1.55],[10.0,10.0,1.0],[10.0,-10.0,1.0],[8.0,8.0,1.0],[8.0,-8.0,1.0],[18.385,3.0,1.0],[7.999,-57.5,1.0],[-9.999,-48.0,1.0],[-9.999,-28.0,1.0],[-16.605,-28.0,1.0],[-13.499,55.0,1.0],[-13.499,27.0,1.0],[-18.385,19.917,1.55],[-18.385,-19.917,1.55],[-10.0,10.0,1.0],[-10.0,-10.0,1.0],[-8.0,8.0,1.0],[-8.0,-8.0,1.0],[-18.385,3.0,1.0],[-7.999,-57.5,1.0],[-0.0,-15.385,1.0],[15.25,15.25,2.25],[15.25,-15.25,2.25],[-15.25,15.25,2.25],[-15.25,-15.25,2.25]]};
+    botV2.add(plate(modlShape('bottomV2'), UF.plateT, uBottom));
+    (function (quad) {
+      // 5-inch quad bottom plate v2: four Tarot M3 stainless press nuts pressed in from the top (head up) on the 30.5 x 30.5 pattern;
+      // hex head 5.6 mm across, 1.5 mm tall on the top face of the plate, M3 threaded bore (the FC M3 x 8 screws come down into it).
+      (function () {
+        var head = new THREE.CylinderGeometry(F.fcNutHead / 2, F.fcNutHead / 2, F.fcNutH, 6);
+        var bore = new THREE.CylinderGeometry(1.25, 1.25, 0.06, 20);
+        var ss = new THREE.MeshStandardMaterial({ color: 0xc4c8cd, roughness: 0.3, metalness: 0.9 });          // 304 stainless
+        var thr = new THREE.MeshStandardMaterial({ color: 0x3b3f45, roughness: 0.6, metalness: 0.6 });         // M3 thread (bore)
+        F.fcNuts.forEach(function (p) {
+          var n = shadowed(new THREE.Mesh(head, ss)); n.position.set(p[0], yDeck + F.fcNutH / 2, -p[1]); n.rotation.y = Math.PI / 6; quad.add(n);
+          var b = new THREE.Mesh(bore, thr); b.position.set(p[0], yDeck + F.fcNutH + 0.03, -p[1]); quad.add(b);
+        });
+      })();
+    })(botV2);
+    ref4.add(botV2);
+    // middle standoff pair in the other hole pair common to both plates (+/-13.5, z -27), used when a board covers (+/-16.6, z 28)
+    (function () {
+      var sg = new THREE.CylinderGeometry(UF.standoffD / 2, UF.standoffD / 2, UF.standoffH, 12), b = new THREE.CylinderGeometry(1.8, 1.8, 1.4, 12);
+      [[13.499, -27], [-13.499, -27]].forEach(function (p) {
+        var m = shadowed(new THREE.Mesh(sg, M.nylon)); m.position.set(p[0], uBottomTop + UF.standoffH / 2, p[1]); MIDALT.add(m);
+        var bt = shadowed(new THREE.Mesh(b, M.aluDark)); bt.position.set(p[0], uTopFace + 0.7, p[1]); MIDALT.add(bt);
+        var bb = shadowed(new THREE.Mesh(b, M.aluDark)); bb.position.set(p[0], uBottom - 0.7, p[1]); MIDALT.add(bb);
+      });
+      ref4.add(MIDALT);
+    })();
+
+    // ---- Lucid H7 Wing (copied from quad5_render.html). Right-angle headers only on this frame: bases + 1.5 mm pin stubs.
+    (function (D) {
+      //   // TBS Lucid H7 Wing: two-board sandwich inside the stack, on the bottom plate (5-inch quad plate v2: 30.5 x 30.5 M3 press nuts).
+      // Layout of the top (FC) board follows the TBS Lucid manual p.51 "Top Plate - Top" diagram (read 2026-11-08):
+      //   front (-Z) edge: an outer 13-hole row and an inner 3 + 5 hole row; left (-X) edge: 8 rows x 3 (G / VS / S3..S10);
+      //   rear (+Z) edge: three 13-hole rows (S11..S13, UARTs, I2C, 5V/G). All 2.54 mm pitch plated through-holes;
+      //   the TBS kit ships a 2.54 mm header strip, so the holes are modelled with headers fitted.
+      //   microSD holder front-centre, two JST-SH (VTX, USB board) on the right (+X) edge, LEDs rear-right.
+      // ---------------------------------------------------------------------
+      (function () {
+        var fc = D.fc, hd = D.hdr, g = new THREE.Group();
+        var yBase = yDeck + F.fcNutH;   // grommets on the M3 press-nut heads (5-inch quad plate v2)
+        var h = F.stack30 / 2;
+        // 4 nylon mount spacers on the 30.5 pattern centred on the bottom-plate stack centre (0, 0) (5-inch quad plate v2 press nuts)
+        [[h, h], [-h, h], [h, -h], [-h, -h]].forEach(function (p) {
+          var so = shadowed(new THREE.Mesh(new THREE.CylinderGeometry(3.3, 3.3, fc.mountH, 24), new THREE.MeshStandardMaterial({ color: 0x111214, roughness: 0.95, metalness: 0.0 })));   // M3 rubber grommet
+          so.position.set(p[0], fc.mountH / 2, p[1]); g.add(so);
+        });
+        var y0 = fc.mountH;
+        // board outline centred offZ aft of the hole pattern, so holes stay on the 30.5 pattern
+        function pcb(y) {
+          var s = roundedRectShape(fc.L, fc.W, 2.5);
+          [[h, h], [-h, h], [h, -h], [-h, -h]].forEach(function (p) { s.holes.push(hole(p[0], p[1] - fc.offZ, 1.6)); });
+          var m = plate(s, fc.pcbT, y, M.pcb);
+          m.position.z = fc.offZ;
+          return m;
+        }
+        var zFront = fc.offZ - fc.L / 2, zRear = fc.offZ + fc.L / 2;   // board edges in pattern coords
+        var gapBoards = fc.H - 2 * fc.pcbT;
+        // bottom board: PDB
+        g.add(pcb(y0));
+        var shunt = shadowed(new THREE.Mesh(new THREE.BoxGeometry(4, 1.2, 7), M.usb)); shunt.position.set(10, y0 + fc.pcbT + 0.6, 14); g.add(shunt);
+        var reg = shadowed(new THREE.Mesh(new THREE.BoxGeometry(6, 1.8, 6), M.chip)); reg.position.set(-9, y0 + fc.pcbT + 0.9, 14); g.add(reg);
+        var ind = shadowed(new THREE.Mesh(new THREE.CylinderGeometry(3, 3, 3, 24), M.chipSm)); ind.position.set(-9, y0 + fc.pcbT + 1.5, -10); g.add(ind);
+        // board-to-board pin headers at the ends
+        for (var i = -3; i <= 3; i++) {
+          var pin = new THREE.Mesh(new THREE.BoxGeometry(0.6, gapBoards, 0.6), M.pin);
+          pin.position.set(i * 2.54, y0 + fc.pcbT + gapBoards / 2, zFront + 3); g.add(pin);
+          var pin2 = pin.clone(); pin2.position.z = zRear - 3; g.add(pin2);
+        }
+        var hdrB = shadowed(new THREE.Mesh(new THREE.BoxGeometry(20, gapBoards - 1.6, 2.6), M.chip)); hdrB.position.set(0, y0 + fc.pcbT + (gapBoards - 1.6) / 2, zFront + 3); g.add(hdrB);
+        var hdrB2 = hdrB.clone(); hdrB2.position.z = zRear - 3; g.add(hdrB2);
+        // top board: FC
+        var yF = y0 + fc.pcbT + gapBoards;
+        g.add(pcb(yF));
+        var yC = yF + fc.pcbT;
+
+        // --- 2.54 mm pin headers ---------------------------------------------------------
+        // header(n, x0, z0, alongX): n positions starting at (x0, z0), stepping +pitch along X or Z.
+        var pinH = hd.above + hd.base + hd.below;
+        var pinGeo = new THREE.BoxGeometry(hd.pin, pinH, hd.pin);
+        var headerCount = 0;
+        function header(n, x0, z0, alongX) {
+          var len = n * hd.pitch - (hd.pitch - hd.base);
+          var base = shadowed(new THREE.Mesh(new THREE.BoxGeometry(alongX ? len : hd.base, hd.base, alongX ? hd.base : len), M.hdrBase));
+          var cx = x0 + (alongX ? (n - 1) * hd.pitch / 2 : 0), cz = z0 + (alongX ? 0 : (n - 1) * hd.pitch / 2);
+          base.position.set(cx, yC + hd.base / 2, cz); g.add(base);
+          for (var k = 0; k < n; k++) {
+            var pn = shadowed(new THREE.Mesh(pinGeo, M.hdrPin));
+            pn.position.set(x0 + (alongX ? k * hd.pitch : 0), yC + pinH / 2 - hd.below, z0 + (alongX ? 0 : k * hd.pitch)); g.add(pn);
+            headerCount++;
+          }
+        }
+        var P = hd.pitch;
+        var colX = function (i) { return -0.8 + (i - 6) * P; };      // 13 columns, centred 0.8 mm left of the pattern centre (manual diagram)
+        var zRow1 = zFront + 1.9, zRow2 = zRow1 + P;                 // front rows
+        header(13, colX(0), zRow1, true);                            // G VS S1 CS1 CS2 MISO MOSI SCK Rx8 Tx8 VBAT2 AirS RSSI
+        header(3, colX(0), zRow2, true);                             // G VS S2
+        header(5, colX(8), zRow2, true);                             // BUZZ G VFC 5V CUR2
+        var zRearRow3 = zRear - 2.3, zRearRow1 = zRearRow3 - 2 * P;  // rear rows
+        header(13, colX(0), zRearRow1, true); header(13, colX(0), zRearRow2(), true); header(13, colX(0), zRearRow3, true);
+        function zRearRow2() { return zRearRow3 - P; }
+        // left servo block: S3..S8 (6 rows) between the mount holes, S9..S10 (2 rows) just aft of the rear-left mount hole
+        for (var c = 0; c < 3; c++) {
+          header(6, colX(c), -3.1, false);                           // rows at -3.1 .. +9.6
+          header(2, colX(c), zRearRow1 - 2 * P + 0.5, false);        // S9, S10
+        }
+
+        // --- other top-side parts, placed clear of the headers --------------------------
+        var sd = shadowed(new THREE.Mesh(new THREE.BoxGeometry(12, 1.9, 15), M.usb)); sd.position.set(0.5, yC + 0.95, zFront + 13.5); g.add(sd);   // microSD holder
+        var sdLip = new THREE.Mesh(new THREE.BoxGeometry(12.2, 1.2, 1.0), M.chip); sdLip.position.set(0.5, yC + 0.6, zFront + 6.3); g.add(sdLip);
+        var arrow = new THREE.Mesh(new THREE.ConeGeometry(1.6, 3, 3), M.usb); arrow.rotation.x = -Math.PI / 2; arrow.position.set(3, yC + 0.1, 5); g.add(arrow);   // forward chevron
+        var jVtx = shadowed(new THREE.Mesh(new THREE.BoxGeometry(3.2, 2.9, 8.5), M.jst)); jVtx.position.set(fc.W / 2 - 2.4, yC + 1.45, -4); g.add(jVtx);        // JST-SH VTX
+        var jUsb = jVtx.clone(); jUsb.position.z = 6.5; g.add(jUsb);                                                                                          // JST-SH to USB board
+        var c1 = shadowed(new THREE.Mesh(new THREE.BoxGeometry(2.2, 1.1, 3.2), M.chipSm)); c1.position.set(5, yC + 0.55, 13); g.add(c1);
+        var c2 = c1.clone(); c2.position.set(-5, yC + 0.55, 15.5); g.add(c2);
+        var c3 = shadowed(new THREE.Mesh(new THREE.BoxGeometry(3, 1.0, 2.2), M.chipSm)); c3.position.set(9, yC + 0.5, -12); g.add(c3);
+        var led = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.5, 0.7), new THREE.MeshStandardMaterial({ color: 0x2255ff, emissive: 0x1133cc, emissiveIntensity: 0.6 })); led.position.set(13.5, yC + 0.25, 11.5); g.add(led);
+        var led2 = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.5, 0.7), new THREE.MeshStandardMaterial({ color: 0x33dd55, emissive: 0x11aa33, emissiveIntensity: 0.6 })); led2.position.set(13.5, yC + 0.25, 13.5); g.add(led2);
+        // top bolts
+        [[h, h], [-h, h], [h, -h], [-h, -h]].forEach(function (p) {
+          var bh = shadowed(new THREE.Mesh(new THREE.CylinderGeometry(1.9, 1.9, 1.6, 12), M.nylon));
+          bh.position.set(p[0], yC + 0.8, p[1]); g.add(bh);
+        });
+
+        g.position.y = yBase;
+        quad.add(g);
+        window.__headerPins = headerCount;
+        FCS.wing = g;
+      })();
+    })({ hdr: { pitch: 2.54, base: 2.5, pin: 0.64, above: 1.5, below: 3 }, fc: { L: 54, W: 36, H: 13, pcbT: 1.6, mountH: 3, offZ: 4 } });
+    // ---- Lucid H7 V2 + PDB and ARKV6X + PAB (copied from quad5_render.html), Cube Orange+ (fc_blocks.py)
+    // Triumph Lucid H7 (V2, non-Wing) + PDB
+    (function () {
+
+      var hd = D.hdr, g = new THREE.Group(), yBase = yDeck, PCB_T = 1.0;
+      var MX = {
+        pcbBlack: new THREE.MeshStandardMaterial({ color: 0x15171a, roughness: 0.6, metalness: 0.15 }),
+        pcbBlue:  new THREE.MeshStandardMaterial({ color: 0x1f4f9a, roughness: 0.65, metalness: 0.1 }),
+        pcbWhite: new THREE.MeshStandardMaterial({ color: 0xe6e6df, roughness: 0.7, metalness: 0.05 }),
+        pcbFc:    new THREE.MeshStandardMaterial({ color: 0x1f7a3a, roughness: 0.6, metalness: 0.1 }),   // FC boards green except Matek (blue) and Cube (orange), designer 2026-11-09
+        shell:    new THREE.MeshStandardMaterial({ color: 0x1b1c1f, roughness: 0.75, metalness: 0.05 }),
+        orange:   new THREE.MeshStandardMaterial({ color: 0xf26b1d, roughness: 0.55, metalness: 0.1 }),
+        chipTxt:  new THREE.MeshStandardMaterial({ color: 0x3a3d42, roughness: 0.4, metalness: 0.3 }),
+        jstGrey:  new THREE.MeshStandardMaterial({ color: 0xc9c9c4, roughness: 0.7, metalness: 0.0 }),
+        molex:    new THREE.MeshStandardMaterial({ color: 0xf7f7f2, roughness: 0.65, metalness: 0.0 }),
+        pad:      new THREE.MeshStandardMaterial({ color: 0xd4af37, roughness: 0.35, metalness: 0.9 }),
+        brass:    new THREE.MeshStandardMaterial({ color: 0xb5a642, roughness: 0.4, metalness: 0.8 }),
+        rubber:   new THREE.MeshStandardMaterial({ color: 0x111214, roughness: 0.95, metalness: 0.0 }),
+        cap:      new THREE.MeshStandardMaterial({ color: 0x8a6d3b, roughness: 0.5, metalness: 0.3 }),
+        ind:      new THREE.MeshStandardMaterial({ color: 0x4a4d52, roughness: 0.5, metalness: 0.5 }),
+        fet:      new THREE.MeshStandardMaterial({ color: 0x202226, roughness: 0.4, metalness: 0.3 }),
+        ledB: new THREE.MeshStandardMaterial({ color: 0x2255ff, emissive: 0x1133cc, emissiveIntensity: 0.6 }),
+        ledG: new THREE.MeshStandardMaterial({ color: 0x33dd55, emissive: 0x11aa33, emissiveIntensity: 0.6 }),
+        ledR: new THREE.MeshStandardMaterial({ color: 0xff3333, emissive: 0xcc1111, emissiveIntensity: 0.6 })
+      };
+      function box(w, h, d, mat, x, y, z) { var m = shadowed(new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat)); m.position.set(x, y, z); g.add(m); return m; }
+      function cyl(r, h, mat, x, y, z, seg) { var m = shadowed(new THREE.Mesh(new THREE.CylinderGeometry(r, r, h, seg || 24), mat)); m.position.set(x, y, z); g.add(m); return m; }
+      // PCB: W along X, L along Z, mount holes at [x, z]
+      function pcbB(W, L, cornerR, holes, holeR, y, mat, thick) {
+        var s = roundedRectShape(L, W, cornerR);
+        holes.forEach(function (p) { s.holes.push(hole(p[0], p[1], holeR)); });
+        var m = plate(s, thick || PCB_T, y, mat); g.add(m); return m;
+      }
+      function standoffs(holes, r, h, mat, y0) { holes.forEach(function (p) { cyl(r, h, mat, p[0], (y0 || 0) + h / 2, p[1], 6); }); }
+      function bolts(holes, y, mat) { holes.forEach(function (p) { cyl(1.9, 1.2, mat, p[0], y + 0.6, p[1], 12); }); }
+      var pinH = hd.above + hd.base + hd.below;
+      var pinGeo = new THREE.BoxGeometry(hd.pin, pinH, hd.pin);
+      var headerCount = 0;
+      // 2.54 mm header identical to the base page: n positions from (x0, z0) stepping along X or Z, base on surface yC
+      function header(n, x0, z0, alongX, yC) {
+        var len = n * hd.pitch - (hd.pitch - hd.base);
+        var base = shadowed(new THREE.Mesh(new THREE.BoxGeometry(alongX ? len : hd.base, hd.base, alongX ? hd.base : len), M.hdrBase));
+        var cx = x0 + (alongX ? (n - 1) * hd.pitch / 2 : 0), cz = z0 + (alongX ? 0 : (n - 1) * hd.pitch / 2);
+        base.position.set(cx, yC + hd.base / 2, cz); g.add(base);
+        for (var k = 0; k < n; k++) {
+          var pn = shadowed(new THREE.Mesh(pinGeo, M.hdrPin));
+          pn.position.set(x0 + (alongX ? k * hd.pitch : 0), yC + pinH / 2 - hd.below, z0 + (alongX ? 0 : k * hd.pitch)); g.add(pn);
+          headerCount++;
+        }
+      }
+      var padGeo = new THREE.BoxGeometry(1.5, 0.12, 1.5);
+      function pads(n, x0, z0, alongX, yC, pitch) {      // flat SMD pads (wire, not headers)
+        for (var k = 0; k < n; k++) { var p = new THREE.Mesh(padGeo, MX.pad); p.position.set(x0 + (alongX ? k * pitch : 0), yC + 0.06, z0 + (alongX ? 0 : k * pitch)); g.add(p); }
+      }
+      function chevron(x, yC, z, s) { var a = new THREE.Mesh(new THREE.ConeGeometry(s * 0.55, s, 3), M.usb); a.rotation.x = -Math.PI / 2; a.position.set(x, yC + 0.1, z); g.add(a); }
+      function jstGH(n, x, y, z, alongX) {               // JST-GH 1.25 mm: 1.25 * (n - 1) + 3.5 mm long, 4.25 wide, 4.4 tall (beige)
+        var len = 1.25 * (n - 1) + 3.5; return box(alongX ? len : 4.25, 4.4, alongX ? 4.25 : len, M.jst, x, y + 2.2, z);
+      }
+      function jstSH(n, x, y, z, alongX) {               // JST-SH 1.0 mm: 1.0 * (n - 1) + 3.0 mm long, 2.9 wide, 4.3 tall... modelled 3 x 4.3
+        var len = 1.0 * (n - 1) + 3.0; return box(alongX ? len : 3.0, 4.3, alongX ? 3.0 : len, M.jst, x, y + 2.15, z);
+      }
+      function finish(labelLines, topY, zRear, leadFrom) {
+        if (typeof FC_PAGE_LABEL !== 'undefined' && FC_PAGE_LABEL) {   // Source One V5 pages: the page owns the callout (per-view positions)
+          FC_LABEL = labelLines; FC_LEAD = [leadFrom.x, leadFrom.y + yBase, leadFrom.z];
+        } else {
+          var spr = makeLabelMulti(labelLines);
+          var labelX = 25, labelY = topY + 24 + (labelLines.length - 2) * 2, labelZ = zRear + 52;   // -22 mm in X moves the label toward screen-right in the 3/4 view, clear of the legend panel
+          spr.position.set(labelX, labelY, labelZ); /* FC label: HTML callout (lib/callouts.js) */
+          var lead = new THREE.Line(new THREE.BufferGeometry().setFromPoints([leadFrom, new THREE.Vector3(labelX, labelY, labelZ - 42)]),
+            new THREE.LineBasicMaterial({ color: 0xaab2bc, transparent: true, opacity: 0.8 }));
+        
+        }
+        g.position.y = yBase;
+        window.__fcGroup = g; window.__fcBaseY = yBase;
+        quad.add(g);
+        window.__headerPins = headerCount;
+      }
+      var LABEL = ['Triumph Lucid H7 V2 (non-Wing), NDAA US build', 'About 36 x 36 x 5 mm, 7 g; 30.5 x 30.5 M3 on rubber grommets', 'Over a PDB + current sensor (36 x 36, ASSUMED) on the plate v2 press nuts', '12 x 2.54 mm through-holes (1 x 10 column + G / VBat), headers there only', 'Stack: pins 19.1 mm; upright Dupont 27.1 mm, 17.9 mm under the 45 mm top plate', 'NDAA: GREEN via Triumph US build (RMRC 86342)'];
+
+      // Triumph Lucid H7 V2 (non-Wing) on four M3 rubber grommets on 4 mm nylon standoffs, 30.5 x 30.5 pattern (manual p.34). PCB bottom
+      // 5.0 mm above the deck (4 mm standoff + 1 mm grommet flange) so the 4.4 mm underside plugs clear. Top side = TBS Lucid manual
+      // rev 1.15 p.38 (V2), rectified at 20 px/mm (design/renders/lucid_topdown/lucid_h7_v2_manual_p38_top.png; board centre = image
+      // centre, nose = chevron up = -Z): 12 plated 2.54 mm through-holes = a 10-hole column 1 mm inside the right edge (CL1 DA1 G 4V5 R2 T2
+      // G 4V5 R6 T6, front to rear) and the G / VBat pair at the front-left; all else square SMD pads. Headers fitted on the 12 holes
+      // (none in the box). USB-C mid-mount on the left edge (p.38). Underside parts (MCU, microSD, JST) placed by assumption.
+      var P = hd.pitch, h = F.stack30 / 2, STD = 9.6, W = 36, L = 36;   // PCB bottom 9.6 mm: PDB under it (quad5_render_lucidh7)
+      var holes = [[h, h], [-h, h], [h, -h], [-h, -h]];
+      standoffs(holes, 2.4, STD - 1 - 3.1, M.nylon, 3.1);   // nylon standoffs from the PDB top to the grommet flange
+      // PDB + current sensor (needed with the non-Wing FC): Matek PDB-HEX type, ASSUMED 36 x 36 x 1.6 mm, 30.5 M3, on the press-nut heads
+      pcbB(36, 36, 3, holes, 1.7, F.fcNutH, MX.pcbBlack, 1.6); var yPt = F.fcNutH + 1.6;
+      box(4, 1.2, 9, M.usb, 0, yPt + 0.6, 13);                                   // current-sense shunt
+      [[-12, 12], [12, 12], [-12, -12], [12, -12]].forEach(function (q) { box(5, 0.15, 4, MX.pad, q[0], yPt + 0.08, q[1]); });   // ESC pads
+      box(9, 0.15, 5, MX.pad, -5, yPt + 0.08, 15.5); box(9, 0.15, 5, MX.pad, 5, yPt + 0.08, 15.5);   // battery pads (rear)
+      cyl(2.5, 4, MX.cap, -9, yPt + 2, 0, 20); box(5, 1.4, 5, M.chip, 9, yPt + 0.7, -2);                // cap (laid flat in reality), BEC
+      [[-5, 0xc62828], [5, 0x1a1b1d]].forEach(function (w) { var m = cyl(1.6, 22, new THREE.MeshStandardMaterial({ color: w[1], roughness: 0.55 }), w[0], yPt + 1.4, 26.5, 12); m.rotation.x = Math.PI / 2; });   // 14 AWG battery leads aft
+      var yB = STD; pcbB(W, L, 4.5, holes, 1.6, yB, MX.pcbFc); var yC = yB + PCB_T, yU = yB;
+      holes.forEach(function (p) { cyl(3.3, 1.0, MX.rubber, p[0], yB - 0.5, p[1], 24); cyl(3.3, 1.0, MX.rubber, p[0], yC + 0.5, p[1], 24); });   // grommet flanges
+      bolts(holes, yC + 1.0, M.nylon);
+      header(10, 17.0, -11.75, false, yC);                 // CL1 DA1 G 4V5 R2 T2 G 4V5 R6 T6 (right edge, front to rear)
+      header(2, -11.5, -17.0, true, yC);                   // G VBat (front-left)
+      pads(8, -6.4, -17.0, true, yC, P);                   // DA2 CL2 R8 T8 9V C1 C2 VTx
+      pads(10, -11.5, -14.5, true, yC, P);                 // PC1 G S1 S2 S3 S4 9V G G G
+      pads(4, 3.75, -12.0, true, yC, P);                   // 5V 5V Vsw CAM
+      pads(10, 14.5, -11.75, false, yC, P);                // inner column CL1 DA1 G 4V5 Rts7 Cts7 G 5V R7 T7
+      pads(10, -11.5, 13.25, true, yC, P); pads(10, -11.5, 16.75, true, yC, P);   // 9V LED S12-S5 / R1 T1 R3 T3 R4 T4 5V G CL CH
+      pads(7, -14.75, -7.75, false, yC, 2.54); pads(7, -11.25, -6.75, false, yC, 2.54);   // 5V Buz- G 5V AirS Vbt2 Cur2 / G Vbat CS1 CK SO SI CS2
+      pads(3, -17.0, -10.0, false, yC, 2.0); pads(4, -17.0, 0, false, yC, 2.0);           // USB D- D+ Vbus / SWD 3V3 DIO CLK G
+      box(1.6, 0.12, 1.6, MX.pad, -8.75, yC + 0.06, -4.25); box(1.6, 0.12, 1.6, MX.pad, 8.75, yC + 0.06, -4.25); box(1.2, 0.12, 4.4, MX.pad, 6.75, yC + 0.06, -3.25);   // 4V5, 5V, Vbat / Vsw / 5V jumper
+      chevron(0, yC, 0.5, 3.2);
+      box(7.3, 3.2, 9.0, M.usb, -W / 2 + 1.85, yB + 0.5, -6.0);                          // USB-C, mid-mount, left edge (p.38), protrudes 1.8 mm
+      box(10, 1.4, 10, M.chip, 4, yU - 0.7, 4.5); box(12, 1.9, 14, M.usb, -2, yU - 0.95, 6);
+      jstSH(8, 5, yU - 4.3, -L / 2 + 3.5, true); jstGH(4, 7, yU - 4.4, L / 2 - 4, true); jstSH(6, -6, yU - 4.3, L / 2 - 3.5, true);
+      box(2.6, 1.6, 2.6, MX.chipTxt, 12, yU - 0.8, 10); box(4, 1.2, 4, M.chipSm, -11, yU - 0.6, 9); box(3, 1.2, 3, M.chipSm, 12, yU - 0.6, -9);
+      window.__fcTopY = yBase + yC + hd.base + hd.above;
+      finish(LABEL, yC + hd.base + hd.above, L / 2, new THREE.Vector3(17, yC + hd.base + hd.above, 0));
+    })();
+    FCS.h7 = window.__fcGroup;
+    // ARKV6X + PAB carrier
+    (function () {
+
+      var hd = D.hdr, g = new THREE.Group(), yBase = yDeck, PCB_T = 1.0;
+      var MX = {
+        pcbBlack: new THREE.MeshStandardMaterial({ color: 0x15171a, roughness: 0.6, metalness: 0.15 }),
+        pcbBlue:  new THREE.MeshStandardMaterial({ color: 0x1f4f9a, roughness: 0.65, metalness: 0.1 }),
+        pcbWhite: new THREE.MeshStandardMaterial({ color: 0xe6e6df, roughness: 0.7, metalness: 0.05 }),
+        pcbFc:    new THREE.MeshStandardMaterial({ color: 0x1f7a3a, roughness: 0.6, metalness: 0.1 }),   // FC boards green except Matek (blue) and Cube (orange), designer 2026-11-09
+        shell:    new THREE.MeshStandardMaterial({ color: 0x1b1c1f, roughness: 0.75, metalness: 0.05 }),
+        orange:   new THREE.MeshStandardMaterial({ color: 0xf26b1d, roughness: 0.55, metalness: 0.1 }),
+        chipTxt:  new THREE.MeshStandardMaterial({ color: 0x3a3d42, roughness: 0.4, metalness: 0.3 }),
+        jstGrey:  new THREE.MeshStandardMaterial({ color: 0xc9c9c4, roughness: 0.7, metalness: 0.0 }),
+        molex:    new THREE.MeshStandardMaterial({ color: 0xf7f7f2, roughness: 0.65, metalness: 0.0 }),
+        pad:      new THREE.MeshStandardMaterial({ color: 0xd4af37, roughness: 0.35, metalness: 0.9 }),
+        brass:    new THREE.MeshStandardMaterial({ color: 0xb5a642, roughness: 0.4, metalness: 0.8 }),
+        rubber:   new THREE.MeshStandardMaterial({ color: 0x111214, roughness: 0.95, metalness: 0.0 }),
+        cap:      new THREE.MeshStandardMaterial({ color: 0x8a6d3b, roughness: 0.5, metalness: 0.3 }),
+        ind:      new THREE.MeshStandardMaterial({ color: 0x4a4d52, roughness: 0.5, metalness: 0.5 }),
+        fet:      new THREE.MeshStandardMaterial({ color: 0x202226, roughness: 0.4, metalness: 0.3 }),
+        ledB: new THREE.MeshStandardMaterial({ color: 0x2255ff, emissive: 0x1133cc, emissiveIntensity: 0.6 }),
+        ledG: new THREE.MeshStandardMaterial({ color: 0x33dd55, emissive: 0x11aa33, emissiveIntensity: 0.6 }),
+        ledR: new THREE.MeshStandardMaterial({ color: 0xff3333, emissive: 0xcc1111, emissiveIntensity: 0.6 })
+      };
+      function box(w, h, d, mat, x, y, z) { var m = shadowed(new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat)); m.position.set(x, y, z); g.add(m); return m; }
+      function cyl(r, h, mat, x, y, z, seg) { var m = shadowed(new THREE.Mesh(new THREE.CylinderGeometry(r, r, h, seg || 24), mat)); m.position.set(x, y, z); g.add(m); return m; }
+      // PCB: W along X, L along Z, mount holes at [x, z]
+      function pcbB(W, L, cornerR, holes, holeR, y, mat, thick) {
+        var s = roundedRectShape(L, W, cornerR);
+        holes.forEach(function (p) { s.holes.push(hole(p[0], p[1], holeR)); });
+        var m = plate(s, thick || PCB_T, y, mat); g.add(m); return m;
+      }
+      function standoffs(holes, r, h, mat, y0) { holes.forEach(function (p) { cyl(r, h, mat, p[0], (y0 || 0) + h / 2, p[1], 6); }); }
+      function bolts(holes, y, mat) { holes.forEach(function (p) { cyl(1.9, 1.2, mat, p[0], y + 0.6, p[1], 12); }); }
+      var pinH = hd.above + hd.base + hd.below;
+      var pinGeo = new THREE.BoxGeometry(hd.pin, pinH, hd.pin);
+      var headerCount = 0;
+      // 2.54 mm header identical to the base page: n positions from (x0, z0) stepping along X or Z, base on surface yC
+      function header(n, x0, z0, alongX, yC) {
+        var len = n * hd.pitch - (hd.pitch - hd.base);
+        var base = shadowed(new THREE.Mesh(new THREE.BoxGeometry(alongX ? len : hd.base, hd.base, alongX ? hd.base : len), M.hdrBase));
+        var cx = x0 + (alongX ? (n - 1) * hd.pitch / 2 : 0), cz = z0 + (alongX ? 0 : (n - 1) * hd.pitch / 2);
+        base.position.set(cx, yC + hd.base / 2, cz); g.add(base);
+        for (var k = 0; k < n; k++) {
+          var pn = shadowed(new THREE.Mesh(pinGeo, M.hdrPin));
+          pn.position.set(x0 + (alongX ? k * hd.pitch : 0), yC + pinH / 2 - hd.below, z0 + (alongX ? 0 : k * hd.pitch)); g.add(pn);
+          headerCount++;
+        }
+      }
+      var padGeo = new THREE.BoxGeometry(1.5, 0.12, 1.5);
+      function pads(n, x0, z0, alongX, yC, pitch) {      // flat SMD pads (wire, not headers)
+        for (var k = 0; k < n; k++) { var p = new THREE.Mesh(padGeo, MX.pad); p.position.set(x0 + (alongX ? k * pitch : 0), yC + 0.06, z0 + (alongX ? 0 : k * pitch)); g.add(p); }
+      }
+      function chevron(x, yC, z, s) { var a = new THREE.Mesh(new THREE.ConeGeometry(s * 0.55, s, 3), M.usb); a.rotation.x = -Math.PI / 2; a.position.set(x, yC + 0.1, z); g.add(a); }
+      function jstGH(n, x, y, z, alongX) {               // JST-GH 1.25 mm: 1.25 * (n - 1) + 3.5 mm long, 4.25 wide, 4.4 tall (beige)
+        var len = 1.25 * (n - 1) + 3.5; return box(alongX ? len : 4.25, 4.4, alongX ? 4.25 : len, M.jst, x, y + 2.2, z);
+      }
+      function jstSH(n, x, y, z, alongX) {               // JST-SH 1.0 mm: 1.0 * (n - 1) + 3.0 mm long, 2.9 wide, 4.3 tall... modelled 3 x 4.3
+        var len = 1.0 * (n - 1) + 3.0; return box(alongX ? len : 3.0, 4.3, alongX ? 3.0 : len, M.jst, x, y + 2.15, z);
+      }
+      function finish(labelLines, topY, zRear, leadFrom) {
+        if (typeof FC_PAGE_LABEL !== 'undefined' && FC_PAGE_LABEL) {   // Source One V5 pages: the page owns the callout (per-view positions)
+          FC_LABEL = labelLines; FC_LEAD = [leadFrom.x, leadFrom.y + yBase, leadFrom.z];
+        } else {
+          var spr = makeLabelMulti(labelLines);
+          var labelX = 25, labelY = topY + 24 + (labelLines.length - 2) * 2, labelZ = zRear + 52;   // -22 mm in X moves the label toward screen-right in the 3/4 view, clear of the legend panel
+          spr.position.set(labelX, labelY, labelZ); /* FC label: HTML callout (lib/callouts.js) */
+          var lead = new THREE.Line(new THREE.BufferGeometry().setFromPoints([leadFrom, new THREE.Vector3(labelX, labelY, labelZ - 42)]),
+            new THREE.LineBasicMaterial({ color: 0xaab2bc, transparent: true, opacity: 0.8 }));
+        
+        }
+        g.position.y = yBase;
+        window.__fcGroup = g; window.__fcBaseY = yBase;
+        quad.add(g);
+        window.__headerPins = headerCount;
+      }
+      var LABEL = ['ARKV6X on ARK PAB carrier', 'Module 36 x 29 x 5 mm, 5 g; carrier 74 x 43.5 x 12 mm, 22 g', 'Holes ~68 x 39 mm: 2 mm adapter plate, inside the 45 mm stack', 'Connectors only: JST-GH 1.25 mm, Molex Clik-Mate, USB-C', 'No solder pads, no 2.54 mm pins', 'NDAA: GREEN (DCMA Blue UAS 2025-02-14; USA built, Utah)'];
+
+      // ARK PAB carrier 74 (Z) x 43.5 (X) mm PCB (drawn green); corner holes ~68 x 39 mm and connector positions measured from the PX4
+      // ark_pab_top photo (624 px = 74 mm; read 2026-11-08), ASSUMED. Photo left end (two Molex Clik-Mate power inputs) = rear (+Z).
+      // Module ARKV6X 36 (Z) x 29 (X) mm offset to x = -6, z = -3.8 on two DF40 connectors (4 mm stack) with four M2 screws.
+      var CL = 74, CW = 43.5, STD = 6, ADP = F.fcNutH + 2;
+
+      // 2 mm carbon adapter plate on the four M3 press-nut heads (rev 11): carrier outline, local to this board group
+      (function () { var s = roundedRectShape(CL, CW, 3); [[15.25, 15.25], [-15.25, 15.25], [15.25, -15.25], [-15.25, -15.25]].forEach(function (p) {
+        var q = [p[0], -p[1] - 15.25]; s.holes.push(hole(q[0], q[1], 1.6)); }); g.add(plate(s, 2, F.fcNutH, M.carbonEdge || M.carbon)); })();
+      var holes = [[19.5, 34], [-19.5, 34], [19.5, -34], [-19.5, -34]];
+      standoffs(holes, 2.4, STD, M.nylon, ADP);
+      var yB = ADP + STD; pcbB(CW, CL, 2.5, holes, 1.6, yB, MX.pcbFc, 1.6); var yC = yB + 1.6, yU = yB;
+      bolts(holes, yC, M.nylon);
+      // power inputs (Molex Clik-Mate 6-pin), rear end
+      box(14, 6, 7, MX.molex, -9.9, yC + 3, 32.3); box(14, 6, 7, MX.molex, 7.9, yC + 3, 32.3);
+      // JST-GH columns (long axis along X), rear half
+      [-14.6, -6.3, 2, 10.3].forEach(function (x) { jstGH(6, x, yC, 24.5, true); });
+      [-11, 2, 12.6].forEach(function (x) { jstGH(6, x, yC, 16.8, true); });
+      // right-hand (+X) row along the edge, long axis along Z: TELEM / CAN / PWM / UART ports, then DSM (ZH) and SBUS
+      [14.5, 8.5, 2.6, -3.3, -9.3].forEach(function (z) { jstGH(6, 17, yC, z, false); });
+      jstGH(3, 17.5, yC, -15.2, false); jstGH(3, 17.5, yC, -21, false); jstGH(5, 17, yC, -27, false);
+      // front end column (GPS 10-pin, GPS 6-pin, CAN, Ethernet), long axis along X
+      jstGH(10, -14, yC, -29, true); jstGH(6, -4, yC, -29, true); jstGH(4, 4.5, yC, -29, true); jstGH(4, 12, yC, -29, true);
+      jstGH(4, -18.5, yC, 24, false); jstGH(4, -18.5, yC, 16, false);                               // two small ports on the left edge
+      // underside: USB-C at a corner, 10-pin JST-SH debug, SMD parts
+      box(8.9, 3.2, 7.3, M.usb, 14, yU - 1.6, 30); box(7.8, 2.2, 0.8, M.chip, 14, yU - 1.6, 34.2);
+      jstSH(10, -8, yU - 4.3, 32, true); box(6, 1.2, 6, M.chipSm, 8, yU - 0.6, -5); box(4, 1.0, 4, M.chipSm, -10, yU - 0.5, -20);
+      // module: DF40 pair + M2 standoffs, then the ARKV6X board
+      var mx = -6, mz = -3.8, mh = [[mx + 12.15, mz + 14.95], [mx - 12.15, mz + 14.95], [mx + 12.15, mz - 14.95], [mx - 12.15, mz - 14.95]];
+      box(3.5, 4, 15, M.chip, mx, yC + 2, mz + 12.2); box(3.5, 4, 15, M.chip, mx, yC + 2, mz - 12.2);
+      mh.forEach(function (p) { cyl(1.1, 4, MX.brass, p[0], yC + 2, p[1], 6); });
+      var yM = yC + 4; pcbB(29, 36, 2, mh, 1.0, yM, MX.pcbFc, 1.6); var yMc = yM + 1.6;
+      mh.forEach(function (p) { cyl(1.4, 0.8, M.aluDark, p[0], yMc + 0.4, p[1], 10); });
+      box(10, 1.4, 10, M.chip, mx + 2, yMc + 0.7, mz + 1);                                           // STM32H743IIK6
+      box(3, 0.9, 3, M.chipSm, mx - 8, yMc + 0.45, mz - 8); box(3, 0.9, 3, M.chipSm, mx - 8, yMc + 0.45, mz - 3); box(3, 0.9, 3, M.chipSm, mx - 8, yMc + 0.45, mz + 2);   // IMUs
+      box(2, 0.8, 2, M.chipSm, mx + 9, yMc + 0.4, mz - 10); box(2.5, 0.8, 2, M.chipSm, mx + 9, yMc + 0.4, mz + 8);   // baro, mag
+      box(12, 1.9, 14, M.usb, mx + 1, yMc + 0.95, mz - 10);                                           // microSD holder
+      box(0.8, 0.5, 1.4, MX.ledB, mx - 12, yMc + 0.25, mz + 12); box(0.8, 0.5, 1.4, MX.ledG, mx - 12, yMc + 0.25, mz + 14.5);
+      chevron(mx + 9, yMc, mz + 12, 2.6);
+      finish(LABEL, yMc + 3, CL / 2, new THREE.Vector3(0, yC + 6, CL / 2 - 4));
+      g.position.z = 15.25;   // 4-inch: carrier z -21.75..52.25, between the moved middle standoffs (z -27) and the tail pair (z 57.5)
+    })();
+    FCS.ark = window.__fcGroup;
+    // Cube Orange+ (fc_blocks.py, top-plate placement)
+    (function () {
+
+      var hd = D.hdr, g = new THREE.Group(), yBase = yTopFace, PCB_T = 1.0;
+      var MX = {
+        pcbBlack: new THREE.MeshStandardMaterial({ color: 0x15171a, roughness: 0.6, metalness: 0.15 }),
+        pcbBlue:  new THREE.MeshStandardMaterial({ color: 0x1f4f9a, roughness: 0.65, metalness: 0.1 }),
+        pcbWhite: new THREE.MeshStandardMaterial({ color: 0xe6e6df, roughness: 0.7, metalness: 0.05 }),
+        pcbFc:    new THREE.MeshStandardMaterial({ color: 0x1f7a3a, roughness: 0.6, metalness: 0.1 }),   // FC boards green except Matek (blue) and Cube (orange), designer 2026-11-09
+        shell:    new THREE.MeshStandardMaterial({ color: 0x1b1c1f, roughness: 0.75, metalness: 0.05 }),
+        orange:   new THREE.MeshStandardMaterial({ color: 0xf26b1d, roughness: 0.55, metalness: 0.1 }),
+        chipTxt:  new THREE.MeshStandardMaterial({ color: 0x3a3d42, roughness: 0.4, metalness: 0.3 }),
+        jstGrey:  new THREE.MeshStandardMaterial({ color: 0xc9c9c4, roughness: 0.7, metalness: 0.0 }),
+        molex:    new THREE.MeshStandardMaterial({ color: 0xf7f7f2, roughness: 0.65, metalness: 0.0 }),
+        pad:      new THREE.MeshStandardMaterial({ color: 0xd4af37, roughness: 0.35, metalness: 0.9 }),
+        brass:    new THREE.MeshStandardMaterial({ color: 0xb5a642, roughness: 0.4, metalness: 0.8 }),
+        rubber:   new THREE.MeshStandardMaterial({ color: 0x111214, roughness: 0.95, metalness: 0.0 }),
+        cap:      new THREE.MeshStandardMaterial({ color: 0x8a6d3b, roughness: 0.5, metalness: 0.3 }),
+        ind:      new THREE.MeshStandardMaterial({ color: 0x4a4d52, roughness: 0.5, metalness: 0.5 }),
+        fet:      new THREE.MeshStandardMaterial({ color: 0x202226, roughness: 0.4, metalness: 0.3 }),
+        ledB: new THREE.MeshStandardMaterial({ color: 0x2255ff, emissive: 0x1133cc, emissiveIntensity: 0.6 }),
+        ledG: new THREE.MeshStandardMaterial({ color: 0x33dd55, emissive: 0x11aa33, emissiveIntensity: 0.6 }),
+        ledR: new THREE.MeshStandardMaterial({ color: 0xff3333, emissive: 0xcc1111, emissiveIntensity: 0.6 })
+      };
+      function box(w, h, d, mat, x, y, z) { var m = shadowed(new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat)); m.position.set(x, y, z); g.add(m); return m; }
+      function cyl(r, h, mat, x, y, z, seg) { var m = shadowed(new THREE.Mesh(new THREE.CylinderGeometry(r, r, h, seg || 24), mat)); m.position.set(x, y, z); g.add(m); return m; }
+      // PCB: W along X, L along Z, mount holes at [x, z]
+      function pcbB(W, L, cornerR, holes, holeR, y, mat, thick) {
+        var s = roundedRectShape(L, W, cornerR);
+        holes.forEach(function (p) { s.holes.push(hole(p[0], p[1], holeR)); });
+        var m = plate(s, thick || PCB_T, y, mat); g.add(m); return m;
+      }
+      function standoffs(holes, r, h, mat, y0) { holes.forEach(function (p) { cyl(r, h, mat, p[0], (y0 || 0) + h / 2, p[1], 6); }); }
+      function bolts(holes, y, mat) { holes.forEach(function (p) { cyl(1.9, 1.2, mat, p[0], y + 0.6, p[1], 12); }); }
+      var pinH = hd.above + hd.base + hd.below;
+      var pinGeo = new THREE.BoxGeometry(hd.pin, pinH, hd.pin);
+      var headerCount = 0;
+      // 2.54 mm header identical to the base page: n positions from (x0, z0) stepping along X or Z, base on surface yC
+      function header(n, x0, z0, alongX, yC) {
+        var len = n * hd.pitch - (hd.pitch - hd.base);
+        var base = shadowed(new THREE.Mesh(new THREE.BoxGeometry(alongX ? len : hd.base, hd.base, alongX ? hd.base : len), M.hdrBase));
+        var cx = x0 + (alongX ? (n - 1) * hd.pitch / 2 : 0), cz = z0 + (alongX ? 0 : (n - 1) * hd.pitch / 2);
+        base.position.set(cx, yC + hd.base / 2, cz); g.add(base);
+        for (var k = 0; k < n; k++) {
+          var pn = shadowed(new THREE.Mesh(pinGeo, M.hdrPin));
+          pn.position.set(x0 + (alongX ? k * hd.pitch : 0), yC + pinH / 2 - hd.below, z0 + (alongX ? 0 : k * hd.pitch)); g.add(pn);
+          headerCount++;
+        }
+      }
+      var padGeo = new THREE.BoxGeometry(1.5, 0.12, 1.5);
+      function pads(n, x0, z0, alongX, yC, pitch) {      // flat SMD pads (wire, not headers)
+        for (var k = 0; k < n; k++) { var p = new THREE.Mesh(padGeo, MX.pad); p.position.set(x0 + (alongX ? k * pitch : 0), yC + 0.06, z0 + (alongX ? 0 : k * pitch)); g.add(p); }
+      }
+      function chevron(x, yC, z, s) { var a = new THREE.Mesh(new THREE.ConeGeometry(s * 0.55, s, 3), M.usb); a.rotation.x = -Math.PI / 2; a.position.set(x, yC + 0.1, z); g.add(a); }
+      function jstGH(n, x, y, z, alongX) {               // JST-GH 1.25 mm: 1.25 * (n - 1) + 3.5 mm long, 4.25 wide, 4.4 tall (beige)
+        var len = 1.25 * (n - 1) + 3.5; return box(alongX ? len : 4.25, 4.4, alongX ? 4.25 : len, M.jst, x, y + 2.2, z);
+      }
+      function jstSH(n, x, y, z, alongX) {               // JST-SH 1.0 mm: 1.0 * (n - 1) + 3.0 mm long, 2.9 wide, 4.3 tall... modelled 3 x 4.3
+        var len = 1.0 * (n - 1) + 3.0; return box(alongX ? len : 3.0, 4.3, alongX ? 3.0 : len, M.jst, x, y + 2.15, z);
+      }
+      function finish(labelLines, topY, zRear, leadFrom) {
+        if (typeof FC_PAGE_LABEL !== 'undefined' && FC_PAGE_LABEL) {   // Source One V5 pages: the page owns the callout (per-view positions)
+          FC_LABEL = labelLines; FC_LEAD = [leadFrom.x, leadFrom.y + yBase, leadFrom.z];
+        } else {
+          var spr = makeLabelMulti(labelLines);
+          var labelX = -22, labelY = topY + 24 + (labelLines.length - 2) * 2, labelZ = zRear + 52;   // -22 mm in X moves the label toward screen-right in the 3/4 view, clear of the legend panel
+          spr.position.set(labelX, labelY, labelZ); g.add(spr);
+          var lead = new THREE.Line(new THREE.BufferGeometry().setFromPoints([leadFrom, new THREE.Vector3(labelX, labelY, labelZ - 42)]),
+            new THREE.LineBasicMaterial({ color: 0xaab2bc, transparent: true, opacity: 0.8 }));
+          g.add(lead);
+        }
+        g.position.y = yBase;
+        window.__fcGroup = g; window.__fcBaseY = yBase;
+        quad.add(g);
+        window.__headerPins = headerCount;
+      }
+      var LABEL = [];
+
+      // CubePilot standard carrier (ADS-B version shares the outline): 94.46 (Z) x 44.29 (X) x 13.4 mm black enclosure, cube
+      // 38.2 x 38.2 x 22.3 mm, 31.42 mm overall; mount holes 85 x 34.4 mm dia 2.5; connector zone 29.31 mm at the front,
+      // 26.95 mm at the rear (CubePilot standard-carrier-board-dimentions.png, read 2026-11-08). Carrier rests on the four
+      // standoff screw heads on the MOD-L top plate: its holes match nothing and it is too tall for the 25 mm stack.
+      var CL = 94.46, CW = 44.29, CH = 13.4, y0 = 2.2;
+      var holes = [[17.2, 42.5], [-17.2, 42.5], [17.2, -42.5], [-17.2, -42.5]];
+      (function () { var s = roundedRectShape(CL, CW, 4); holes.forEach(function (p) { s.holes.push(hole(p[0], p[1], 1.25)); }); g.add(plate(s, CH, y0, MX.shell)); })();
+      var yT = y0 + CH;
+      holes.forEach(function (p) { cyl(2.2, 0.6, M.aluDark, p[0], yT + 0.3, p[1], 12); });
+      // cube: bottom 9.1 mm above the carrier underside (sits on the PCB via the DF17), centre 1.2 mm aft of the carrier centre
+      (function () { var s = roundedRectShape(38.2, 38.2, 5); var m = plate(s, 22.3, y0 + 9.1, MX.orange); m.position.z = 1.2; g.add(m); })();
+      var yCube = y0 + 9.1 + 22.3;
+      chevron(0, yCube, -4, 5);
+      // front connector zone: 3 x 3 JST-GH 6-pin (GPS1 GPS2 TELEM1 TELEM2 CAN1 CAN2 ADC I2C2 USB) + SPKT 3-pin, openings toward the front
+      var cz = [-39.8, -31.1, -22.7], cx = [-13, -0.7, 10.3];
+      for (var i = 0; i < 3; i++) for (var j = 0; j < 3; j++) { if (i === 1 && j === 2) continue; jstGH(6, cx[j], yT - 3.4, cz[i], true); }
+      jstGH(3, cx[2], yT - 3.4, cz[1] + 4.5, true);
+      // rear zone: POWER1 / POWER2 Molex Clik-Mate 6-pin, SBUSo 3-pin header
+      box(14, 6, 7, MX.molex, -13, yT - 2.5, 28.3); box(14, 6, 7, MX.molex, 3, yT - 2.5, 28.3);
+      header(3, 14.5, 29.5, false, yT - 2.5);
+      // servo rail: 3 rows x 15 pins (MAIN OUT 1-8, AUX OUT 1-6, RC IN) exiting the rear end face horizontally, 2.54 mm pitch
+      (function () {
+        var n = 15, x0 = -1 - 7 * hd.pitch, rows = [4.0, 6.54, 9.08];
+        box(n * hd.pitch, 3 * hd.pitch, 2.5, M.hdrBase, -1, y0 + 6.54, CL / 2 - 1.25);
+        rows.forEach(function (ry) { for (var k = 0; k < n; k++) { box(hd.pin, hd.pin, 6, M.hdrPin, x0 + k * hd.pitch, y0 + ry, CL / 2 + 3); headerCount++; } });
+      })();
+      // two micro-USB on the left side
+      box(3, 2.6, 7.5, M.usb, -CW / 2 - 0.2, y0 + 9.5, -5.2); box(3, 2.6, 7.5, M.usb, -CW / 2 - 0.2, y0 + 9.5, 9.8);
+      finish(LABEL, yCube, CL / 2 + 6, new THREE.Vector3(0, yCube, CL / 2 - 20));
+      g.position.z = -17.23;   // 4-inch: carrier rear edge at z 30, servo-rail pins end at z 36, ahead of the GPS mast cup
+    })();
+    FCS.cube = window.__fcGroup;
+
+    // one callout per FC option, on the top centre of its group
+    ref4.updateMatrixWorld(true);
+    var FCL = { wing: ['Triumph Lucid H7 Wing (FC + PDB)', '54 x 36 x 13 mm; plate v2, right-angle headers only'], h7: ['Triumph Lucid H7 V2 (non-Wing) + PDB', '36 x 36 mm FC over a separate PDB; plate v2'], ark: ['ARKV6X + PAB carrier', '74 x 43.5 mm on a 2 mm adapter plate, 15 mm aft'], cube: ['Cube Orange+ (standard carrier)', 'does not fit: 31.4 mm tall, 25 mm stack'] };
+    Object.keys(FCL).forEach(function (k) {
+      var g = FCS[k], b = new THREE.Box3().setFromObject(g), p = new THREE.Vector3((b.min.x + b.max.x) / 2, b.max.y, (b.min.z + b.max.z) / 2);
+      g.worldToLocal(p); var o = new THREE.Object3D(); o.position.copy(p); g.add(o);
+      OPTC.push({ id: 'fc-' + k, a: [0, 0, 0], t: FCL[k][0], s: FCL[k][1], o: o, hide: k === 'cube' ? null : { top: 1 } });
+    });
+
+    // ---- Companion computers (onboard.py): Pi Zero 2 W, Pi 5, Arduino UNO Q on the top plate
+    (function () {
+      var OB = { cf: M.carbon, ny: std(0xe8e6df, 0.7, 0.0), br: std(0xb5a642, 0.4, 0.8) };
+      function addTo(g, m) { g.add(shadowed(m)); return m; }
+      function CO(t, sub, o) { OPTC.push({ id: 'pc', a: [0, 0, 0], t: t, s: sub, o: o }); }
+      function anchorAt(g, x, y, z) { var o = new THREE.Object3D(); o.position.set(x, y, z); g.add(o); return o; }
+      // ---- Companion computer on the top plate, one at a time (Options panel): Pi Zero 2 W, Pi 5 or Arduino UNO Q --------------
+      // Top plate: 121 mm long (y -62..+59), 23-39 mm wide. Each board sits on two 61 x 6 x 2 mm carbon crossbars across the top plate
+      // at its hole rows (y = +49.7 / -8.3; the Pi 5 and Pi Zero hole rows are both 58 mm apart): Pi 5 on 5 mm M2.5 standoffs at
+      // x = +/-24.5 (outside the plate), Pi Zero 2 W velcroed directly on the top plate (3 mm pad, no crossbars). Crossbars and mounts are a proposal, not in the BOM.
+    function addPiBoards(parent, mkLabel, cfg) {
+      var PM = {
+        pcb:  new THREE.MeshStandardMaterial({ color: 0x1d6e3c, roughness: 0.62, metalness: 0.1 }),
+        lid:  new THREE.MeshStandardMaterial({ color: 0xc4c8cd, roughness: 0.35, metalness: 0.85 }),
+        usb:  new THREE.MeshStandardMaterial({ color: 0xb8bcc2, roughness: 0.3, metalness: 0.9 }),
+        chip: new THREE.MeshStandardMaterial({ color: 0x111214, roughness: 0.45, metalness: 0.2 }),
+        chipSm: new THREE.MeshStandardMaterial({ color: 0x2a2d32, roughness: 0.5, metalness: 0.2 }),
+        chipTxt: new THREE.MeshStandardMaterial({ color: 0x3a3d42, roughness: 0.4, metalness: 0.3 }),
+        jst:  new THREE.MeshStandardMaterial({ color: 0xf2f2ee, roughness: 0.7, metalness: 0.0 }),
+        pad:  new THREE.MeshStandardMaterial({ color: 0xd4af37, roughness: 0.35, metalness: 0.9 }),
+        hdrBase: new THREE.MeshStandardMaterial({ color: 0x0e0f11, roughness: 0.92, metalness: 0.0 }),
+        hdrPin:  new THREE.MeshStandardMaterial({ color: 0xd9dcdf, roughness: 0.28, metalness: 0.9 }),
+        ledG: new THREE.MeshStandardMaterial({ color: 0x33dd55, emissive: 0x11aa33, emissiveIntensity: 0.6 })
+      };
+      var HD = { pitch: 2.54, base: 2.5, pin: 0.64, above: 6, below: 3 };
+      var all = new THREE.Group();
+      function sh(m) { m.castShadow = true; m.receiveShadow = true; return m; }
+      function box(g, w, h, d, mat, x, y, z) { var m = sh(new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat)); m.position.set(x, y, z); g.add(m); return m; }
+      function pcb(g, W, L, r, holes, holeR, y, t) {          // W along X, L along Z, holes [x, z]; extruded up from y
+        var s = new THREE.Shape(), hw = W / 2, hl = L / 2;
+        s.moveTo(-hw + r, -hl); s.lineTo(hw - r, -hl); s.absarc(hw - r, -hl + r, r, -Math.PI / 2, 0, false);
+        s.lineTo(hw, hl - r); s.absarc(hw - r, hl - r, r, 0, Math.PI / 2, false);
+        s.lineTo(-hw + r, hl); s.absarc(-hw + r, hl - r, r, Math.PI / 2, Math.PI, false);
+        s.lineTo(-hw, -hl + r); s.absarc(-hw + r, -hl + r, r, Math.PI, 1.5 * Math.PI, false);
+        holes.forEach(function (p) { var h = new THREE.Path(); h.absarc(p[0], p[1], holeR, 0, Math.PI * 2, false); s.holes.push(h); });
+        var geo = new THREE.ExtrudeGeometry(s, { depth: t, bevelEnabled: false, curveSegments: 16 });
+        geo.rotateX(-Math.PI / 2); geo.scale(1, 1, -1); geo.computeVertexNormals();
+        var m = sh(new THREE.Mesh(geo, PM.pcb)); m.position.y = y; g.add(m); return m;
+      }
+      var pinH = HD.above + HD.base + HD.below, pinGeo = new THREE.BoxGeometry(HD.pin, pinH, HD.pin);
+      function header(g, n, x0, z0, yC) {                    // n positions along Z from (x0, z0)
+        var len = n * HD.pitch - (HD.pitch - HD.base);
+        box(g, HD.base, HD.base, len, PM.hdrBase, x0, yC + HD.base / 2, z0 + (n - 1) * HD.pitch / 2);
+        for (var k = 0; k < n; k++) { var pn = sh(new THREE.Mesh(pinGeo, PM.hdrPin)); pn.position.set(x0, yC + pinH / 2 - HD.below, z0 + k * HD.pitch); g.add(pn); }
+      }
+      // Raspberry Pi 5: u along the long edge (local Z), v across (local X, v = 0 is the 40-pin header edge, toward the drone)
+      (function () {
+        var g = new THREE.Group(), BL = 85, BW = 56;
+        function X(v) { return v - BW / 2; } function Z(u) { return u - BL / 2; }
+        function b(w_v, h, d_u, mat, u, v, y) { return box(g, w_v, h, d_u, mat, X(v), y, Z(u)); }
+        var holes = [[X(3.5), Z(3.5)], [X(3.5), Z(61.5)], [X(52.5), Z(3.5)], [X(52.5), Z(61.5)]];
+        var yB = cfg.g5 + 1.45; pcb(g, BW, BL, 3, holes, 1.35, yB, 1.4); var yC = yB + 1.4, yU = yB;   // lying on its underside microSD
+        for (var r = 0; r < 2; r++) header(g, 20, X(3.5 - 1.27 + r * 2.54), Z(32.5 - 9.5 * 2.54), yC);   // 40-pin 2x20, fitted
+        b(16, 13.5, 21.5, PM.usb, 77.5 + 2.5, 10.25, yC + 6.75);          // Ethernet, overhangs the end
+        b(13.1, 16, 17.5, PM.usb, 79 + 2.5, 29, yC + 8); b(13.1, 16, 17.5, PM.usb, 79 + 2.5, 47, yC + 8);   // USB 3.0 / 2.0 pairs
+        b(1.0, 6, 9, PM.chip, 88.3, 29, yC + 8); b(1.0, 6, 9, PM.chip, 88.3, 47, yC + 8);
+        b(7.5, 3.2, 9, PM.usb, 11.2, 56 - 3.2, yC + 1.6);                 // USB-C power
+        b(6.5, 3.5, 7.5, PM.usb, 25.8, 56 - 3.0, yC + 1.75); b(6.5, 3.5, 7.5, PM.usb, 39.2, 56 - 3.0, yC + 1.75);   // 2x micro-HDMI
+        b(4, 1.6, 15, PM.jst, 48.5, 47, yC + 0.8); b(4, 1.6, 15, PM.jst, 63, 47, yC + 0.8);   // CAM/DISP FPC
+        b(13, 1.6, 4, PM.jst, 1.8, 28, yC + 0.8);                         // PCIe FPC
+        b(17, 1.6, 17, PM.lid, 29, 30, yC + 0.8);                         // BCM2712 under its lid
+        b(11, 1.0, 15, PM.chip, 46, 22, yC + 0.5); b(7, 1.0, 7, PM.chip, 63, 26, yC + 0.5);
+        b(10, 1.2, 12, PM.chipSm, 8, 14, yC + 0.6); b(6, 1.0, 6, PM.chipSm, 20, 46, yC + 0.5);
+        b(3, 1.6, 3, PM.chipTxt, 3.5, 52, yC + 0.8); b(5, 3, 3, PM.jst, 72, 4.5, yC + 1.5);
+        b(12, 1.4, 11, PM.usb, 6, 28, yU - 0.7);                          // microSD, underside
+        g.position.set(cfg.pi5[0], 0, cfg.pi5[1]); g.rotation.y = cfg.pi5[2]; all.add(g);
+      })();
+      // Raspberry Pi Zero W: 40-pin footprint unpopulated
+      (function () {
+        var g = new THREE.Group(), BL = 65, BW = 30;
+        function X(v) { return v - BW / 2; } function Z(u) { return u - BL / 2; }
+        function b(w_v, h, d_u, mat, u, v, y) { return box(g, w_v, h, d_u, mat, X(v), y, Z(u)); }
+        var holes = [[X(3.5), Z(3.5)], [X(3.5), Z(61.5)], [X(26.5), Z(3.5)], [X(26.5), Z(61.5)]];
+        var yB = cfg.gz + 0.3; pcb(g, BW, BL, 3, holes, 1.35, yB, 1.0); var yC = yB + 1.0;
+        var ring = new THREE.CylinderGeometry(0.85, 0.85, 0.12, 16), bore = new THREE.CylinderGeometry(0.5, 0.5, 0.16, 12);
+        for (var r = 0; r < 2; r++) for (var k = 0; k < 20; k++) {
+          var x = X(3.5 - 1.27 + r * 2.54), z = Z(32.5 - 9.5 * 2.54 + k * 2.54);
+          var a = new THREE.Mesh(ring, PM.pad); a.position.set(x, yC + 0.06, z); g.add(a);
+          var c = new THREE.Mesh(bore, PM.chip); c.position.set(x, yC + 0.08, z); g.add(c);
+        }
+        b(11.2, 3.3, 7.6, PM.usb, 12.4, 30 - 3.3, yC + 1.65);              // mini-HDMI
+        b(8, 3, 5.6, PM.usb, 41.4, 30 - 2.6, yC + 1.5); b(8, 3, 5.6, PM.usb, 54, 30 - 2.6, yC + 1.5);   // micro-USB x2
+        b(17, 1.3, 4.5, PM.jst, 63, 15, yC + 0.65);                        // CSI FPC
+        b(11, 1.4, 12, PM.usb, 6.5, 16.5, yC + 0.7);                       // microSD
+        b(12, 1.4, 12, PM.chip, 31, 16, yC + 0.7); b(6, 1.0, 6, PM.chipSm, 20, 22, yC + 0.5);
+        b(0.8, 0.5, 1.4, PM.ledG, 60.5, 27, yC + 0.25);
+        g.position.set(cfg.zero[0], 0, cfg.zero[1]); g.rotation.y = cfg.zero[2]; all.add(g);
+      })();
+      var l5 = mkLabel('Raspberry Pi 5, 85 x 56 mm', null, 7.5); l5.position.set(cfg.lab5[0], cfg.lab5[1], cfg.lab5[2]); all.add(l5);
+      var lz = mkLabel('Raspberry Pi Zero W, 65 x 30 mm', null, 7.5); lz.position.set(cfg.labZ[0], cfg.labZ[1], cfg.labZ[2]); all.add(lz);
+      parent.add(all);
+      return all;
+    }
+      var H0 = yTopFace, YF = 53.2, R1 = YF - 3.5, R2 = YF - 61.5;    // board front edge y = 53.2 (crossbars 0.5 mm clear of the M2 standoff heads at y = 55)
+      var piAll = addPiBoards(quad, function () { return new THREE.Object3D(); }, { pi5: [0, -(YF - 42.5), 0], zero: [0, -(YF - 32.5), 0], g5: H0 + 7 - 1.45, gz: H0 + 3 - 0.3,
+        lab5: [0, 0, 0], labZ: [0, 0, 0] });
+      var pi5G = new THREE.Group(), zeroG = new THREE.Group(), b5 = piAll.children[0], bz = piAll.children[1];
+      piAll.add(pi5G); piAll.add(zeroG); pi5G.add(b5); zeroG.add(bz);
+      function bar(g, y, yb, len) { var m = new THREE.Mesh(new THREE.BoxGeometry(len || 61, 2, 6), OB.cf); m.position.set(0, yb + 1, -y); addTo(g, m); }
+      function so(g, x, y, y0, h, mat) { var m = new THREE.Mesh(new THREE.CylinderGeometry(2.5, 2.5, h, 6), mat || OB.ny); m.position.set(x, y0 + h / 2, -y); addTo(g, m); }
+      [R1, R2].forEach(function (y) {
+        bar(pi5G, y, H0); [-24.5, 24.5].forEach(function (x) { so(pi5G, x, y, H0 + 2, 5); });
+      });
+      // Pi Zero 2 W: velcroed straight onto the top plate (DECISIONS 2026-11-09; designer 2026-11-09: no crossbars sticking out the sides):
+      // 3 mm hook-and-loop pad, 50 x 22 mm, under the board centre.
+      (function () { var vm = new THREE.MeshStandardMaterial({ color: 0x3a3d42, roughness: 0.95, metalness: 0.0 });
+        var v = new THREE.Mesh(new THREE.BoxGeometry(22, 3, 50), vm); v.position.set(0, H0 + 1.5, -(YF - 32.5)); addTo(zeroG, v); })();
+      CO('Raspberry Pi Zero 2 W', '65 x 30 mm, velcro on the top plate', anchorAt(zeroG, 6, H0 + 4.2, -(YF - 32.5) + 14));
+      CO('Raspberry Pi 5', '85 x 56 mm, crossbars on the top plate', anchorAt(pi5G, -20, H0 + 10, -(YF - 42.5) + 24));
+      // ---- Arduino UNO Q (ABX00162 / ABX00173): 68.58 x 53.34 mm, UNO outline and 4 x d3.2 holes, green PCB (drawn; designer 2026-11-09), female 2.54 mm headers
+      // 8.5 mm tall, USB-C on the short edge, QRB2210 + LPDDR4X + STM32U585, Wi-Fi module, 8 x 13 LED matrix; bottom JMISC / JMEDIA
+      // high-speed connectors (bottom parts under 2 mm). Weight about 30 g (retail listing; not on the official datasheet).
+      // Long axis fore-aft, USB-C aft, on two crossbars on the top plate, 3 mm standoffs (one companion at a time, Options panel).
+      var unoAll = new THREE.Group(), unoB = new THREE.Group(), unoBars = new THREE.Group();
+      (function () {
+        var UM = { pcb: new THREE.MeshStandardMaterial({ color: 0x4f9d5d,   // green (designer 2026-11-09), lighter than the FC green 0x1f7a3a
+          roughness: 0.6, metalness: 0.1 }),
+          hdr: new THREE.MeshStandardMaterial({ color: 0x141518, roughness: 0.85, metalness: 0.0 }),
+          soc: new THREE.MeshStandardMaterial({ color: 0x6f747b, roughness: 0.35, metalness: 0.7 }),
+          chip: new THREE.MeshStandardMaterial({ color: 0x24272c, roughness: 0.45, metalness: 0.2 }),
+          can: new THREE.MeshStandardMaterial({ color: 0xc4c8cd, roughness: 0.3, metalness: 0.85 }),
+          wht: new THREE.MeshStandardMaterial({ color: 0xeeeeea, roughness: 0.7, metalness: 0.0 }),
+          led: new THREE.MeshStandardMaterial({ color: 0xbfc4ca, roughness: 0.5, metalness: 0.2 }),
+          pin: new THREE.MeshStandardMaterial({ color: 0xd4af37, roughness: 0.35, metalness: 0.9 }) };
+        var BL = 68.58, BW = 53.34, T = 1.6;
+        // UNO coords (X along the long edge from the USB-C end, Y across) -> board group (x = 26.67 - Y, z = -X); group origin = USB-C edge centre
+        function P(X, Y) { return [BW / 2 - Y, -X]; }
+        function bx(w_Y, h, d_X, mat, X, Y, y) { var p = P(X, Y), m = new THREE.Mesh(new THREE.BoxGeometry(w_Y, h, d_X), mat); m.position.set(p[0], y, p[1]); addTo(unoB, m); return m; }
+        var s = new THREE.Shape(), c = 3.6, pts = [[0, 0], [BL - c, 0], [BL, c], [BL, BW - c], [BL - c, BW], [0, BW]];
+        pts.forEach(function (q, i) { var p = P(q[0], q[1]); if (i) s.lineTo(p[0], p[1]); else s.moveTo(p[0], p[1]); });   // shape y = world z (as plate())
+        var HOLES = [[13.97, 2.54], [15.24, 50.8], [66.04, 7.62], [66.04, 35.56]];
+        HOLES.forEach(function (h) { var p = P(h[0], h[1]), hp = new THREE.Path(); hp.absarc(p[0], p[1], 1.6, 0, Math.PI * 2, false); s.holes.push(hp); });
+        var geo = new THREE.ExtrudeGeometry(s, { depth: T, bevelEnabled: false, curveSegments: 16 }); geo.rotateX(-Math.PI / 2); geo.scale(1, 1, -1); geo.computeVertexNormals();
+        addTo(unoB, new THREE.Mesh(geo, UM.pcb));
+        var yC = T;
+        bx(2.54, 8.5, 18 * 2.54 + 1.3, UM.hdr, 17.5 + 9 * 2.54, 50.8, yC + 4.25);     // digital headers (10 + 8, top edge)
+        bx(2.54, 8.5, 14 * 2.54 + 1.3, UM.hdr, 26.7 + 7 * 2.54, 2.54, yC + 4.25);     // power 8 + analog 6 (bottom edge)
+        bx(9.0, 3.2, 7.4, UM.can, 1.0, 36.5, yC + 1.6);                               // USB-C on the short edge, 1 mm proud
+        bx(12, 1.2, 12, UM.soc, 30, 31, yC + 0.6); bx(10, 1.0, 13, UM.chip, 30, 45, yC + 0.5);   // QRB2210, LPDDR4X
+        bx(7, 1.0, 7, UM.chip, 53, 42, yC + 0.5);                                     // STM32U585
+        bx(15, 2.0, 12, UM.can, 13, 14, yC + 1.0);                                    // Wi-Fi / BT module
+        bx(20, 0.8, 28, UM.led, 39, 13, yC + 0.4);                                    // 8 x 13 LED matrix
+        bx(5, 6, 12.7, UM.hdr, 16, 44, yC + 3); bx(5, 6, 7.6, UM.hdr, 62, 27, yC + 3); // JCTL 2x5, JSPI 2x3 (male)
+        bx(6, 3, 4.5, UM.wht, 64, 16, yC + 1.5); bx(6, 3.5, 6, UM.wht, 4, 47, yC + 1.75);   // Qwiic, power button
+        bx(30, 1.8, 6, UM.hdr, 34, 27, -0.9); bx(30, 1.8, 6, UM.hdr, 50, 27, -0.9);   // JMISC / JMEDIA (bottom, < 2 mm)
+        HOLES.forEach(function (h) { var p = P(h[0], h[1]), m = new THREE.Mesh(new THREE.CylinderGeometry(2.5, 2.5, 3, 6), OB.br); m.position.set(p[0], -1.5, p[1]); addTo(unoB, m); });
+        [14.6, 66.04].forEach(function (X) { var p = P(X, BW / 2), m = new THREE.Mesh(new THREE.BoxGeometry(61, 2, 6), OB.cf); m.position.set(0, -4, p[1]); addTo(unoBars, m); });
+        unoB.add(unoBars);
+        CO('Arduino UNO Q', '68.6 x 53.4 mm, about 30 g', anchorAt(unoB, 0, 10.2, -34));
+      })();
+      unoAll.add(unoB); quad.add(unoAll);
+      unoB.position.set(0, H0 + 5, 33.5);                          // USB-C edge at y = -33.5: crossbars at y = -18.9 / +32.5 (clear of the standoff heads)
+      COMP.zero = zeroG; COMP.pi5 = pi5G; COMP.uno = unoAll;
+
+    })();
+    COMP.zero.position.z = 19.7;   // 4-inch: Pi Zero 2 W centred at z -1, where the as-built Orange Pi Zero 3W sits (5-inch: z -20.7)
+    OPTC.forEach(function (c) { if (c.t === 'Raspberry Pi 5') c.s = 'does not fit: antenna tubes, prop discs'; });
+  })(M);
+  // <<< OPTIONS
+
+  // Canvas label sprite (house style), used for the scale bar.
+  function makeLabel(line1, line2, heightMM) {
+    var f1 = (line2 ? '600 50px' : '600 72px') + ' system-ui, Helvetica, Arial, sans-serif', f2 = '400 28px system-ui, Helvetica, Arial, sans-serif';
+    var cv = document.createElement('canvas'); cv.height = line2 ? 160 : 128;
+    var cx = cv.getContext('2d');
+    cx.font = f1; var tw = cx.measureText(line1).width;
+    if (line2) { cx.font = f2; tw = Math.max(tw, cx.measureText(line2).width); }
+    cv.width = Math.ceil(tw + 72); cx = cv.getContext('2d');
+    cx.fillStyle = 'rgba(20,22,26,0.85)'; roundRect(cx, 2, 2, cv.width - 4, cv.height - 4, 24); cx.fill();
+    cx.strokeStyle = 'rgba(255,255,255,0.25)'; cx.lineWidth = 4; roundRect(cx, 2, 2, cv.width - 4, cv.height - 4, 24); cx.stroke();
+    cx.fillStyle = '#ffffff'; cx.font = f1; cx.textBaseline = 'middle'; cx.textAlign = 'center';
+    cx.fillText(line1, cv.width / 2, line2 ? 64 : cv.height / 2 + 2);
+    if (line2) { cx.fillStyle = '#b8c0ca'; cx.font = f2; cx.fillText(line2, cv.width / 2, 118); }
+    var tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 4;
+    var spr = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, depthTest: false }));
+    spr.scale.set(heightMM * cv.width / cv.height, heightMM, 1); spr.renderOrder = 10;
+    return spr;
+  }
+  function roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+  }
+
+  // ---------------------------------------------------------------------
+  // Ground, grid, lights, nose arrow
+  // ---------------------------------------------------------------------
+  var groundY = -1.2;
+  var grid10 = new THREE.GridHelper(360, 36, 0xffffff, 0xffffff); grid10.position.y = groundY; scene.add(grid10);
+  var grid50 = new THREE.GridHelper(400, 8, 0xffffff, 0xffffff); grid50.position.y = groundY + 0.05; scene.add(grid50);
+  var ground = new THREE.Mesh(new THREE.PlaneGeometry(1400, 1400), new THREE.ShadowMaterial({ opacity: 0.32 }));
+  ground.rotation.x = -Math.PI / 2; ground.position.y = groundY - 0.05; ground.receiveShadow = true; scene.add(ground);
+  scene.add(new THREE.ArrowHelper(new THREE.Vector3(0, 0, -1), new THREE.Vector3(0, groundY + 0.3, -104), 16, 0xd08a3a, 7, 5));
+
+  var topBar, sideBar;
+  // Scale bar in inches: flat on the grid ahead of the nose, along X; 6 in with 1 in ticks and a 1/2 in tick.
+  (function () {
+    var IN = 25.4, nIn = 6, barZ = -132, x0 = -nIn * IN / 2, w = 4, t = 0.8, yb = groundY + 0.6, sg = new THREE.Group();
+    for (var i = 0; i < nIn; i++) { var seg = new THREE.Mesh(new THREE.BoxGeometry(IN, t, w), i % 2 ? M.barLight : M.barDark); seg.position.set(x0 + (i + 0.5) * IN, yb, barZ); seg.receiveShadow = true; sg.add(seg); }
+    var outline = new THREE.Mesh(new THREE.BoxGeometry(nIn * IN + 1.6, t * 0.5, w + 1.6), M.barLight); outline.position.set(0, yb - t * 0.3, barZ); sg.add(outline);
+    function tick(x, len) { var tk = new THREE.Mesh(new THREE.BoxGeometry(0.9, t + 0.4, len), M.barTick); tk.position.set(x, yb, barZ + w / 2 + len / 2); sg.add(tk); }
+    for (var k = 0; k <= nIn; k++) tick(x0 + k * IN, 6);
+    tick(x0 + IN / 2, 3.5);
+    for (var m = 0; m <= nIn; m++) { var lb = makeLabel(m === 0 ? '0' : m + ' in', null, 6.5); lb.position.set(x0 + m * IN, yb + 1, barZ - 12); sg.add(lb); }
+    var note = makeLabel('(1 in = 25.4 mm)', null, 6); note.position.set(x0 + nIn * IN + 32, yb + 1, barZ); sg.add(note);
+    scene.add(sg); topBar = sg;
+    // side-view ruler: the same 6 in bar standing in the YZ plane under the drone, facing +X (shown only in the side view)
+    var sb = new THREE.Group(), ys = -14, zs = -nIn * IN / 2;
+    for (var i2 = 0; i2 < nIn; i2++) { var sgm = new THREE.Mesh(new THREE.BoxGeometry(0.8, w, IN), i2 % 2 ? M.barLight : M.barDark); sgm.position.set(60, ys, zs + (i2 + 0.5) * IN); sb.add(sgm); }
+    var so = new THREE.Mesh(new THREE.BoxGeometry(0.4, w + 1.6, nIn * IN + 1.6), M.barLight); so.position.set(59.6, ys, 0); sb.add(so);
+    for (var k2 = 0; k2 <= nIn; k2++) { var tk2 = new THREE.Mesh(new THREE.BoxGeometry(1.2, 6, 0.9), M.barTick); tk2.position.set(60.2, ys + w / 2 + 3, zs + k2 * IN); sb.add(tk2); }
+    var th = new THREE.Mesh(new THREE.BoxGeometry(1.2, 3.5, 0.9), M.barTick); th.position.set(60.2, ys + w / 2 + 1.75, zs + IN / 2); sb.add(th);
+    for (var m2 = 0; m2 <= nIn; m2++) { var l2 = makeLabel(m2 === 0 ? '0' : m2 + ' in', null, 6.5); l2.position.set(61, ys - 9, zs + m2 * IN); sb.add(l2); }
+    var n2 = makeLabel('(1 in = 25.4 mm)', null, 6); n2.position.set(61, ys - 9, zs + nIn * IN + 28); sb.add(n2);
+    sb.visible = false; scene.add(sb); sideBar = sb;
+  })();
+
+  // >>> PENNY (generated by tools/render/penny_refs.py; model in lib/penny.js)
+  // US one-cent coin, 19.05 mm x 1.52 mm, flat on the grid, obverse up: a size reference everyone knows (designer, 2026-11-09).
+  (function () {
+    if (!window.PennyModel) return;
+    var cfg = {"p": [40, -166], "lab": [40, 4, -193]}, gy = groundY;
+    var p = PennyModel.make(); p.position.set(cfg.p[0], gy, cfg.p[1]); scene.add(p);
+    var l = makeLabel('US penny, 19.05 mm (0.75 in)', null, 5.5); l.position.set(cfg.lab[0], gy + cfg.lab[1], cfg.lab[2]); scene.add(l);
+    window.__penny = p; window.__pennyLabel = l;
+  })();
+  // <<< PENNY
+
+  var hemi = new THREE.HemisphereLight(0xd7dde5, 0x2b2e33, 0.9); scene.add(hemi);
+  var key = new THREE.DirectionalLight(0xffffff, 2.4); key.position.set(220, 380, 260); key.castShadow = true;
+  key.shadow.mapSize.set(2048, 2048); key.shadow.camera.near = 50; key.shadow.camera.far = 1200;
+  key.shadow.camera.left = -200; key.shadow.camera.right = 200; key.shadow.camera.top = 200; key.shadow.camera.bottom = -200; key.shadow.bias = -0.0005; key.shadow.normalBias = 0.3;
+  scene.add(key);
+  var fill = new THREE.DirectionalLight(0xcfd8e6, 0.8); fill.position.set(-300, 160, -220); scene.add(fill);
+  var rim = new THREE.DirectionalLight(0xffffff, 0.5); rim.position.set(0, 120, -400); scene.add(rim);
+
+  // ---------------------------------------------------------------------
+  // Callouts: HTML labels in two columns beside the drone, leader lines to projected anchors (ref4-local coordinates)
+  // ---------------------------------------------------------------------
+  var M1 = ref4Motors[0], M2 = ref4Motors[1];
+  var CALL = [
+    { id: 'frame', a: [14, uTopFace, -48], t: 'MOD-L frame, 4" Arm v1-1 + HD_CARGO', s: '180.0 mm wheelbase, 147.2 x 103.6 mm (DXF)' },
+    { id: 'fc', when: function () { return OPT.fc === 'matek'; }, a: [U.fc.x, FCD.yC + uBottomTop + 1.4, 0], t: 'Matek F405-WMO + PDB', s: '32 x 22 x 12.7 mm, right-angle 2.54 mm headers', hide: { top: 1 } },
+    { id: 'ext', when: function () { return OPT.fc === 'matek'; }, a: [EXT.x - 4, uBottomTop + 9, EXT.z + 5], t: 'Matek USB-C / buzzer extender', s: '22 x 22 mm, JST-SH-6P lead', hide: { top: 1 } },
+    { id: 'pi', when: function () { return PIG.visible; }, a: [10, PI.yT + 1, U.pi.zc - 22], t: 'Orange Pi Zero 3W, flat on riser', s: '65 x 32 mm, long axis on the roll axis' },
+    { id: 'batt', a: [U.batt.W / 2, -U.batt.H / 2 - 0.6, -24], t: 'Zeee 2S 2200 mAh LiPo', s: 'under the cross plate', hide: { top: 1 } },
+    { id: 'gps', a: [0, gpsTopY, U.gps.z], t: 'HGLRC M100-PRO GPS + compass', s: 'printed cup and mast at the tail' },
+    { id: 'cam', a: [0, uBottomTop + 8, U.cam.z - 6], t: 'AKK A11T camera + VTX', s: 'nose, between the plates' },
+    { id: 'rx', a: [-19, uBottomTop + 3.4, 26], t: 'Happymodel EP2 ELRS RX', s: 'rear-left, clear heat shrink', hide: { top: 1 } },
+    { id: 'xiao', a: [XIAO.x + 10, uTop - 3, XIAO.z], t: 'Seeed XIAO ESP32-C3', s: 'DroneBridge telemetry, under the top plate' },
+    { id: 'esc', a: [escX, uArmTop + U.esc.H, -escZ], t: '20 A BLHeli_S ESC x4', s: 'on the arms under black tape' },
+    { id: 'motor', a: [M1.x, uArmTop + 12, M1.z], t: 'iFlight XING2 1404 3800KV x4', s: '1 + 2 CCW, 3 + 4 CW' },
+    { id: 'prop', a: [M2.x + 38, uArmTop + U.motor.H + 3, M2.z + 8], t: 'Gemfan 4024 two-blade x4', s: '101.6 mm (4.0 in), translucent blue' }
+  ];
+  var coLayer = document.getElementById('callouts'), coSvg = document.getElementById('coSvg'), NS = 'http://www.w3.org/2000/svg';
+  CALL = CALL.concat(OPTC);   // option labels (gen_ref4_options.py)
+  CALL.forEach(function (c) {
+    var d = document.createElement('div'); d.className = 'co'; d.innerHTML = '<b></b><span></span>';
+    d.querySelector('b').textContent = c.t; d.querySelector('span').textContent = c.s; coLayer.appendChild(d); c.el = d;
+    c.line = document.createElementNS(NS, 'polyline'); coSvg.appendChild(c.line);
+    c.dot = document.createElementNS(NS, 'circle'); c.dot.setAttribute('r', '3'); coSvg.appendChild(c.dot);
+    c.v = new THREE.Vector3(c.a[0], c.a[1], c.a[2]);
+  });
+  var curView = 'iso';
+  var legendEl = document.getElementById('legend'), ctrlsEl = document.getElementById('ctrls');
+  function shownObj(o) { for (; o; o = o.parent) if (!o.visible) return false; return true; }
+  function layoutCallouts() {
+    var W = window.innerWidth, H = window.innerHeight;
+    if (W < 900) return;
+    camera.updateMatrixWorld(); ref4.updateMatrixWorld();
+    var leg = legendEl.getBoundingClientRect(), ctr = ctrlsEl.getBoundingClientRect();
+    var cen = ref4.localToWorld(new THREE.Vector3(0, 20, 0)).project(camera), cx = (cen.x + 1) / 2 * W;
+    var L = [], R = [];
+    CALL.forEach(function (c) {
+      var vis = c.o ? shownObj(c.o) : (!c.when || c.when());   // options page: labels of hidden options are hidden
+      c.el.style.display = c.line.style.display = c.dot.style.display = vis ? '' : 'none'; if (!vis) return;
+      var p = c.o ? c.o.getWorldPosition(new THREE.Vector3()).project(camera) : ref4.localToWorld(c.v.clone()).project(camera);
+      c.x = (p.x + 1) / 2 * W; c.y = (1 - p.y) / 2 * H; c.w = c.el.offsetWidth; c.h = c.el.offsetHeight;
+      var hid = c.hide && c.hide[curView];
+      c.el.querySelector('span').textContent = c.s + (hid ? ' (hidden below)' : '');
+      c.line.setAttribute('class', hid ? 'hid' : '');
+      (c.x < cx ? L : R).push(c);
+    });
+    function maxW(a) { return a.reduce(function (m, c) { return Math.max(m, c.el.offsetWidth); }, 0); }
+    var bottom = H - 10;
+    function place(arr, top) {
+      arr.sort(function (a, b) { return a.y - b.y; });
+      var y = top; arr.forEach(function (c) { c.ly = Math.max(c.y - c.h / 2, y); y = c.ly + c.h + 8; });
+      var lim = bottom; for (var i = arr.length - 1; i >= 0; i--) { arr[i].ly = Math.min(arr[i].ly, lim - arr[i].h); lim = arr[i].ly - 8; }
+    }
+    var minX = L.reduce(function (m, c) { return Math.min(m, c.x); }, 1e9), maxX = R.reduce(function (m, c) { return Math.max(m, c.x); }, -1e9);
+    var lR = Math.max(minX - 40, leg.right + 14 + maxW(L)), opEl = document.getElementById('opts'), opL = opEl && opEl.getClientRects().length ? opEl.getBoundingClientRect().left - 14 : W - 16, rL = Math.min(maxX + 40, opL - maxW(R));   // right column stays left of the Options panel
+    place(L, 56); place(R, ctr.bottom + 12);
+    L.forEach(function (c) { c.lx = lR - c.el.offsetWidth; c.ex = lR; });
+    R.forEach(function (c) { c.lx = rL; c.ex = rL; });
+    L.concat(R).forEach(function (c) {
+      c.el.style.left = Math.round(c.lx) + 'px'; c.el.style.top = Math.round(c.ly) + 'px';
+      var my = c.ly + c.h / 2, kx = c.ex + (c.ex === rL && R.indexOf(c) >= 0 ? -10 : 10);
+      c.line.setAttribute('points', c.ex + ',' + my + ' ' + kx + ',' + my + ' ' + c.x.toFixed(1) + ',' + c.y.toFixed(1));
+      c.dot.setAttribute('cx', c.x.toFixed(1)); c.dot.setAttribute('cy', c.y.toFixed(1));
+    });
+  }
+
+  // ---------------------------------------------------------------------
+  // Minimal orbit controls (inline so the page works from file://)
+  // ---------------------------------------------------------------------
+  var ctl = { target: new THREE.Vector3(), theta: 0, phi: 1, radius: 500, minR: 40, maxR: 2500 };
+  function applyCamera() {
+    var sp = Math.sin(ctl.phi);
+    camera.position.set(ctl.target.x + ctl.radius * sp * Math.sin(ctl.theta), ctl.target.y + ctl.radius * Math.cos(ctl.phi), ctl.target.z + ctl.radius * sp * Math.cos(ctl.theta));
+    camera.lookAt(ctl.target);
+  }
+  var views = {
+    iso:  { theta: Math.PI - 0.78, phi: 1.0, radius: 640, target: [0, 28, 0] },
+    top:  { theta: 0.0001, phi: 0.0001, radius: 600, target: [0, 20, 0] },
+    side: { theta: Math.PI / 2, phi: Math.PI / 2 - 0.02, radius: 560, target: [0, 45, 0] }   // 2026-11-09: z 10 -> 28 so the bar note clears the taller legend
+  };
+  function setView(name) { var v = views[name]; curView = name; ctl.theta = v.theta; ctl.phi = v.phi; ctl.radius = v.radius; ctl.target.set(v.target[0], v.target[1], v.target[2]); topBar.visible = name !== 'side'; sideBar.visible = name === 'side'; applyCamera(); }
+  setView('iso');
+
+  var el = renderer.domElement, dragging = false, mode = 'rotate', lx = 0, ly = 0;
+  el.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+  el.addEventListener('pointerdown', function (e) { dragging = true; mode = (e.button === 2 || e.shiftKey || e.ctrlKey) ? 'pan' : 'rotate'; lx = e.clientX; ly = e.clientY; el.setPointerCapture(e.pointerId); });
+  el.addEventListener('pointerup', function () { dragging = false; });
+  el.addEventListener('pointermove', function (e) {
+    if (!dragging) return;
+    var dx = e.clientX - lx, dy = e.clientY - ly; lx = e.clientX; ly = e.clientY;
+    if (mode === 'rotate') { ctl.theta -= dx * 0.006; ctl.phi -= dy * 0.006; ctl.phi = Math.max(0.0001, Math.min(Math.PI - 0.0001, ctl.phi)); }
+    else {
+      var k = ctl.radius * 0.0012, right = new THREE.Vector3(), up = new THREE.Vector3();
+      camera.matrix.extractBasis(right, up, new THREE.Vector3());
+      ctl.target.addScaledVector(right, -dx * k).addScaledVector(up, dy * k);
+    }
+    applyCamera();
+  });
+  el.addEventListener('wheel', function (e) { e.preventDefault(); ctl.radius *= Math.exp(e.deltaY * 0.0012); ctl.radius = Math.max(ctl.minR, Math.min(ctl.maxR, ctl.radius)); applyCamera(); }, { passive: false });
+
+  // ---------------------------------------------------------------------
+  // Theme, buttons, URL hash (#top, #side, #dark, #case shows the Pi heatsink, hidden by default)
+  // ---------------------------------------------------------------------
+  var currentTheme = 'light';
+  function setTheme(name) {
+    var t = themes[name];
+    document.documentElement.setAttribute('data-theme', name);
+    scene.background = new THREE.Color(t.bg);
+    grid10.material.color.setHex(t.grid1); grid10.material.transparent = true; grid10.material.opacity = 0.7;
+    grid50.material.color.setHex(t.grid2);
+    hemi.color.setHex(t.hemiSky); hemi.groundColor.setHex(t.hemiGnd);
+    ground.material.opacity = name === 'dark' ? 0.32 : 0.22;
+    currentTheme = name;
+  }
+  var hash = (location.hash || '').toLowerCase();
+  setTheme(hash.indexOf('dark') >= 0 ? 'dark' : 'light');
+  if (hash.indexOf('top') >= 0) setView('top');
+  if (hash.indexOf('side') >= 0) setView('side');
+  piCase.visible = /(^|[#,&])case\b/.test(hash) && hash.indexOf('nocase') < 0;   // heatsink hidden by default so the orange Pi board shows (designer 2026-11-08); #case shows it
+  document.getElementById('bIso').onclick = function () { setView('iso'); };
+  document.getElementById('bTop').onclick = function () { setView('top'); };
+  document.getElementById('bSide').onclick = function () { setView('side'); };
+  document.getElementById('bCase').onclick = function () { piCase.visible = !piCase.visible; };
+  document.getElementById('bTheme').onclick = function () { setTheme(currentTheme === 'dark' ? 'light' : 'dark'); };
+
+  // Options panel (tools/render/gen_ref4_options.py; same behaviour as the 5-inch page, tools/render/onboard.py SEL_JS).
+  // Hash on load: #fc-matek|wing|h7|ark|cube, #pc-opi|zero|pi5|uno|none. Defaults (Matek, Orange Pi) = the as-built drone.
+  (function () {
+    var NOTE = {"fc": {"matek": [true, ""], "wing": [true, "Wing: needs bottom plate v2 (30.5 M3 press nuts) and the middle standoffs in the forward holes. Right-angle headers only: vertical pins reach 26.0 mm, the stack is 25 mm."], "h7": [true, "H7 V2: needs bottom plate v2 and a separate PDB (drawn). Pins 19.1 mm fit; upright Dupont housings (27.1 mm) do not."], "ark": [true, "ARK: needs bottom plate v2, a 2 mm adapter plate and the middle standoffs in the forward holes; carrier sits 15 mm aft. PDB not drawn."], "cube": [false, "Cube: does not fit. 31.4 mm tall, the stack is 25 mm. Drawn on the top plate: it takes the companion computer's place and runs into the camera antenna."]}, "pc": {"opi": [true, ""], "zero": [true, "Pi Zero 2 W: velcro pad where the Orange Pi sits."], "pi5": [false, "Pi 5: does not fit. The two antenna tubes at the front-left pass through it and its corners are 4 mm inside the prop discs."], "uno": [true, "UNO Q: on two crossbars; rear corners reach the prop discs in plan, 15 mm above them."], "none": [true, ""]}};
+    var fcKeys = ['matek', 'wing', 'h7', 'ark', 'cube'], pcKeys = ['opi', 'zero', 'pi5', 'uno', 'none'];
+    function tok(p, def, ok) { var m = hash.match(new RegExp('(?:^|[#&,;])' + p + '-([a-z0-9]+)')); return m && ok.indexOf(m[1]) >= 0 ? m[1] : def; }
+    OPT.fc = tok('fc', 'matek', fcKeys); OPT.pc = tok('pc', 'opi', pcKeys);
+    var noteEl = document.getElementById('optsN'), bc = document.getElementById('bCase');
+    function apply() {
+      var fc = OPT.fc, pc = OPT.pc, mk = fc === 'matek', v2 = fc === 'wing' || fc === 'h7' || fc === 'ark', fwd = fc === 'wing' || fc === 'ark';
+      fcGroup.visible = GM.visible = mk;                         // Matek, its USB-C extender and every lead that ends on it
+      Object.keys(FCS).forEach(function (k) { FCS[k].visible = k === fc; });
+      botStock.visible = !v2; botV2.visible = v2;                // bottom plate v2 (30.5 press nuts) with the 30.5 mm boards
+      MIDS.forEach(function (m) { m.visible = !fwd; }); MIDALT.visible = fwd;   // middle standoff pair: as built or forward holes
+      var top = fc === 'cube';                                   // the Cube sits where the companion computer goes
+      PIG.visible = pc === 'opi' && !top; GMP.visible = mk && pc === 'opi';
+      ['zero', 'pi5', 'uno'].forEach(function (k) { COMP[k].visible = k === pc && !top; });
+      if (bc) { bc.disabled = !PIG.visible; bc.title = PIG.visible ? '' : 'Orange Pi Zero 3W only'; }
+      document.querySelectorAll('#opts input[name="fc"]').forEach(function (i) { i.checked = i.value === fc; });
+      document.querySelectorAll('#opts input[name="pc"]').forEach(function (i) { i.checked = i.value === pc; i.disabled = top; });
+      if (noteEl) {
+        noteEl.textContent = '';
+        [NOTE.fc[fc], top ? [true, 'Companion computer not shown with the Cube.'] : NOTE.pc[pc]].forEach(function (n) {
+          if (!n[1]) return; var p = document.createElement('p'); p.textContent = n[1]; if (!n[0]) p.className = 'nofit'; noteEl.appendChild(p);
+        });
+        if (!mk) { var w = document.createElement('p'); w.textContent = 'Wiring and the USB-C extender are drawn for the Matek only.'; noteEl.appendChild(w); }
+      }
+    }
+    function hashSync() {
+      try {
+        var t = (location.hash || '').replace(/^#/, '').split(/[,&;]/).filter(function (x) { return x && !/^(fc|pc)-/i.test(x); });
+        if (OPT.fc !== 'matek') t.push('fc-' + OPT.fc);
+        if (OPT.pc !== 'opi') t.push('pc-' + OPT.pc);
+        history.replaceState(null, '', t.length ? '#' + t.join(',') : location.pathname + location.search);
+      } catch (e) {}
+    }
+    document.querySelectorAll('#opts input[type="radio"]').forEach(function (i) {
+      i.addEventListener('change', function () { if (!i.checked) return; OPT[i.name] = i.value; apply(); hashSync(); });
+    });
+    var op = document.getElementById('opts'), ot = document.getElementById('optsT'), ct = document.getElementById('ctrls');
+    function place() { if (op && ct) op.style.top = Math.round(ct.getBoundingClientRect().bottom + 8) + 'px'; }
+    if (op && ot) {
+      if (window.innerWidth < 700) op.classList.add('closed');
+      ot.onclick = function () { op.classList.toggle('closed'); ot.setAttribute('aria-expanded', op.classList.contains('closed') ? 'false' : 'true'); };
+      ot.setAttribute('aria-expanded', op.classList.contains('closed') ? 'false' : 'true');
+    }
+    place(); window.addEventListener('resize', place);
+    apply();
+    window.__optGroups = { fc: FCS, pc: COMP, root: ref4, deck: uBottomTop, top: uTop };   // for fit checks from the console / test scripts
+    window.__toggles = { get: function () { return { fc: OPT.fc, pc: OPT.pc }; },
+      set: function (fc, pc) { if (fc != null && fcKeys.indexOf(fc) >= 0) OPT.fc = fc; if (pc != null && pcKeys.indexOf(pc) >= 0) OPT.pc = pc; apply(); } };
+  })();
+
+
+  window.addEventListener('resize', function () {
+    camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  var frames = 0;
+  window.__pause = false;
+  function loop() { requestAnimationFrame(loop); if (window.__pause) return; renderer.render(scene, camera); layoutCallouts(); if (++frames === 3) window.__rendered = true; }
+  loop();
+})();
+</script>
+</body>
+</html>
