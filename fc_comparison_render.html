@@ -30,7 +30,7 @@
 <body>
 <div id="legend">
   <h1>Flight controllers, to scale</h1>
-  <div class="sub">The six flight controllers in designer's FlightControllers.docx, two Lumenier NDAA options and two Raspberry Pi boards for scale, flat on a 10 / 50 mm grid, 1 scene unit = 1 mm. Front row: FPV-size boards; back row: Wing and carriers; Pis at the right. NDAA: <span class="ok">GREEN</span> / <span class="rd">RED</span> per variants/README.md.</div>
+  <div class="sub">The six flight controllers in designer's FlightControllers.docx, two Lumenier NDAA options, the AeroEggTech AET-H743-Basic and two Raspberry Pi boards for scale, flat on a 10 / 50 mm grid, 1 scene unit = 1 mm. Front row: FPV-size boards; back row: Wing and carriers; Pis at the right. NDAA: <span class="ok">GREEN</span> / <span class="rd">RED</span> per variants/README.md.</div>
   <ol>
     <li><span class="sw" style="background:#1f4f9a"></span><b>Matek F405-WMO</b> (4-inch reference quad board). 32 x 22 x 12.7 mm, 39 x 2.54 mm through-holes <span class="ok">VERIFIED</span>; 18 x 12 mm M2 mount <span class="as">MEASURED</span>; separate USB-C / buzzer board not shown. <span class="rd">RED</span> (PRC).</li>
     <li><span class="sw" style="background:#1f7a3a"></span><b>Lumenier LUX Mini F7 V2</b>. 28 x 28 x 6 mm, 20 x 20 mm on M3 grommets <span class="ok">VERIFIED</span>; pads and wire holes only, no headers; pad positions <span class="as">MEASURED</span> from photos. <span class="rd">RED</span> (China; not on the ArduPilot table, GetFPV "NDAA No").</li>
@@ -40,11 +40,12 @@
     <li><span class="sw" style="background:#1f7a3a"></span><b>ARK ARKV6X</b> on the <b>ARK PAB</b> carrier. Module 36 x 29 x 5, carrier 74 x 43.5 x 12 mm <span class="ok">VERIFIED</span>; connector positions and ~68 x 39 mm holes <span class="as">ASSUMED</span> (photo). JST-GH only. <span class="ok">GREEN</span> (Blue UAS).</li>
     <li><span class="sw" style="background:#1f7a3a"></span><b>Lumenier LUX F765 NDAA</b> (added NDAA option). 38 x 38 x 4 mm, 9 g, 30.5 mm M3 grommets <span class="ok">VERIFIED</span> (GetFPV); JST-SH ports + GH CAN, pads, no 2.54 mm (ArduPilot wiki); positions <span class="as">MEASURED</span> by eye. <span class="ok">GREEN</span> (vendor declaration, made in Thailand). ArduPilot supported.</li>
     <li><span class="sw" style="background:#1f7a3a"></span><b>Lumenier LUX H743 NDAA</b> (added NDAA option). 37.5 x 37.5 mm, 30.5 mm M3 <span class="ok">VERIFIED</span> (PR #34831 README); JST-GH only, pads, no 2.54 mm; thickness and weight not published, 5 mm stack <span class="as">ASSUMED</span>. <span class="ok">GREEN</span> (vendor claim, made in USA; not on Blue list). ArduPilot: PR #34831 open, vendor 4.7.2 build.</li>
+    <li><span class="sw" style="background:#1f7a3a"></span><b>AeroEggTech AET-H743-Basic</b> (added 2026-11-16; hardware V1.3). Power board + FC + Bluetooth board, 49 x 36 x 17 mm, 45 g <span class="ok">VERIFIED</span> (AeroEggTech manual; ArduPilot wiki says 47 mm); outline, 79 through-holes, power pads and the 30.1 mm stack-screw square <span class="as">MEASURED</span> from the ArduPilot hwdef images; height split and foam-tape mount <span class="as">ASSUMED</span> (no frame-mount holes). Right-angle pins; battery and ESC power on solder pads. <span class="rd">RED</span> (PRC, Suzhou). ArduPilot supported.</li>
     <li><span class="sw" style="background:#1d6e3c"></span><b>Raspberry Pi 5</b> (right, back; <span class="as">ASSUMED</span> model for "a Raspberry Pi", Pi 4B has the same 85 x 56 mm board and 58 x 49 mm M2.5 holes), about 46 g, 2 x 20 header fitted. Companion-computer size reference, not an FC.</li>
     <li><span class="sw" style="background:#1d6e3c"></span><b>Raspberry Pi Zero W</b> (right, front). 65 x 30 mm, 58 x 23 mm M2.5, about 9 g; 40-pin footprint shown unpopulated. Size reference.</li>
   </ol>
   <div class="note">The document pairs the Lucid H7 with a JHEMCU 45A 4-in-1 ESC; omitted because 5-inch quad uses discrete ESCs.</div>
-  <div class="note">2.54 mm headers (black base 2.5 mm, 0.64 mm pins 6 mm proud) only where the board has 2.54 mm through-holes: WMO, Lucid H7 V2 (12), H7 Wing, Cube servo rail, Pi 5 (Pi Zero W holes left empty). FC boards drawn green for consistency (Matek blue, Cube orange); tell the boards apart by the labels. Scale bar 6 in, 1 in ticks. Drag to orbit, wheel to zoom, right-drag to pan; #top / #dark in the URL.</div>
+  <div class="note">2.54 mm headers (black base 2.5 mm, 0.64 mm pins 6 mm proud) only where the board has 2.54 mm through-holes: WMO, Lucid H7 V2 (12), H7 Wing, Cube servo rail, AET-H743-Basic (79, right-angle), Pi 5 (Pi Zero W holes left empty). FC boards drawn green for consistency (Matek blue, Cube orange); tell the boards apart by the labels. Scale bar 6 in, 1 in ticks. Drag to orbit, wheel to zoom, right-drag to pan; #top / #dark in the URL.</div>
 </div>
 <div id="ctrls">
   <a id="bHome" href="index.html">Home</a>
@@ -618,6 +619,153 @@
     boardLabel(g, ['Raspberry Pi Zero W', '65 x 30 mm, about 9 g', 'mount 58 x 23 mm, M2.5', '40-pin 2.54 mm footprint, unpopulated (no header)', 'mini-HDMI, 2x micro-USB, CSI FPC, microSD', 'companion computer, size reference'], LBL_W, 'front', new THREE.Vector3(X(15), yC + 3, Z(60)));
     scene.add(g);
   })();
+  // >>> AET-H743-BASIC (generated by tools/render/patch_fc_comparison.py; model in fc_blocks.py)
+  // Back row, between the Cube and the Pi 5. Geometry = fc_blocks.py entry 7 (sources there), flat on the grid on its foam tape.
+  (function () {
+    var wrap = new THREE.Group(); wrap.position.set(88, 0, Z_BACK); scene.add(wrap);
+    var D = { hdr: HD }, quad = wrap, yDeck = 0, FC_PAGE_LABEL = true, FC_LABEL = null, FC_LEAD = null;   // what fc_blocks.HELPERS expects
+    (function () {
+
+    var hd = D.hdr, g = new THREE.Group(), yBase = yDeck, PCB_T = 1.0;
+    var MX = {
+      pcbBlack: new THREE.MeshStandardMaterial({ color: 0x15171a, roughness: 0.6, metalness: 0.15 }),
+      pcbBlue:  new THREE.MeshStandardMaterial({ color: 0x1f4f9a, roughness: 0.65, metalness: 0.1 }),
+      pcbWhite: new THREE.MeshStandardMaterial({ color: 0xe6e6df, roughness: 0.7, metalness: 0.05 }),
+      pcbFc:    new THREE.MeshStandardMaterial({ color: 0x1f7a3a, roughness: 0.6, metalness: 0.1 }),   // FC boards green except Matek (blue) and Cube (orange), designer 2026-11-09
+      shell:    new THREE.MeshStandardMaterial({ color: 0x1b1c1f, roughness: 0.75, metalness: 0.05 }),
+      orange:   new THREE.MeshStandardMaterial({ color: 0xf26b1d, roughness: 0.55, metalness: 0.1 }),
+      chipTxt:  new THREE.MeshStandardMaterial({ color: 0x3a3d42, roughness: 0.4, metalness: 0.3 }),
+      jstGrey:  new THREE.MeshStandardMaterial({ color: 0xc9c9c4, roughness: 0.7, metalness: 0.0 }),
+      molex:    new THREE.MeshStandardMaterial({ color: 0xf7f7f2, roughness: 0.65, metalness: 0.0 }),
+      pad:      new THREE.MeshStandardMaterial({ color: 0xd4af37, roughness: 0.35, metalness: 0.9 }),
+      brass:    new THREE.MeshStandardMaterial({ color: 0xb5a642, roughness: 0.4, metalness: 0.8 }),
+      rubber:   new THREE.MeshStandardMaterial({ color: 0x111214, roughness: 0.95, metalness: 0.0 }),
+      cap:      new THREE.MeshStandardMaterial({ color: 0x8a6d3b, roughness: 0.5, metalness: 0.3 }),
+      ind:      new THREE.MeshStandardMaterial({ color: 0x4a4d52, roughness: 0.5, metalness: 0.5 }),
+      fet:      new THREE.MeshStandardMaterial({ color: 0x202226, roughness: 0.4, metalness: 0.3 }),
+      ledB: new THREE.MeshStandardMaterial({ color: 0x2255ff, emissive: 0x1133cc, emissiveIntensity: 0.6 }),
+      ledG: new THREE.MeshStandardMaterial({ color: 0x33dd55, emissive: 0x11aa33, emissiveIntensity: 0.6 }),
+      ledR: new THREE.MeshStandardMaterial({ color: 0xff3333, emissive: 0xcc1111, emissiveIntensity: 0.6 })
+    };
+    function box(w, h, d, mat, x, y, z) { var m = shadowed(new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat)); m.position.set(x, y, z); g.add(m); return m; }
+    function cyl(r, h, mat, x, y, z, seg) { var m = shadowed(new THREE.Mesh(new THREE.CylinderGeometry(r, r, h, seg || 24), mat)); m.position.set(x, y, z); g.add(m); return m; }
+    // PCB: W along X, L along Z, mount holes at [x, z]
+    function pcbB(W, L, cornerR, holes, holeR, y, mat, thick) {
+      var s = roundedRectShape(L, W, cornerR);
+      holes.forEach(function (p) { s.holes.push(hole(p[0], p[1], holeR)); });
+      var m = plate(s, thick || PCB_T, y, mat); g.add(m); return m;
+    }
+    function standoffs(holes, r, h, mat, y0) { holes.forEach(function (p) { cyl(r, h, mat, p[0], (y0 || 0) + h / 2, p[1], 6); }); }
+    function bolts(holes, y, mat) { holes.forEach(function (p) { cyl(1.9, 1.2, mat, p[0], y + 0.6, p[1], 12); }); }
+    var pinH = hd.above + hd.base + hd.below;
+    var pinGeo = new THREE.BoxGeometry(hd.pin, pinH, hd.pin);
+    var headerCount = 0;
+    // 2.54 mm header identical to the base page: n positions from (x0, z0) stepping along X or Z, base on surface yC
+    function header(n, x0, z0, alongX, yC) {
+      var len = n * hd.pitch - (hd.pitch - hd.base);
+      var base = shadowed(new THREE.Mesh(new THREE.BoxGeometry(alongX ? len : hd.base, hd.base, alongX ? hd.base : len), M.hdrBase));
+      var cx = x0 + (alongX ? (n - 1) * hd.pitch / 2 : 0), cz = z0 + (alongX ? 0 : (n - 1) * hd.pitch / 2);
+      base.position.set(cx, yC + hd.base / 2, cz); g.add(base);
+      for (var k = 0; k < n; k++) {
+        var pn = shadowed(new THREE.Mesh(pinGeo, M.hdrPin));
+        pn.position.set(x0 + (alongX ? k * hd.pitch : 0), yC + pinH / 2 - hd.below, z0 + (alongX ? 0 : k * hd.pitch)); g.add(pn);
+        headerCount++;
+      }
+    }
+    var padGeo = new THREE.BoxGeometry(1.5, 0.12, 1.5);
+    function pads(n, x0, z0, alongX, yC, pitch) {      // flat SMD pads (wire, not headers)
+      for (var k = 0; k < n; k++) { var p = new THREE.Mesh(padGeo, MX.pad); p.position.set(x0 + (alongX ? k * pitch : 0), yC + 0.06, z0 + (alongX ? 0 : k * pitch)); g.add(p); }
+    }
+    function chevron(x, yC, z, s) { var a = new THREE.Mesh(new THREE.ConeGeometry(s * 0.55, s, 3), M.usb); a.rotation.x = -Math.PI / 2; a.position.set(x, yC + 0.1, z); g.add(a); }
+    function jstGH(n, x, y, z, alongX) {               // JST-GH 1.25 mm: 1.25 * (n - 1) + 3.5 mm long, 4.25 wide, 4.4 tall (beige)
+      var len = 1.25 * (n - 1) + 3.5; return box(alongX ? len : 4.25, 4.4, alongX ? 4.25 : len, M.jst, x, y + 2.2, z);
+    }
+    function jstSH(n, x, y, z, alongX) {               // JST-SH 1.0 mm: 1.0 * (n - 1) + 3.0 mm long, 2.9 wide, 4.3 tall... modelled 3 x 4.3
+      var len = 1.0 * (n - 1) + 3.0; return box(alongX ? len : 3.0, 4.3, alongX ? 3.0 : len, M.jst, x, y + 2.15, z);
+    }
+    function finish(labelLines, topY, zRear, leadFrom) {
+      if (typeof FC_PAGE_LABEL !== 'undefined' && FC_PAGE_LABEL) {   // Source One V5 pages: the page owns the callout (per-view positions)
+        FC_LABEL = labelLines; FC_LEAD = [leadFrom.x, leadFrom.y + yBase, leadFrom.z];
+      } else {
+        var spr = makeLabelMulti(labelLines);
+        var labelX = -22, labelY = topY + 24 + (labelLines.length - 2) * 2, labelZ = zRear + 52;   // -22 mm in X moves the label toward screen-right in the 3/4 view, clear of the legend panel
+        spr.position.set(labelX, labelY, labelZ); g.add(spr);
+        var lead = new THREE.Line(new THREE.BufferGeometry().setFromPoints([leadFrom, new THREE.Vector3(labelX, labelY, labelZ - 42)]),
+          new THREE.LineBasicMaterial({ color: 0xaab2bc, transparent: true, opacity: 0.8 }));
+        g.add(lead);
+      }
+      g.position.y = yBase;
+      window.__fcGroup = g; window.__fcBaseY = yBase;
+      quad.add(g);
+      window.__headerPins = headerCount;
+    }
+    var LABEL = [];
+
+    // AeroEggTech AET-H743-Basic, hardware V1.3 (sources and what is measured / assumed: fc_blocks.py, entry 7). Origin = board centre,
+    // nose (the board's arrow, power-pad end) = -Z, board right = +X. Positions from the ArduPilot hwdef images at 15.58 px/mm.
+    var P = hd.pitch, W = 36, L = 49.6, TAPE = 3, G1 = 5.6, G2 = 4.2, hx = 15.07, hzN = -16.9, hzT = 13.25;
+    var holes = [[hx, hzN], [-hx, hzN], [hx, hzT], [-hx, hzT]];
+    var foam = new THREE.MeshStandardMaterial({ color: 0x2a2c30, roughness: 0.95 }), ball = new THREE.MeshStandardMaterial({ color: 0x9a5bd0, roughness: 0.8 }),
+      sink = new THREE.MeshStandardMaterial({ color: 0x101113, roughness: 0.5, metalness: 0.4 });
+    [-7, 7].forEach(function (x) { box(8, TAPE, 40, foam, x, TAPE / 2, 0); });            // two foam-tape strips (mount ASSUMED), clear of plate screw heads on the centreline and the 30.5 press nuts
+    // power board: solder pads on the nose edge (BAT+, ESC+, ESC+, ESC-, ESC-, BAT-), R002 shunt, inductors, 2 x 8 link to the FC
+    var yP = TAPE; pcbB(W, L, 1.5, holes, 0.8, yP, MX.pcbFc, 1.6); var yPc = yP + 1.6;
+    holes.forEach(function (p) { cyl(1.7, 1.0, M.aluDark, p[0], yP - 0.5, p[1], 12); });  // stack screw heads under the power board
+    [15.4, 2.1, -2.0, -7.0, -11.1, -15.4].forEach(function (x) { box(4.0, 0.15, 4.6, MX.pad, x, yPc + 0.07, -22.5); });
+    box(6.4, 1.2, 7.0, M.usb, 8.8, yPc + 0.6, -21.2);                                    // R002 shunt
+    box(11.5, 5.0, 12.2, MX.ind, -12.7, yPc + 2.5, -7.9);                                // "100" inductor (overhangs the left edge)
+    box(8.3, 4.0, 8.3, MX.ind, 8.8, yPc + 2.0, 7.3); box(4.5, 3.0, 4.8, MX.ind, -2.8, yPc + 1.5, 22.2);   // VX and 4R7 inductors
+    box(5.0, 1.0, 5.0, MX.fet, -2.8, yPc + 0.5, -11.5); box(5.0, 1.0, 5.0, MX.fet, -2.8, yPc + 0.5, -4.7);
+    box(4.5, 1.2, 4.0, M.chipSm, 3.3, yPc + 0.6, -7.5); box(4.5, 1.0, 4.5, M.chipSm, 7.0, yPc + 0.5, 16.2); box(3.5, 1.0, 3.5, M.chipSm, -6.7, yPc + 0.5, 19.2);
+    [[7.2, -14.5], [7.2, -11.9], [7.2, -9.3], [-2.2, 2.4], [-2.2, 5.0], [-2.2, 7.6], [-10.4, 6.4], [-13.0, 6.4]].forEach(function (p) { box(3.2, 1.6, 1.6, MX.cap, p[0], yPc + 0.8, p[1]); });
+    box(11.0, G1, 3.9, M.chip, -2.8, yPc + G1 / 2, 12.3);                                // 2 x 8 board-to-board link
+    holes.forEach(function (p) { cyl(2.6, G1, ball, p[0], yPc + G1 / 2, p[1], 20); });    // two-piece damping balls
+    // FC main board
+    var yM = yPc + G1; pcbB(W, L, 1.5, holes, 1.75, yM, MX.pcbFc, 1.6); var yC = yM + 1.6;
+    box(14, 1.4, 14, M.chip, 1.6, yC + 0.7, -6.2);                                       // STM32H743VIT6, LQFP100
+    box(11, 1.9, 9.5, M.usb, -1.9, yC + 0.95, 10.5);                                      // microSD slot
+    box(3, 0.9, 3, M.chipSm, 12.6, yC + 0.45, -4.4); box(3, 0.9, 3, M.chipSm, 10.5, yC + 0.45, 9.0); box(2.6, 0.9, 2.2, M.chipSm, 2.5, yC + 0.45, -17.5);
+    box(4.25, 4.05, 1.25 * 3 + 3.5, M.jst, W / 2 - 1.6, yC + 2.03, -10.7);               // JST-GH 4-pin CAN, side entry, right edge
+    box(3.0, 2.95, 1.0 * 5 + 3.0, M.jst, W / 2 - 1.0, yC + 1.48, -1.7);                  // JST-SH 6-pin UART4 / I2C2
+    box(3.0, 2.95, 1.0 * 5 + 3.0, M.jst, W / 2 - 1.0, yC + 1.48, 6.6);                   // JST-SH to the USB board (USB board not drawn)
+    box(1.4, 0.5, 0.8, MX.ledB, 16.5, yC + 0.25, -24.0); box(1.4, 0.5, 0.8, MX.ledG, 16.5, yC + 0.25, -22.4); box(1.4, 0.5, 0.8, MX.ledR, -16.5, yC + 0.25, -24.0);
+    // right-angle 2.54 mm pin blocks (as in the manufacturer photos): rows counted inward from the edge, row r bends out at 1.5 + r * 2.54 mm
+    function raBlock(n, rows, a0, e0, alongX, out) {   // n pins along the edge from a0, rows from e0 (outermost) stepping inward; out = +1 / -1 along the other axis
+      var across = (n - 1) * P, depth = (rows - 1) * P, ac = a0 + across / 2, ec = e0 - out * depth / 2;
+      box(alongX ? across + 2.5 : depth + 2.5, 2.5, alongX ? depth + 2.5 : across + 2.5, M.hdrBase, alongX ? ac : ec, yC + 1.25, alongX ? ec : ac);
+      for (var r = 0; r < rows; r++) for (var k = 0; k < n; k++) {
+        var a = a0 + k * P, e = e0 - out * r * P, h = 1.5 + r * P, len = r * P + 8.5, ec2 = e + out * len / 2;
+        box(hd.pin, h, hd.pin, M.hdrPin, alongX ? a : e, yC + h / 2, alongX ? e : a);
+        box(alongX ? hd.pin : len, hd.pin, alongX ? len : hd.pin, M.hdrPin, alongX ? a : ec2, yC + h, alongX ? ec2 : a);
+        headerCount++;
+      }
+    }
+    raBlock(11, 2, -12.74, -23.46, true, -1);                                            // nose end 2 x 11: 5V / 9V, CAM1/2, Vbat, 9Vsw, VTX, UART1, UART8, S1, S2, RX4
+    raBlock(8, 3, -10.75, -16.66, false, -1);                                            // left edge 3 x 8: S3-S10 / VX / G
+    raBlock(11, 3, -11.27, 23.5, true, 1);                                               // tail end 3 x 11: UART2/3/6/7, I2C1, 4V5, RSSI, airspeed, LED, S11, S12
+    // Bluetooth top board on nylon posts: notched clear of the pin blocks; MCU heat sink through its window
+    var yB = yC + G2; holes.forEach(function (p) { cyl(2.2, G2, M.nylon, p[0], yC + G2 / 2, p[1], 16); });
+    (function () {
+      var s = new THREE.Shape(), pts = [[18, -19.3], [18, 16.4], [-18, 16.4], [-18, 9.6], [-9.6, 9.6], [-9.6, -13.2], [-18, -13.2], [-18, -19.3]];   // [x, z]
+      s.moveTo(-18, -19.3); pts.forEach(function (q) { s.lineTo(q[0], q[1]); });
+      holes.forEach(function (p) { s.holes.push(hole(p[0], p[1], 1.1)); });
+      (function () { var w = new THREE.Path(); w.moveTo(-3.4, -11.2); w.lineTo(6.6, -11.2); w.lineTo(6.6, -1.2); w.lineTo(-3.4, -1.2); w.lineTo(-3.4, -11.2); s.holes.push(w); })();
+      g.add(plate(s, 1.2, yB, MX.pcbFc));
+    })();
+    var yT = yB + 1.2;
+    holes.forEach(function (p) { cyl(1.7, 1.0, M.aluDark, p[0], yT + 0.5, p[1], 12); });  // stack screw heads
+    box(9, TAPE + 17 - (yC + 1.4), 9, sink, 1.6, (TAPE + 17 + yC + 1.4) / 2, -6.2);      // heat sink on the MCU, top at 17.0 mm
+    box(6, 1.6, 9, M.chipSm, 10.5, yT + 0.8, 8.5);                                       // Bluetooth module (SPP / BLE on UART7)
+    chevron(-6, yT, -15.5, 3.0);
+    window.__fcTopY = yBase + TAPE + 17;
+    finish(LABEL, TAPE + 17, L / 2, new THREE.Vector3(0, TAPE + 17, 0));
+    })();
+    pinTotals.aet = window.__headerPins;
+    // label: narrower than the other back-row labels (58 mm) to fit between the Cube and Pi 5 labels
+    var spr = makeLabel(['AeroEggTech AET-H743-Basic', 'power + FC + BT boards, 49 x 36 x 17 mm, 45 g', 'no frame-mount holes: foam tape (stack screws 30.1 mm sq.)', '2.54 mm through-hole, right-angle pins, 79 pos.', 'JST-GH CAN, JST-SH I2C / USB; power: solder pads', 'NDAA: RED (PRC)', 'ArduPilot: supported (AET-H743-Basic)'], 58), lp = new THREE.Vector3(0, LBL_BACK_Y, LBL_BACK_Z - Z_BACK);
+    spr.position.copy(lp); wrap.add(spr); leader(wrap, new THREE.Vector3(0, 20, 0), lp);
+  })();
+  // <<< AET-H743-BASIC
   window.__headerPins = pinTotals;
 
   // ---------------------------------------------------------------------

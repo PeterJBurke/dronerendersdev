@@ -35,7 +35,7 @@
 <script src="lib/legend_panel.js"></script>
 <style id="homeCss">/* ui_chrome.py: Home button (link back to the gallery) */ #bHome { display:inline-block; background:var(--panel, var(--card, rgba(255,255,255,0.88))); color:var(--fg, var(--ink, inherit)); border:1px solid var(--line, #c3c8cf); border-radius:6px; padding:6px 10px; font:inherit; font-size:13px; line-height:normal; text-decoration:none; cursor:pointer; box-sizing:border-box; } #bHome:hover { border-color:var(--muted, #888); } #bHome.fixed { position:fixed; right:16px; top:16px; z-index:22; }</style>
 <script src="lib/callouts.js"></script>
-<style id="optsCss">/* onboard.py: Options panel (FC / companion radio buttons) */ #opts { position:fixed; right:16px; top:60px; z-index:3; background:var(--panel); color:var(--fg); border:1px solid var(--line); border-radius:8px; padding:4px 10px 8px; font-size:12px; line-height:1.35; backdrop-filter:blur(4px); max-height:calc(100vh - 80px); overflow:auto; } #optsT { background:transparent; border:0; padding:3px 0; font-weight:600; font-size:12px; color:var(--fg); width:100%; text-align:left; } #optsT::after { content:" \2212"; color:var(--muted); } #opts.closed #optsT::after { content:" +"; } #opts.closed #optsB { display:none; } #opts fieldset { border:0; margin:4px 0 0; padding:0; min-width:0; } #opts legend { color:var(--muted); padding:0; margin:0 0 1px; font-size:11px; } #opts label { display:block; padding:1px 0; cursor:pointer; white-space:nowrap; } #opts input { margin:0 6px 0 0; vertical-align:-2px; } button:disabled { opacity:0.45; cursor:not-allowed; } #opts { max-width:min(250px, calc(100vw - 32px)); } #optsN { margin-top:6px; border-top:1px solid var(--line); padding-top:4px; white-space:normal; color:var(--muted); font-size:11.5px; } #optsN:empty { display:none; } #optsN p { margin:3px 0; } #optsN p.nofit { color:var(--warn); font-weight:600; } :root { --warn:#ff8a80; } :root[data-theme="light"] { --warn:#b3261e; }</style>
+<style id="optsCss">/* onboard.py: Options panel (FC / companion radio buttons) */ #opts { position:fixed; right:16px; top:60px; z-index:3; background:var(--panel); color:var(--fg); border:1px solid var(--line); border-radius:8px; padding:4px 10px 8px; font-size:12px; line-height:1.35; backdrop-filter:blur(4px); max-height:calc(100vh - 80px); overflow:auto; } #optsT { background:transparent; border:0; padding:3px 0; font-weight:600; font-size:12px; color:var(--fg); width:100%; text-align:left; } #optsT::after { content:" \2212"; color:var(--muted); } #opts.closed #optsT::after { content:" +"; } #opts.closed #optsB { display:none; } #opts fieldset { border:0; margin:4px 0 0; padding:0; min-width:0; } #opts legend { color:var(--muted); padding:0; margin:0 0 1px; font-size:11px; } #opts label { display:block; padding:1px 0; cursor:pointer; white-space:nowrap; } #opts input { margin:0 6px 0 0; vertical-align:-2px; } button:disabled { opacity:0.45; cursor:not-allowed; } #optsN { max-width:230px; margin-top:6px; border-top:1px solid var(--line); padding-top:4px; white-space:normal; color:var(--muted); font-size:11.5px; } #optsN:empty { display:none; } #optsN p { margin:3px 0; } #optsN p.nofit { color:var(--warn); font-weight:600; } :root { --warn:#ff8a80; } :root[data-theme="light"] { --warn:#b3261e; } #opts { max-width:min(250px, calc(100vw - 32px)); } #optsN { margin-top:6px; border-top:1px solid var(--line); padding-top:4px; white-space:normal; color:var(--muted); font-size:11.5px; } #optsN:empty { display:none; } #optsN p { margin:3px 0; } #optsN p.nofit { color:var(--warn); font-weight:600; } :root { --warn:#ff8a80; } :root[data-theme="light"] { --warn:#b3261e; }</style>
 </head>
 <body>
 <div id="legend">
@@ -48,7 +48,7 @@
     <li><span class="sw" style="background:#1f6fe0"></span><b>Battery</b> - Zeee 2S 2200 mAh (BOM) under the cross plate, drawn as a blue wrap with a white label band; strap not drawn.</li>
     <li><span class="sw" style="background:#2e9e9a"></span><b>Motors, props, ESCs</b> - XING2 1404 3800KV (gunmetal bell, teal top), Gemfan 4024 translucent blue (3 + 4 CW, 1 + 2 CCW), 20 A ESCs taped on the arms.</li>
     <li><span class="sw" style="background:#2b2d31"></span><b>Other</b> - M100-PRO GPS on a tail mast, AKK A11T camera at the nose, EP2 RX rear-left, XIAO ESP32-C3 under the top plate.</li>
-    <li><span class="sw" style="background:#1f7a3a"></span><b>Options</b> (panel, top right) - one flight controller and one companion computer at a time. As built: Matek F405-WMO and Orange Pi Zero 3W. The other boards are the 5-inch page's models placed on this frame. Lucid H7 Wing, Lucid H7 V2 + PDB and ARKV6X + PAB need the 5-inch quad bottom plate v2 (30.5 x 30.5 M3 press nuts, same HD_CARGO outline); Wing and ARK also need the middle standoffs in the forward holes. Wing: right-angle headers only (25 mm stack). Cube Orange+ and Raspberry Pi 5 do not fit and are drawn to show why. Wiring and the USB-C extender are drawn for the Matek only. Option mounts are a proposal (ASSUMED).</li>
+    <li><span class="sw" style="background:#1f7a3a"></span><b>Options</b> (panel, top right) - one flight controller and one companion computer at a time. As built: Matek F405-WMO and Orange Pi Zero 3W. The other boards are the 5-inch page's models placed on this frame. Lucid H7 Wing, Lucid H7 V2 + PDB and ARKV6X + PAB need the 5-inch quad bottom plate v2 (30.5 x 30.5 M3 press nuts, same HD_CARGO outline); Wing and ARK also need the middle standoffs in the forward holes. Wing: right-angle headers only (25 mm stack). AeroEggTech AET-H743-Basic: stock plate, foam tape, forward standoffs; not NDAA (PRC), battery / ESC power on solder pads. Cube Orange+ and Raspberry Pi 5 do not fit and are drawn to show why. Wiring and the USB-C extender are drawn for the Matek only. Option mounts are a proposal (ASSUMED).</li>
   </ol>
   <div class="va"><b>Verified:</b> frame outlines, holes, thicknesses (DXF/STL); FC envelope, MCU, pad names (Matek); Pi PCB size (Orange Pi); kit parts (BOM). <b>Assumed:</b> FC holes 18.1 x 12.0 mm and part positions (from Matek's layout image, +/-0.3 mm); Pi part positions, holes and riser; battery, ESC, GPS, RX sizes; wiring; the Pi FPC antenna (not in the photos).</div>
   <div class="scale">1 unit = 1 mm; grid 10 / 50 mm; 6 in bar (1 in = 25.4 mm) ahead of the nose, under the drone in the side view; exact on the grid, the perspective top view reads 4-9 percent large. Drag to orbit, wheel to zoom, right-drag to pan.</div>
@@ -71,6 +71,7 @@
     <label><input type="radio" name="fc" value="h7"> Lucid H7 V2 + PDB</label>
     <label><input type="radio" name="fc" value="ark"> ARKV6X + PAB</label>
     <label><input type="radio" name="fc" value="cube"> Cube Orange+ (does not fit)</label>
+    <label><input type="radio" name="fc" value="aet"> AET-H743-Basic (not NDAA)</label>
   </fieldset>
   <fieldset><legend>Companion computer</legend>
     <label><input type="radio" name="pc" value="opi"> Orange Pi Zero 3W (as built)</label>
@@ -747,7 +748,7 @@
         FCS.wing = g;
       })();
     })({ hdr: { pitch: 2.54, base: 2.5, pin: 0.64, above: 1.5, below: 3 }, fc: { L: 54, W: 36, H: 13, pcbT: 1.6, mountH: 3, offZ: 4 } });
-    // ---- Lucid H7 V2 + PDB and ARKV6X + PAB (copied from quad5_render.html), Cube Orange+ (fc_blocks.py)
+    // ---- Lucid H7 V2 + PDB and ARKV6X + PAB (copied from quad5_render.html), Cube Orange+ and AET-H743-Basic (fc_blocks.py)
     // Triumph Lucid H7 (V2, non-Wing) + PDB
     (function () {
 
@@ -1094,10 +1095,149 @@
       g.position.z = -17.23;   // 4-inch: carrier rear edge at z 30, servo-rail pins end at z 36, ahead of the GPS mast cup
     })();
     FCS.cube = window.__fcGroup;
+    // AeroEggTech AET-H743-Basic (fc_blocks.py), inside the stack on foam tape
+    (function () {
+
+      var hd = D.hdr, g = new THREE.Group(), yBase = yDeck, PCB_T = 1.0;
+      var MX = {
+        pcbBlack: new THREE.MeshStandardMaterial({ color: 0x15171a, roughness: 0.6, metalness: 0.15 }),
+        pcbBlue:  new THREE.MeshStandardMaterial({ color: 0x1f4f9a, roughness: 0.65, metalness: 0.1 }),
+        pcbWhite: new THREE.MeshStandardMaterial({ color: 0xe6e6df, roughness: 0.7, metalness: 0.05 }),
+        pcbFc:    new THREE.MeshStandardMaterial({ color: 0x1f7a3a, roughness: 0.6, metalness: 0.1 }),   // FC boards green except Matek (blue) and Cube (orange), designer 2026-11-09
+        shell:    new THREE.MeshStandardMaterial({ color: 0x1b1c1f, roughness: 0.75, metalness: 0.05 }),
+        orange:   new THREE.MeshStandardMaterial({ color: 0xf26b1d, roughness: 0.55, metalness: 0.1 }),
+        chipTxt:  new THREE.MeshStandardMaterial({ color: 0x3a3d42, roughness: 0.4, metalness: 0.3 }),
+        jstGrey:  new THREE.MeshStandardMaterial({ color: 0xc9c9c4, roughness: 0.7, metalness: 0.0 }),
+        molex:    new THREE.MeshStandardMaterial({ color: 0xf7f7f2, roughness: 0.65, metalness: 0.0 }),
+        pad:      new THREE.MeshStandardMaterial({ color: 0xd4af37, roughness: 0.35, metalness: 0.9 }),
+        brass:    new THREE.MeshStandardMaterial({ color: 0xb5a642, roughness: 0.4, metalness: 0.8 }),
+        rubber:   new THREE.MeshStandardMaterial({ color: 0x111214, roughness: 0.95, metalness: 0.0 }),
+        cap:      new THREE.MeshStandardMaterial({ color: 0x8a6d3b, roughness: 0.5, metalness: 0.3 }),
+        ind:      new THREE.MeshStandardMaterial({ color: 0x4a4d52, roughness: 0.5, metalness: 0.5 }),
+        fet:      new THREE.MeshStandardMaterial({ color: 0x202226, roughness: 0.4, metalness: 0.3 }),
+        ledB: new THREE.MeshStandardMaterial({ color: 0x2255ff, emissive: 0x1133cc, emissiveIntensity: 0.6 }),
+        ledG: new THREE.MeshStandardMaterial({ color: 0x33dd55, emissive: 0x11aa33, emissiveIntensity: 0.6 }),
+        ledR: new THREE.MeshStandardMaterial({ color: 0xff3333, emissive: 0xcc1111, emissiveIntensity: 0.6 })
+      };
+      function box(w, h, d, mat, x, y, z) { var m = shadowed(new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat)); m.position.set(x, y, z); g.add(m); return m; }
+      function cyl(r, h, mat, x, y, z, seg) { var m = shadowed(new THREE.Mesh(new THREE.CylinderGeometry(r, r, h, seg || 24), mat)); m.position.set(x, y, z); g.add(m); return m; }
+      // PCB: W along X, L along Z, mount holes at [x, z]
+      function pcbB(W, L, cornerR, holes, holeR, y, mat, thick) {
+        var s = roundedRectShape(L, W, cornerR);
+        holes.forEach(function (p) { s.holes.push(hole(p[0], p[1], holeR)); });
+        var m = plate(s, thick || PCB_T, y, mat); g.add(m); return m;
+      }
+      function standoffs(holes, r, h, mat, y0) { holes.forEach(function (p) { cyl(r, h, mat, p[0], (y0 || 0) + h / 2, p[1], 6); }); }
+      function bolts(holes, y, mat) { holes.forEach(function (p) { cyl(1.9, 1.2, mat, p[0], y + 0.6, p[1], 12); }); }
+      var pinH = hd.above + hd.base + hd.below;
+      var pinGeo = new THREE.BoxGeometry(hd.pin, pinH, hd.pin);
+      var headerCount = 0;
+      // 2.54 mm header identical to the base page: n positions from (x0, z0) stepping along X or Z, base on surface yC
+      function header(n, x0, z0, alongX, yC) {
+        var len = n * hd.pitch - (hd.pitch - hd.base);
+        var base = shadowed(new THREE.Mesh(new THREE.BoxGeometry(alongX ? len : hd.base, hd.base, alongX ? hd.base : len), M.hdrBase));
+        var cx = x0 + (alongX ? (n - 1) * hd.pitch / 2 : 0), cz = z0 + (alongX ? 0 : (n - 1) * hd.pitch / 2);
+        base.position.set(cx, yC + hd.base / 2, cz); g.add(base);
+        for (var k = 0; k < n; k++) {
+          var pn = shadowed(new THREE.Mesh(pinGeo, M.hdrPin));
+          pn.position.set(x0 + (alongX ? k * hd.pitch : 0), yC + pinH / 2 - hd.below, z0 + (alongX ? 0 : k * hd.pitch)); g.add(pn);
+          headerCount++;
+        }
+      }
+      var padGeo = new THREE.BoxGeometry(1.5, 0.12, 1.5);
+      function pads(n, x0, z0, alongX, yC, pitch) {      // flat SMD pads (wire, not headers)
+        for (var k = 0; k < n; k++) { var p = new THREE.Mesh(padGeo, MX.pad); p.position.set(x0 + (alongX ? k * pitch : 0), yC + 0.06, z0 + (alongX ? 0 : k * pitch)); g.add(p); }
+      }
+      function chevron(x, yC, z, s) { var a = new THREE.Mesh(new THREE.ConeGeometry(s * 0.55, s, 3), M.usb); a.rotation.x = -Math.PI / 2; a.position.set(x, yC + 0.1, z); g.add(a); }
+      function jstGH(n, x, y, z, alongX) {               // JST-GH 1.25 mm: 1.25 * (n - 1) + 3.5 mm long, 4.25 wide, 4.4 tall (beige)
+        var len = 1.25 * (n - 1) + 3.5; return box(alongX ? len : 4.25, 4.4, alongX ? 4.25 : len, M.jst, x, y + 2.2, z);
+      }
+      function jstSH(n, x, y, z, alongX) {               // JST-SH 1.0 mm: 1.0 * (n - 1) + 3.0 mm long, 2.9 wide, 4.3 tall... modelled 3 x 4.3
+        var len = 1.0 * (n - 1) + 3.0; return box(alongX ? len : 3.0, 4.3, alongX ? 3.0 : len, M.jst, x, y + 2.15, z);
+      }
+      function finish(labelLines, topY, zRear, leadFrom) {
+        if (typeof FC_PAGE_LABEL !== 'undefined' && FC_PAGE_LABEL) {   // Source One V5 pages: the page owns the callout (per-view positions)
+          FC_LABEL = labelLines; FC_LEAD = [leadFrom.x, leadFrom.y + yBase, leadFrom.z];
+        } else {
+          var spr = makeLabelMulti(labelLines);
+          var labelX = -22, labelY = topY + 24 + (labelLines.length - 2) * 2, labelZ = zRear + 52;   // -22 mm in X moves the label toward screen-right in the 3/4 view, clear of the legend panel
+          spr.position.set(labelX, labelY, labelZ); g.add(spr);
+          var lead = new THREE.Line(new THREE.BufferGeometry().setFromPoints([leadFrom, new THREE.Vector3(labelX, labelY, labelZ - 42)]),
+            new THREE.LineBasicMaterial({ color: 0xaab2bc, transparent: true, opacity: 0.8 }));
+          g.add(lead);
+        }
+        g.position.y = yBase;
+        window.__fcGroup = g; window.__fcBaseY = yBase;
+        quad.add(g);
+        window.__headerPins = headerCount;
+      }
+      var LABEL = [];
+
+      // AeroEggTech AET-H743-Basic, hardware V1.3 (sources and what is measured / assumed: fc_blocks.py, entry 7). Origin = board centre,
+      // nose (the board's arrow, power-pad end) = -Z, board right = +X. Positions from the ArduPilot hwdef images at 15.58 px/mm.
+      var P = hd.pitch, W = 36, L = 49.6, TAPE = 4.5,   /* 4-inch: 4.5 mm foam pads so the stack screw heads under the power board (1 mm) pass over the EP2 receiver (top 3.4 mm) on the rear-left lobe */ G1 = 5.6, G2 = 4.2, hx = 15.07, hzN = -16.9, hzT = 13.25;
+      var holes = [[hx, hzN], [-hx, hzN], [hx, hzT], [-hx, hzT]];
+      var foam = new THREE.MeshStandardMaterial({ color: 0x2a2c30, roughness: 0.95 }), ball = new THREE.MeshStandardMaterial({ color: 0x9a5bd0, roughness: 0.8 }),
+        sink = new THREE.MeshStandardMaterial({ color: 0x101113, roughness: 0.5, metalness: 0.4 });
+      [-7, 7].forEach(function (x) { box(8, TAPE, 40, foam, x, TAPE / 2, 0); });            // two foam-tape strips (mount ASSUMED), clear of plate screw heads on the centreline and the 30.5 press nuts
+      // power board: solder pads on the nose edge (BAT+, ESC+, ESC+, ESC-, ESC-, BAT-), R002 shunt, inductors, 2 x 8 link to the FC
+      var yP = TAPE; pcbB(W, L, 1.5, holes, 0.8, yP, MX.pcbFc, 1.6); var yPc = yP + 1.6;
+      holes.forEach(function (p) { cyl(1.7, 1.0, M.aluDark, p[0], yP - 0.5, p[1], 12); });  // stack screw heads under the power board
+      [15.4, 2.1, -2.0, -7.0, -11.1, -15.4].forEach(function (x) { box(4.0, 0.15, 4.6, MX.pad, x, yPc + 0.07, -22.5); });
+      box(6.4, 1.2, 7.0, M.usb, 8.8, yPc + 0.6, -21.2);                                    // R002 shunt
+      box(11.5, 5.0, 12.2, MX.ind, -12.7, yPc + 2.5, -7.9);                                // "100" inductor (overhangs the left edge)
+      box(8.3, 4.0, 8.3, MX.ind, 8.8, yPc + 2.0, 7.3); box(4.5, 3.0, 4.8, MX.ind, -2.8, yPc + 1.5, 22.2);   // VX and 4R7 inductors
+      box(5.0, 1.0, 5.0, MX.fet, -2.8, yPc + 0.5, -11.5); box(5.0, 1.0, 5.0, MX.fet, -2.8, yPc + 0.5, -4.7);
+      box(4.5, 1.2, 4.0, M.chipSm, 3.3, yPc + 0.6, -7.5); box(4.5, 1.0, 4.5, M.chipSm, 7.0, yPc + 0.5, 16.2); box(3.5, 1.0, 3.5, M.chipSm, -6.7, yPc + 0.5, 19.2);
+      [[7.2, -14.5], [7.2, -11.9], [7.2, -9.3], [-2.2, 2.4], [-2.2, 5.0], [-2.2, 7.6], [-10.4, 6.4], [-13.0, 6.4]].forEach(function (p) { box(3.2, 1.6, 1.6, MX.cap, p[0], yPc + 0.8, p[1]); });
+      box(11.0, G1, 3.9, M.chip, -2.8, yPc + G1 / 2, 12.3);                                // 2 x 8 board-to-board link
+      holes.forEach(function (p) { cyl(2.6, G1, ball, p[0], yPc + G1 / 2, p[1], 20); });    // two-piece damping balls
+      // FC main board
+      var yM = yPc + G1; pcbB(W, L, 1.5, holes, 1.75, yM, MX.pcbFc, 1.6); var yC = yM + 1.6;
+      box(14, 1.4, 14, M.chip, 1.6, yC + 0.7, -6.2);                                       // STM32H743VIT6, LQFP100
+      box(11, 1.9, 9.5, M.usb, -1.9, yC + 0.95, 10.5);                                      // microSD slot
+      box(3, 0.9, 3, M.chipSm, 12.6, yC + 0.45, -4.4); box(3, 0.9, 3, M.chipSm, 10.5, yC + 0.45, 9.0); box(2.6, 0.9, 2.2, M.chipSm, 2.5, yC + 0.45, -17.5);
+      box(4.25, 4.05, 1.25 * 3 + 3.5, M.jst, W / 2 - 1.6, yC + 2.03, -10.7);               // JST-GH 4-pin CAN, side entry, right edge
+      box(3.0, 2.95, 1.0 * 5 + 3.0, M.jst, W / 2 - 1.0, yC + 1.48, -1.7);                  // JST-SH 6-pin UART4 / I2C2
+      box(3.0, 2.95, 1.0 * 5 + 3.0, M.jst, W / 2 - 1.0, yC + 1.48, 6.6);                   // JST-SH to the USB board (USB board not drawn)
+      box(1.4, 0.5, 0.8, MX.ledB, 16.5, yC + 0.25, -24.0); box(1.4, 0.5, 0.8, MX.ledG, 16.5, yC + 0.25, -22.4); box(1.4, 0.5, 0.8, MX.ledR, -16.5, yC + 0.25, -24.0);
+      // right-angle 2.54 mm pin blocks (as in the manufacturer photos): rows counted inward from the edge, row r bends out at 1.5 + r * 2.54 mm
+      function raBlock(n, rows, a0, e0, alongX, out) {   // n pins along the edge from a0, rows from e0 (outermost) stepping inward; out = +1 / -1 along the other axis
+        var across = (n - 1) * P, depth = (rows - 1) * P, ac = a0 + across / 2, ec = e0 - out * depth / 2;
+        box(alongX ? across + 2.5 : depth + 2.5, 2.5, alongX ? depth + 2.5 : across + 2.5, M.hdrBase, alongX ? ac : ec, yC + 1.25, alongX ? ec : ac);
+        for (var r = 0; r < rows; r++) for (var k = 0; k < n; k++) {
+          var a = a0 + k * P, e = e0 - out * r * P, h = 1.5 + r * P, len = r * P + 8.5, ec2 = e + out * len / 2;
+          box(hd.pin, h, hd.pin, M.hdrPin, alongX ? a : e, yC + h / 2, alongX ? e : a);
+          box(alongX ? hd.pin : len, hd.pin, alongX ? len : hd.pin, M.hdrPin, alongX ? a : ec2, yC + h, alongX ? ec2 : a);
+          headerCount++;
+        }
+      }
+      raBlock(11, 2, -12.74, -23.46, true, -1);                                            // nose end 2 x 11: 5V / 9V, CAM1/2, Vbat, 9Vsw, VTX, UART1, UART8, S1, S2, RX4
+      raBlock(8, 3, -10.75, -16.66, false, -1);                                            // left edge 3 x 8: S3-S10 / VX / G
+      raBlock(11, 3, -11.27, 23.5, true, 1);                                               // tail end 3 x 11: UART2/3/6/7, I2C1, 4V5, RSSI, airspeed, LED, S11, S12
+      // Bluetooth top board on nylon posts: notched clear of the pin blocks; MCU heat sink through its window
+      var yB = yC + G2; holes.forEach(function (p) { cyl(2.2, G2, M.nylon, p[0], yC + G2 / 2, p[1], 16); });
+      (function () {
+        var s = new THREE.Shape(), pts = [[18, -19.3], [18, 16.4], [-18, 16.4], [-18, 9.6], [-9.6, 9.6], [-9.6, -13.2], [-18, -13.2], [-18, -19.3]];   // [x, z]
+        s.moveTo(-18, -19.3); pts.forEach(function (q) { s.lineTo(q[0], q[1]); });
+        holes.forEach(function (p) { s.holes.push(hole(p[0], p[1], 1.1)); });
+        (function () { var w = new THREE.Path(); w.moveTo(-3.4, -11.2); w.lineTo(6.6, -11.2); w.lineTo(6.6, -1.2); w.lineTo(-3.4, -1.2); w.lineTo(-3.4, -11.2); s.holes.push(w); })();
+        g.add(plate(s, 1.2, yB, MX.pcbFc));
+      })();
+      var yT = yB + 1.2;
+      holes.forEach(function (p) { cyl(1.7, 1.0, M.aluDark, p[0], yT + 0.5, p[1], 12); });  // stack screw heads
+      box(9, TAPE + 17 - (yC + 1.4), 9, sink, 1.6, (TAPE + 17 + yC + 1.4) / 2, -6.2);      // heat sink on the MCU, top at 17.0 mm
+      box(6, 1.6, 9, M.chipSm, 10.5, yT + 0.8, 8.5);                                       // Bluetooth module (SPP / BLE on UART7)
+      chevron(-6, yT, -15.5, 3.0);
+      window.__fcTopY = yBase + TAPE + 17;
+      finish(LABEL, TAPE + 17, L / 2, new THREE.Vector3(0, TAPE + 17, 0));
+      g.position.z = 14.5;   // 4-inch: pin tips z -17.5..46.5, between the forward middle standoffs (z -27) and the tail pair (z 57.5)
+    })();
+    FCS.aet = window.__fcGroup;
 
     // one callout per FC option, on the top centre of its group
     ref4.updateMatrixWorld(true);
-    var FCL = { wing: ['Triumph Lucid H7 Wing (FC + PDB)', '54 x 36 x 13 mm; plate v2, right-angle headers only'], h7: ['Triumph Lucid H7 V2 (non-Wing) + PDB', '36 x 36 mm FC over a separate PDB; plate v2'], ark: ['ARKV6X + PAB carrier', '74 x 43.5 mm on a 2 mm adapter plate, 15 mm aft'], cube: ['Cube Orange+ (standard carrier)', 'does not fit: 31.4 mm tall, 25 mm stack'] };
+    var FCL = { wing: ['Triumph Lucid H7 Wing (FC + PDB)', '54 x 36 x 13 mm; plate v2, right-angle headers only'], h7: ['Triumph Lucid H7 V2 (non-Wing) + PDB', '36 x 36 mm FC over a separate PDB; plate v2'], ark: ['ARKV6X + PAB carrier', '74 x 43.5 mm on a 2 mm adapter plate, 15 mm aft'], cube: ['Cube Orange+ (standard carrier)', 'does not fit: 31.4 mm tall, 25 mm stack'], aet: ['AET-H743-Basic (power + FC + BT boards)', '49 x 36 x 17 mm on foam tape; not NDAA (PRC)'] };
     Object.keys(FCL).forEach(function (k) {
       var g = FCS[k], b = new THREE.Box3().setFromObject(g), p = new THREE.Vector3((b.min.x + b.max.x) / 2, b.max.y, (b.min.z + b.max.z) / 2);
       g.worldToLocal(p); var o = new THREE.Object3D(); o.position.copy(p); g.add(o);
@@ -1466,15 +1606,15 @@
   document.getElementById('bTheme').onclick = function () { setTheme(currentTheme === 'dark' ? 'light' : 'dark'); };
 
   // Options panel (tools/render/gen_ref4_options.py; same behaviour as the 5-inch page, tools/render/onboard.py SEL_JS).
-  // Hash on load: #fc-matek|wing|h7|ark|cube, #pc-opi|zero|pi5|uno|none. Defaults (Matek, Orange Pi) = the as-built drone.
+  // Hash on load: #fc-matek|wing|h7|ark|cube|aet, #pc-opi|zero|pi5|uno|none. Defaults (Matek, Orange Pi) = the as-built drone.
   (function () {
-    var NOTE = {"fc": {"matek": [true, ""], "wing": [true, "Wing: needs bottom plate v2 (30.5 M3 press nuts) and the middle standoffs in the forward holes. Right-angle headers only: vertical pins reach 26.0 mm, the stack is 25 mm."], "h7": [true, "H7 V2: needs bottom plate v2 and a separate PDB (drawn). Pins 19.1 mm fit; upright Dupont housings (27.1 mm) do not."], "ark": [true, "ARK: needs bottom plate v2, a 2 mm adapter plate and the middle standoffs in the forward holes; carrier sits 15 mm aft. PDB not drawn."], "cube": [false, "Cube: does not fit. 31.4 mm tall, the stack is 25 mm. Drawn on the top plate: it takes the companion computer's place and runs into the camera antenna."]}, "pc": {"opi": [true, ""], "zero": [true, "Pi Zero 2 W: velcro pad where the Orange Pi sits."], "pi5": [false, "Pi 5: does not fit. The two antenna tubes at the front-left pass through it and its corners are 4 mm inside the prop discs."], "uno": [true, "UNO Q: on two crossbars; rear corners reach the prop discs in plan, 15 mm above them."], "none": [true, ""]}};
-    var fcKeys = ['matek', 'wing', 'h7', 'ark', 'cube'], pcKeys = ['opi', 'zero', 'pi5', 'uno', 'none'];
+    var NOTE = {"fc": {"matek": [true, ""], "wing": [true, "Wing: needs bottom plate v2 (30.5 M3 press nuts) and the middle standoffs in the forward holes. Right-angle headers only: vertical pins reach 26.0 mm, the stack is 25 mm."], "h7": [true, "H7 V2: needs bottom plate v2 and a separate PDB (drawn). Pins 19.1 mm fit; upright Dupont housings (27.1 mm) do not."], "ark": [true, "ARK: needs bottom plate v2, a 2 mm adapter plate and the middle standoffs in the forward holes; carrier sits 15 mm aft. PDB not drawn."], "aet": [true, "AET: stock bottom plate, 4.5 mm foam pads (no frame-mount holes), middle standoffs in the forward holes; board sits 14.5 mm aft, 0.1 mm over the EP2 receiver. Top 21.5 mm, the stack is 25 mm.", "Not NDAA: made in PRC (Suzhou AeroEggTech). Battery and ESC power are solder pads."], "cube": [false, "Cube: does not fit. 31.4 mm tall, the stack is 25 mm. Drawn on the top plate: it takes the companion computer's place and runs into the camera antenna."]}, "pc": {"opi": [true, ""], "zero": [true, "Pi Zero 2 W: velcro pad where the Orange Pi sits."], "pi5": [false, "Pi 5: does not fit. The two antenna tubes at the front-left pass through it and its corners are 4 mm inside the prop discs."], "uno": [true, "UNO Q: on two crossbars; rear corners reach the prop discs in plan, 15 mm above them."], "none": [true, ""]}};
+    var fcKeys = ['matek', 'wing', 'h7', 'ark', 'cube', 'aet'], pcKeys = ['opi', 'zero', 'pi5', 'uno', 'none'];
     function tok(p, def, ok) { var m = hash.match(new RegExp('(?:^|[#&,;])' + p + '-([a-z0-9]+)')); return m && ok.indexOf(m[1]) >= 0 ? m[1] : def; }
     OPT.fc = tok('fc', 'matek', fcKeys); OPT.pc = tok('pc', 'opi', pcKeys);
     var noteEl = document.getElementById('optsN'), bc = document.getElementById('bCase');
     function apply() {
-      var fc = OPT.fc, pc = OPT.pc, mk = fc === 'matek', v2 = fc === 'wing' || fc === 'h7' || fc === 'ark', fwd = fc === 'wing' || fc === 'ark';
+      var fc = OPT.fc, pc = OPT.pc, mk = fc === 'matek', v2 = fc === 'wing' || fc === 'h7' || fc === 'ark', fwd = fc === 'wing' || fc === 'ark' || fc === 'aet';   // AET: stock plate (tape mount), forward standoffs
       fcGroup.visible = GM.visible = mk;                         // Matek, its USB-C extender and every lead that ends on it
       Object.keys(FCS).forEach(function (k) { FCS[k].visible = k === fc; });
       botStock.visible = !v2; botV2.visible = v2;                // bottom plate v2 (30.5 press nuts) with the 30.5 mm boards
@@ -1489,6 +1629,7 @@
         noteEl.textContent = '';
         [NOTE.fc[fc], top ? [true, 'Companion computer not shown with the Cube.'] : NOTE.pc[pc]].forEach(function (n) {
           if (!n[1]) return; var p = document.createElement('p'); p.textContent = n[1]; if (!n[0]) p.className = 'nofit'; noteEl.appendChild(p);
+          if (n[2]) { var r = document.createElement('p'); r.textContent = n[2]; r.className = 'nofit'; noteEl.appendChild(r); }   // fits, but breaks a project rule
         });
         if (!mk) { var w = document.createElement('p'); w.textContent = 'Wiring and the USB-C extender are drawn for the Matek only.'; noteEl.appendChild(w); }
       }
