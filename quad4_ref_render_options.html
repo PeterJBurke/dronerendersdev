@@ -227,7 +227,7 @@
   // Drone group. y = 0 is the underside of the cross plate; the group is lifted so the battery rests on the ground.
   // =====================================================================
   var ref4 = new THREE.Group(); scene.add(ref4);
-  var GM = new THREE.Group(), GMP = new THREE.Group(), MIDS = [], PIG = null; ref4.add(GM); ref4.add(GMP);   // options page (gen_ref4_options.py): Matek-only parts, Pi -> Matek leads, middle standoffs, Orange Pi
+  var GM = new THREE.Group(), GMP = new THREE.Group(), XT = new THREE.Group(), XR = new THREE.Group(), MIDS = [], PIG = null; ref4.add(GM); ref4.add(GMP); ref4.add(XT); ref4.add(XR);   // options page (gen_ref4_options.py): Matek-only parts, Pi -> Matek leads, middle standoffs, Orange Pi
   var UF = U.frame;
   var uBrace = 0, uArm = uBrace + UF.braceT, uBottom = uArm + UF.armT, uBottomTop = uBottom + UF.plateT;
   var uTop = uBottomTop + UF.standoffH, uTopFace = uTop + UF.plateT, uArmTop = uArm + UF.armT;
@@ -519,10 +519,16 @@
     var rp = fcWorld(5.9, -17, FCD.tierY[0]);
     [M.wireGrn, M.wireYel, M.wireRed, M.wireBlk].forEach(function (m, i) { tube([[-19 + (i - 1.5) * 0.7, uBottomTop + 2, 21], [-15, 12, 26], [rp[0] + (i - 1.5) * 0.7, rp[1], rp[2] + 1]], 0.3, m, GM); });
     var y = uTop - 0.3;   // XIAO taped upside down under the top plate
-    box(U.xiao.L, 1.2, U.xiao.W, M.chip, XIAO.x, y - 1.2, XIAO.z, ref4);
-    box(10, 1.5, 10, M.usb, XIAO.x - 2, y - 2.7, XIAO.z, ref4);
-    box(7.4, 3.2, 9.0, M.usb, XIAO.x + U.xiao.L / 2 - 3.2, y - 4.4, XIAO.z, ref4);
-    box(1.6, 0.8, 1.6, M.brass, XIAO.x - 7, y - 2.0, XIAO.z + 6, ref4);          // u.FL
+    box(U.xiao.L, 1.2, U.xiao.W, M.chip, XIAO.x, y - 1.2, XIAO.z, XT);
+    box(10, 1.5, 10, M.usb, XIAO.x - 2, y - 2.7, XIAO.z, XT);
+    box(7.4, 3.2, 9.0, M.usb, XIAO.x + U.xiao.L / 2 - 3.2, y - 4.4, XIAO.z, XT);
+    box(1.6, 0.8, 1.6, M.brass, XIAO.x - 7, y - 2.0, XIAO.z + 6, XT);          // u.FL
+    var XREAR = { x: 0, z: 40 }, yb = uBottomTop + 1.0;   // rear of the bottom plate, 1 mm foam tape
+    box(U.xiao.W - 2, 1.0, U.xiao.L - 2, M.white, XREAR.x, uBottomTop, XREAR.z, XR);
+    box(U.xiao.W, 1.2, U.xiao.L, M.chip, XREAR.x, yb, XREAR.z, XR);
+    box(10, 1.5, 10, M.usb, XREAR.x, yb + 1.2, XREAR.z - 2, XR);                               // shield can
+    box(9.0, 3.2, 7.4, M.usb, XREAR.x, yb + 1.2, XREAR.z + U.xiao.L / 2 - 3.2, XR);          // USB-C, facing the tail
+    box(1.6, 0.8, 1.6, M.brass, XREAR.x - 6, yb + 1.2, XREAR.z - 7, XR);                       // u.FL
     var tp = fcWorld(18.62, -17, FCD.tierY[0]);
     [M.wireYel, M.wireWht, M.wireRed, M.wireBlk].forEach(function (m, i) { tube([[XIAO.x - 8, y - 2, XIAO.z + 4 + i * 0.8], [-2, 20, 12], [tp[0] + (i - 1.5) * 0.7, tp[1] + 0.5, tp[2] + 1]], 0.3, m, GM); });
   })();
@@ -1632,7 +1638,7 @@
     { id: 'gps', a: [0, gpsTopY, U.gps.z], t: 'HGLRC M100-PRO GPS + compass', s: 'printed cup and mast at the tail' },
     { id: 'cam', a: [0, uBottomTop + 8, U.cam.z - 6], t: 'AKK A11T camera + VTX', s: 'nose, between the plates' },
     { id: 'rx', a: [-19, uBottomTop + 3.4, 26], t: 'Happymodel EP2 ELRS RX', s: 'rear-left, clear heat shrink', hide: { top: 1 } },
-    { id: 'xiao', a: [XIAO.x + 10, uTop - 3, XIAO.z], t: 'Seeed XIAO ESP32-C3', s: 'DroneBridge telemetry, under the top plate' },
+    { id: 'xiao', a: [XIAO.x + 10, uTop - 3, XIAO.z], t: 'Seeed XIAO ESP32-C3', s: 'DroneBridge telemetry' },
     { id: 'esc', a: [escX, uArmTop + U.esc.H, -escZ], t: '20 A BLHeli_S ESC x4', s: 'on the arms under black tape' },
     { id: 'motor', a: [M1.x, uArmTop + 12, M1.z], t: 'iFlight XING2 1404 3800KV x4', s: '1 + 2 CCW, 3 + 4 CW' },
     { id: 'prop', a: [M2.x + 38, uArmTop + U.motor.H + 3, M2.z + 8], t: 'Gemfan 4024 two-blade x4', s: '101.6 mm (4.0 in), translucent blue' }
@@ -1759,6 +1765,8 @@
       Object.keys(FCS).forEach(function (k) { FCS[k].visible = k === fc; });
       botStock.visible = !v2; botV2.visible = v2;                // bottom plate v2 (30.5 press nuts) with the 30.5 mm boards
       MIDS.forEach(function (m) { m.visible = !fwd && !four; }); MIDALT.visible = fwd;   // middle standoff pair: as built or forward holes
+      var espRear = four || fc === 'cube'; XT.visible = !espRear; XR.visible = espRear;   // ESP32: rear of the bottom plate where that area is free, else as built under the top plate
+      if (typeof CALL !== 'undefined') CALL.forEach(function (c) { if (c.id === 'xiao' && c.v) c.v.set(espRear ? 0 : 15, espRear ? uBottomTop + 3 : uTop - 3, espRear ? 40 : -1); });
       var top = fc === 'cube';                                   // the Cube sits where the companion computer goes
       PIG.visible = pc === 'opi' && !top; GMP.visible = mk && pc === 'opi';
       ['zero', 'pi5', 'uno'].forEach(function (k) { COMP[k].visible = k === pc && !top; });
@@ -1794,7 +1802,7 @@
     }
     place(); window.addEventListener('resize', place);
     apply();
-    window.__optGroups = { fc: FCS, pc: COMP, root: ref4, deck: uBottomTop, top: uTop };   // for fit checks from the console / test scripts
+    window.__optGroups = { fc: FCS, pc: COMP, root: ref4, deck: uBottomTop, top: uTop, esp: { top: XT, rear: XR } };   // for fit checks from the console / test scripts
     window.__toggles = { get: function () { return { fc: OPT.fc, pc: OPT.pc }; },
       set: function (fc, pc) { if (fc != null && fcKeys.indexOf(fc) >= 0) OPT.fc = fc; if (pc != null && pcKeys.indexOf(pc) >= 0) OPT.pc = pc; apply(); } };
   })();
