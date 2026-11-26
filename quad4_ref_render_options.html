@@ -519,18 +519,142 @@
     var rp = fcWorld(5.9, -17, FCD.tierY[0]);
     [M.wireGrn, M.wireYel, M.wireRed, M.wireBlk].forEach(function (m, i) { tube([[-19 + (i - 1.5) * 0.7, uBottomTop + 2, 21], [-15, 12, 26], [rp[0] + (i - 1.5) * 0.7, rp[1], rp[2] + 1]], 0.3, m, GM); });
     var y = uTop - 0.3;   // XIAO taped upside down under the top plate
-    box(U.xiao.L, 1.2, U.xiao.W, M.chip, XIAO.x, y - 1.2, XIAO.z, XT);
-    box(10, 1.5, 10, M.usb, XIAO.x - 2, y - 2.7, XIAO.z, XT);
-    box(7.4, 3.2, 9.0, M.usb, XIAO.x + U.xiao.L / 2 - 3.2, y - 4.4, XIAO.z, XT);
-    box(1.6, 0.8, 1.6, M.brass, XIAO.x - 7, y - 2.0, XIAO.z + 6, XT);          // u.FL
-    var XREAR = { x: 0, z: 40 }, yb = uBottomTop + 1.0;   // rear of the bottom plate, 1 mm foam tape
-    box(U.xiao.W - 2, 1.0, U.xiao.L - 2, M.white, XREAR.x, uBottomTop, XREAR.z, XR);
-    box(U.xiao.W, 1.2, U.xiao.L, M.chip, XREAR.x, yb, XREAR.z, XR);
-    box(10, 1.5, 10, M.usb, XREAR.x, yb + 1.2, XREAR.z - 2, XR);                               // shield can
-    box(9.0, 3.2, 7.4, M.usb, XREAR.x, yb + 1.2, XREAR.z + U.xiao.L / 2 - 3.2, XR);          // USB-C, facing the tail
-    box(1.6, 0.8, 1.6, M.brass, XREAR.x - 6, yb + 1.2, XREAR.z - 7, XR);                       // u.FL
+    // ---- Seeed Studio XIAO ESP32-C3, photo-based model (gen_ref4_options.py XIAO_JS); one model, cloned for XT and XR ----
+    // Sources: as-built photos 150 / 151 (component side, straight on), 152, 156, 157 (mounted, label and u.FL visible) and
+    // Seeed's wiki front / back pinout images (pad pitch, underside pads and silkscreen). Model frame: a = across the 17.5 mm width
+    // (+a = the 5V / GND / 3V3 row), l = along the 21 mm length (USB-C end = -l), y = 0 at the underside of the PCB.
+    // From the photos / Seeed images: outline, 2 x 7 castellated pads on 2.54 mm, shield can and its label, USB-C shell (two stamped
+    // dimples, two rear windows, four shell legs), contact row behind it, charge LED, "CH" / "R" / "B" silk, reset and boot buttons,
+    // u.FL socket, and on the underside the pin names, JTAG pads, BAT pads, thermal pad, RST / Boot test points.
+    // ASSUMED (not measurable from a photo or drawing):
+    //   - every part height except the USB-C shell: can 1.5 (as the first model), buttons 1.0 + 0.25 plunger, u.FL 1.25, LED 0.35
+    //   - PCB thickness 1.2 and corner radius 1.8 (scaled off Seeed's image); castellation notch radius 0.3, pad hole radius 0.42
+    //   - the tongue inside the USB-C mouth (USB-C receptacle standard; no photo looks into the mouth)
+    //   - label typeface (Arial stands in for Seeed's logotype) and the simplified FCC / CE / Japan-radio marks
+    //   - gold shown on the underside shell-leg pads as in Seeed's rendering (soldered tin on the real board)
+    // NOT as the real board, to keep the envelope of the first model: the USB-C shell stops 0.48 mm past the board end (about 1.5 mm
+    // on the real board), so the shell is drawn 5.9 mm long instead of 7.3.
+    // NOT drawn: copper traces under the mask, the two small passives beside the u.FL, the u.FL pigtail and the clear tape of photos 156 / 157.
+    var XPAD = (function () {
+      var W = U.xiao.W, L = U.xiao.L, T = 1.2, P = 2.54, K = 40, g = new THREE.Group(), hw = W / 2, hl = L / 2, k;
+      var GOLD = '#d3ae58', SILK = '#ecece6', TIN = '#b9bcc0', MASK = '#0e0f11';
+      var gold = std(0xdcb95e, 0.4, 0.5, { side: THREE.DoubleSide }), steel = std(0xd4d6da, 0.34, 0.55), tin = std(0xcfd2d6, 0.36, 0.6), can = std(0xbfc2c6, 0.36, 0.7),
+          beige = std(0xd9cfb4, 0.7, 0.0), blk = std(0x151618, 0.55, 0.05), fr4 = std(0x221f1a, 0.8, 0.0), ring = std(0xd9cda6, 0.32, 0.7, { side: THREE.DoubleSide }),
+          ledOff = std(0xf1f1ea, 0.4, 0.0), dark = new THREE.MeshBasicMaterial({ color: 0x050505 });
+      function add(m, x, y, z) { m.position.set(x, y, z); g.add(shadowed(m)); return m; }
+      function bx(w, h, d, mat, x, y, z) { return add(new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat), x, y + h / 2, z); }      // y = bottom face
+      function cy(r, h, mat, x, y, z) { return add(new THREE.Mesh(new THREE.CylinderGeometry(r, r, h, 20), mat), x, y + h / 2, z); }
+      function cvs(w, h, bg) { var cv = document.createElement('canvas'); cv.width = Math.round(w); cv.height = Math.round(h); var c = cv.getContext('2d'); c.fillStyle = bg; c.fillRect(0, 0, cv.width, cv.height); return c; }
+      function tex(c) { var t = new THREE.CanvasTexture(c.canvas); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t; }
+      function rrp(c, x, y, w, h, r) { c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); }
+      // One board face painted in board mm. under = the back face as seen from below (far end up, +a to the right).
+      function face(under, draw) {
+        var c = cvs(W * K, L * K, MASK);
+        function X(a) { return (a + hw) * K; } function Z(l) { return (under ? hl - l : l + hl) * K; }
+        draw({
+          rr: function (a, l, w, d, col, r) { c.fillStyle = col; rrp(c, X(a) - w * K / 2, Z(l) - d * K / 2, w * K, d * K, (r || 0) * K); c.fill(); },
+          dot: function (a, l, r, col) { c.fillStyle = col; c.beginPath(); c.arc(X(a), Z(l), r * K, 0, 6.2832); c.fill(); },
+          txt: function (s, a, l, size, rot, maxW, bold) { c.save(); c.translate(X(a), Z(l)); c.rotate(rot * Math.PI / 180); c.font = (bold ? '700 ' : '500 ') + (size * K) + 'px Arial, Helvetica, sans-serif';
+            c.fillStyle = SILK; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(s, 0, 0, maxW * K); c.restore(); }
+        });
+        var t = tex(c); t.repeat.set(1 / W, under ? 1 / L : -1 / L); t.offset.set(0.5, 0.5);
+        return new THREE.MeshStandardMaterial({ map: t, roughness: 0.5, metalness: 0.05 });
+      }
+      function pads(F) { for (var i = 0; i < 7; i++) [-1, 1].forEach(function (s) { F.rr(s * (hw - 0.85), (i - 3) * P, 2.4, 1.75, GOLD, 0.87); }); }
+      var topMat = face(false, function (F) {
+        pads(F);
+        for (var i = 0; i < 12; i++) F.rr(-2.75 + i * 0.5, -4.75, 0.24, 0.8, TIN);                              // USB-C contact row behind the shell
+        [-1, 1].forEach(function (s) { F.rr(s * 4.6, -9.4, 0.9, 1.5, TIN, 0.3); F.rr(s * 4.6, -5.5, 0.9, 1.5, TIN, 0.3);   // shell-leg solder
+          F.rr(s * 4.4, 8.8, 4.3, 1.2, TIN, 0.1); });                                                           // button terminals
+        F.rr(0, 8.8, 1.2, 3.6, TIN, 0.1);                                                                       // u.FL signal / ground lands
+        F.rr(5.4, -10.05, 1.5, 0.6, TIN, 0.1);                                                                  // charge LED lands
+        F.txt('CH', 5.75, -8.75, 1.15, 180, 1.7, true); F.txt('R', 7.25, 9.3, 1.15, 180, 1, true); F.txt('B', -7.25, 9.3, 1.15, 180, 1, true);   // upside down with USB-C up, as on the board
+      });
+      var botMat = face(true, function (F) {                                                                    // positions from Seeed's back pinout image
+        pads(F);
+        [-8.54, -5.97, -3.4].forEach(function (l) { F.dot(1.33, l, 0.5, GOLD); F.dot(-1.33, l, 0.5, GOLD); });   // JTAG pads: MTDO GND MTCK / MTDI EN MTMS
+        [-1, 1].forEach(function (s) { F.rr(s * 4.35, -9.4, 1.0, 1.9, GOLD, 0.5); F.rr(s * 4.35, -5.3, 1.0, 1.9, GOLD, 0.5); F.rr(s * 6.25, 5.14, 0.6, 1.2, GOLD, 0.3); });
+        F.dot(3.07, -5.55, 0.3, GOLD); F.dot(-2.74, -5.55, 0.3, GOLD);
+        F.rr(-4.4, -2.07, 1.9, 1.0, GOLD); F.rr(-4.4, -0.66, 1.9, 1.0, GOLD); F.rr(-4.1, -3.15, 0.18, 0.7, SILK); F.txt('+', -4.3, 1.08, 1.5, 270, 1.2, true);   // BAT- / BAT+
+        F.rr(2.57, 0.75, 2.8, 2.8, GOLD);                                                                       // thermal pad
+        [[4.56, 'RST', 3.07], [-4.3, 'Boot', -4.23]].forEach(function (q) { F.dot(q[0], 8.96, 0.3, GOLD); F.dot(q[0], 8.96, 0.14, MASK); F.txt(q[1], q[2], 9.8, 1.05, 180, 2.4, true); });
+        ['VUSB', 'GND', '3V3', 'D10', 'D9', 'D8', 'D7'].forEach(function (s, i) { var l = (i - 3) * P; if (i === 2) F.txt(s, 5.4, l, 1.3, 180, 2.3, true); else F.txt(s, i === 5 ? 5.3 : 6.0, i ? l : l - 0.45, 1.35, 270, i ? 2.3 : 3.0, true); });
+        ['D0', 'D1', 'D2', 'D3', 'D4', 'D5', 'D6'].forEach(function (s, i) { F.txt(s, i === 5 ? -5.05 : -5.95, (i - 3) * P, 1.35, 270, 2.3, true); });
+        F.txt('MTDO', 2.74, -8.85, 1.05, 270, 2.5, true); F.txt('GND', 3.4, -6.75, 0.9, 180, 2.0, true); F.txt('MTCK', 2.74, -3.5, 1.05, 270, 2.6, true);
+        F.txt('MTDI', 0.17, -8.95, 1.05, 270, 2.5, true); F.txt('EN', 0.17, -5.97, 1.05, 270, 1.3, true); F.txt('MTMS', 0.17, -3.4, 1.05, 270, 2.6, true);
+        F.txt('BAT', -2.3, -1.16, 1.45, 270, 2.4, true); F.txt('XIAO ESP32C3', 0.17, 4.73, 1.35, 270, 9.0, false); F.txt('seeed studio', -1.74, 4.9, 1.75, 270, 9.1, true);
+      });
+      // PCB: outline with a castellation notch at every pad and a hole through every pad
+      (function () {
+        var s = new THREE.Shape(), r = 1.8, nr = 0.3, i, l;
+        s.moveTo(-hw + r, -hl); s.lineTo(hw - r, -hl); s.absarc(hw - r, -hl + r, r, -Math.PI / 2, 0, false);
+        for (i = 0; i < 7; i++) { l = (i - 3) * P; s.lineTo(hw, l - nr); s.absarc(hw, l, nr, -Math.PI / 2, Math.PI / 2, true); }
+        s.lineTo(hw, hl - r); s.absarc(hw - r, hl - r, r, 0, Math.PI / 2, false); s.lineTo(-hw + r, hl); s.absarc(-hw + r, hl - r, r, Math.PI / 2, Math.PI, false);
+        for (i = 6; i >= 0; i--) { l = (i - 3) * P; s.lineTo(-hw, l + nr); s.absarc(-hw, l, nr, Math.PI / 2, -Math.PI / 2, true); }
+        s.lineTo(-hw, -hl + r); s.absarc(-hw + r, -hl + r, r, Math.PI, 1.5 * Math.PI, false);
+        for (i = 0; i < 7; i++) [-1, 1].forEach(function (e) { s.holes.push(hole(e * (hw - 1.1), (i - 3) * P, 0.42)); });
+        var geo = new THREE.ExtrudeGeometry(s, { depth: T, bevelEnabled: false, curveSegments: 8 });
+        geo.rotateX(Math.PI / 2);                        // shape y -> l (world Z of the model), extrusion -> down; first half of the lid group = top face
+        var lid = geo.groups[0].count, side = geo.groups[1];
+        geo.clearGroups(); geo.addGroup(0, lid / 2, 0); geo.addGroup(lid / 2, lid / 2, 2); geo.addGroup(side.start, side.count, 1);
+        add(new THREE.Mesh(geo, [topMat, fr4, botMat]), 0, T, 0);
+        // gold plating in the notches and holes: two InstancedMesh
+        var half = new THREE.InstancedMesh(new THREE.CylinderGeometry(nr, nr, T, 8, 1, true, Math.PI, Math.PI), gold, 14), barrel = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.42, 0.42, T, 12, 1, true), gold, 14), m4 = new THREE.Matrix4(), n = 0;
+        for (i = 0; i < 7; i++) [-1, 1].forEach(function (e) { l = (i - 3) * P; m4.makeRotationY(e > 0 ? 0 : Math.PI); m4.setPosition(e * (hw - 0.01), T / 2, l); half.setMatrixAt(n, m4);
+          m4.identity(); m4.setPosition(e * (hw - 1.1), T / 2, l); barrel.setMatrixAt(n, m4); n++; });
+        g.add(half); g.add(barrel);
+      })();
+      // shield can with the white label (photos 150 / 151, text reads with the USB-C end up)
+      bx(12.8, 1.5, 11.1, can, 0, T, 1.55);
+      (function () {
+        var w = 12.2, d = 10.2, q = 60, c = cvs(w * q, d * q, '#f3f3ef'), INK = '#111214';
+        function tx(s, a, l, size, wide, bold) { c.save(); c.setTransform(1, 0, 0, 1, 0, 0); c.font = (bold ? '700 ' : '400 ') + (size * q) + 'px Arial, Helvetica, sans-serif'; c.fillStyle = INK; c.textAlign = 'left'; c.textBaseline = 'middle';
+          var m = c.measureText(s).width; c.translate((a + w / 2) * q, (l + d / 2) * q); c.scale(wide * q / m, 1); c.fillText(s, 0, 0); c.restore(); }
+        function arc(a, l, r, lw, open) { c.lineWidth = lw; c.beginPath(); c.arc(a, l, r, open * Math.PI, (2 - open) * Math.PI); c.stroke(); }
+        tx('seeed studio', -5.6, -3.9, 2.15, 11.0, true); tx('Model:XIAO-ESP32-C3', -5.6, -2.6, 1.02, 9.1, false); tx('FCC ID:Z4T-XIAOESP32C3', -5.6, -1.6, 1.02, 10.85, false); tx('204-B00704', -1.25, 0.3, 1.02, 4.45, false);
+        c.setTransform(q, 0, 0, q, w * q / 2, d * q / 2); c.strokeStyle = INK; c.fillStyle = INK; c.lineCap = 'butt';
+        arc(-3.6, 0.25, 0.98, 0.2, 0); c.fillRect(-4.3, -0.3, 1.5, 0.2); c.fillRect(-4.15, 0.2, 1.1, 0.2); c.fillRect(-3.7, 0.2, 0.2, 0.85);                    // Japan radio mark (simplified)
+        c.lineWidth = 0.2; c.beginPath(); c.moveTo(-3.1, -0.75); c.lineTo(-3.75, -0.2); c.lineTo(-3.35, -0.2); c.lineTo(-3.9, 0.3); c.stroke();
+        c.lineWidth = 0.09; c.strokeRect(-2.2, -0.08, 0.76, 0.76); tx('R', -2.06, 0.32, 0.72, 0.5, true);
+        c.setTransform(q, 0, 0, q, w * q / 2, d * q / 2);
+        c.fillRect(-4.7, 1.95, 0.42, 2.05); c.fillRect(-4.7, 1.95, 1.25, 0.4); c.fillRect(-4.7, 2.8, 1.05, 0.38); arc(-2.85, 2.98, 0.84, 0.38, 0.27); arc(-2.45, 2.98, 0.42, 0.3, 0.3);   // FCC mark (simplified)
+        arc(1.3, 2.98, 0.84, 0.36, 0.3); arc(2.95, 2.98, 0.84, 0.36, 0.3); c.fillRect(2.11, 2.82, 0.75, 0.32);                                                  // CE mark
+        var m = new THREE.Mesh(new THREE.PlaneGeometry(w, d), new THREE.MeshStandardMaterial({ map: tex(c), roughness: 0.62, metalness: 0.0 }));
+        m.rotation.x = -Math.PI / 2; m.position.set(0, T + 1.52, 1.5); m.receiveShadow = true; g.add(m);
+      })();
+      // USB-C receptacle: stadium shell 8.94 x 3.2 with an open mouth toward -l, tongue inside, rear windows and dimples on top (photo 151)
+      (function () {
+        var z0 = -(hl + 0.48), len = 5.88, s = roundedRectShape(3.2, 8.94, 1.25); s.holes.push(roundedRectShape(2.6, 8.34, 0.95));
+        add(new THREE.Mesh(new THREE.ExtrudeGeometry(s, { depth: len, bevelEnabled: false, curveSegments: 6 }), steel), 0, T + 1.6, z0);
+        bx(7.2, 2.6, 1.4, blk, 0, T + 0.3, z0 + len - 0.7); bx(6.7, 0.7, 3.7, blk, 0, T + 1.25, z0 + 2.75);                    // rear plug, tongue (ASSUMED)
+        bx(5.6, 0.74, 0.5, gold, 0, T + 1.23, z0 + 1.3);                                                                       // tongue contacts (ASSUMED)
+        [-1, 1].forEach(function (e) { bx(1.4, 0.03, 1.1, dark, e * 2.0, T + 3.2 - 0.02, -6.15).castShadow = false; bx(0.55, 0.03, 0.75, steel, e * 2.25, T + 3.2 - 0.015, -6.0); bx(0.9, 0.05, 0.5, steel, e * 2.0, T + 3.2 - 0.04, -7.7);
+          bx(0.5, 0.55, 0.9, tin, e * 4.62, T, -9.4); bx(0.5, 0.55, 0.9, tin, e * 4.62, T, -5.5); });
+      })();
+      // reset (R, +a) and boot (B, -a) buttons, u.FL socket between them, charge LED beside the USB-C
+      [-1, 1].forEach(function (e) { bx(3.9, 0.25, 1.7, tin, e * 4.4, T, 8.8); bx(3.0, 1.0, 2.6, steel, e * 4.4, T, 8.8); cy(0.72, 0.25, blk, e * 4.4, T + 1.0, 8.8); });
+      bx(2.6, 0.45, 2.6, beige, 0, T, 8.8); bx(0.9, 0.2, 3.4, tin, 0, T, 8.8);
+      (function () {
+        var pr = [[1.0, 0], [1.0, 0.8], [0.76, 0.8], [0.76, 0.12]].map(function (q) { return new THREE.Vector2(q[0], q[1]); });
+        add(new THREE.Mesh(new THREE.LatheGeometry(pr, 24), ring), 0, T + 0.45, 8.8); cy(0.76, 0.12, beige, 0, T + 0.45, 8.8); cy(0.2, 0.55, gold, 0, T + 0.57, 8.8);
+      })();
+      bx(0.9, 0.35, 0.5, ledOff, 5.4, T, -10.05);
+      // rear of the bottom plate: right side up on 1 mm foam tape, USB-C toward the tail
+      var XREAR = { x: 0, z: 40 };
+      box(W - 2, 1.0, L - 2, M.white, XREAR.x, uBottomTop, XREAR.z, XR);
+      g.position.set(XREAR.x, uBottomTop + 1.0, XREAR.z); g.rotation.y = Math.PI; XR.add(g);
+      // as built: component side down against the underside of the top plate, USB-C to the right (+x)
+      var t = g.clone(); t.rotation.set(0, 0, 0); t.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(new THREE.Vector3(0, 0, -1), new THREE.Vector3(0, -1, 0), new THREE.Vector3(-1, 0, 0)));
+      t.position.set(XIAO.x, y, XIAO.z); XT.add(t);
+      // the four soldered leads of photos 150 / 151 (yellow and white on the third and fourth pad of the -a row, red and black on 5V and GND);
+      // drawn only with the Matek, whose lead tubes start here: solder joint on each pad, then a point just off the board edge
+      return [[-1, -P], [-1, 0], [1, -3 * P], [1, -2 * P]].map(function (q) {
+        var px = XIAO.x - q[1], pz = XIAO.z - q[0] * (hw - 1.1), s = new THREE.Mesh(new THREE.SphereGeometry(0.6, 10, 8), tin); s.scale.y = 0.6; s.position.set(px, y - T - 0.15, pz); GM.add(s);
+        return [[px, y - T - 0.3, pz], [px - 0.5, y - T - 2.0, pz - q[0] * 2.6]];
+      });
+    })();
     var tp = fcWorld(18.62, -17, FCD.tierY[0]);
-    [M.wireYel, M.wireWht, M.wireRed, M.wireBlk].forEach(function (m, i) { tube([[XIAO.x - 8, y - 2, XIAO.z + 4 + i * 0.8], [-2, 20, 12], [tp[0] + (i - 1.5) * 0.7, tp[1] + 0.5, tp[2] + 1]], 0.3, m, GM); });
+    [M.wireYel, M.wireWht, M.wireRed, M.wireBlk].forEach(function (m, i) { tube([XPAD[i][0], XPAD[i][1], [-2, 20, 12], [tp[0] + (i - 1.5) * 0.7, tp[1] + 0.5, tp[2] + 1]], 0.3, m, GM); });
   })();
 
   // =====================================================================
